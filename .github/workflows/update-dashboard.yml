@@ -38,10 +38,6 @@ steps:
     run: |
       python generate_dashboard.py
 
-      - name: Gerar dashboard
-        run: |
-          python generate_dashboard.py
-
       - name: Commit e push (se houver mudanças)
         run: |
           git config user.name "github-actions[bot]"
