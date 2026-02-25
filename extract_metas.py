@@ -107,3 +107,8 @@ if len(data) > 1:
                 "Falta": t2[i + 2][3],
                 "Progresso": t2[i + 2][4],
             })
+    return rows
+
+except Exception as e:
+    print(f"Erro ao extrair dados de {nome}: {e}")
+    return []
