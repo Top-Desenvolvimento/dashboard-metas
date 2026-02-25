@@ -107,5 +107,3 @@ if len(data) > 1:
                 "Falta": t2[i + 2][3],
                 "Progresso": t2[i + 2][4],
             })
-                "Progresso": t2[i + 2][4],
-            })
