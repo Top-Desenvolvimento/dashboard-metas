@@ -40,8 +40,8 @@ jobs:
 
       - name: Gerar dashboard
         env:
-         SYSTEM_LOGIN: ${{ secrets.SYSTEM_LOGIN }}
-         SYSTEM_PASSWORD: ${{ secrets.SYSTEM_PASSWORD }}
+         LOGIN_USER: ${{ secrets.SYSTEM_LOGIN }}
+         LOGIN_PASS: ${{ secrets.SYSTEM_PASSWORD }}
         run: |
           python generate_dashboard.py
 
