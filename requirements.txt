@@ -1,3 +1,6 @@
-playwright
+selenium
 pandas
+requests
+beautifulsoup4
+playwright
 openpyxl
