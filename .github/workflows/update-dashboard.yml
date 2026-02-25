@@ -32,7 +32,10 @@ jobs:
           SYSTEM_PASSWORD: ${{ secrets.SYSTEM_PASSWORD }}
         run: |
           python extract_metas.py
-
+      - name: Instalar Google Chrome
+        run: |
+    sudo apt-get update
+    sudo apt-get install -y google-chrome-stable
       - name: Gerar dashboard
         run: |
           python generate_dashboard.py
