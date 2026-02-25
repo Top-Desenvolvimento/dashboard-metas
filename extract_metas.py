@@ -15,7 +15,8 @@ from openpyxl.utils import get_column_letter
 
 # Configurações
 USERNAME = os.getenv("SYSTEM_LOGIN")
-PASSWORD = os.getenv("SYSTEM_PASSWORD")OUTPUT_DIR = "."
+PASSWORD = os.getenv("SYSTEM_PASSWORD")
+OUTPUT_DIR = "."
 EXCEL_PATH = os.path.join("data", "metas_top_estetica.xlsx")
 CSV_HISTORY_PATH = os.path.join("data", "historico_metas.csv")
 JSON_CURRENT_PATH = os.path.join("data", "current_metas.json")
