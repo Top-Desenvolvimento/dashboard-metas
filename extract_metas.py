@@ -92,23 +92,24 @@ def extract_city_data(page, cidade_info):
                         "Falta": t1[i + 2][3],
                         "Progresso": t1[i + 2][4],
                     })
-if len(data) > 1:
-    t2 = data[1]
-    for i in range(0, len(t2), 3):
-        if i + 2 < len(t2) and len(t2[i + 2]) >= 5:
-            rows.append({
-                "Data/Hora": timestamp,
-                "Cidade": nome,
-                "Mês/Ano": mes_ano,
-                "Tipo": "Serviços",
-                "Nome": t2[i][0],
-                "Meta": t2[i + 2][1],
-                "Realizado": t2[i + 2][2],
-                "Falta": t2[i + 2][3],
-                "Progresso": t2[i + 2][4],
-            })
-    return rows
+        if len(data) > 1:
+            t2 = data[1]
+            for i in range(0, len(t2), 3):
+                if i + 2 < len(t2) and len(t2[i + 2]) >= 5:
+                    rows.append({
+                        "Data/Hora": timestamp,
+                        "Cidade": nome,
+                        "Mês/Ano": mes_ano,
+                        "Tipo": "Serviços",
+                        "Nome": t2[i][0],
+                        "Meta": t2[i + 2][1],
+                        "Realizado": t2[i + 2][2],
+                        "Falta": t2[i + 2][3],
+                        "Progresso": t2[i + 2][4],
+                    })
 
-except Exception as e:
-    print(f"Erro ao extrair dados de {nome}: {e}")
-    return []
+        return rows
+
+    except Exception as e:
+        print(f"Erro ao extrair dados de {nome}: {e}")
+        return []
