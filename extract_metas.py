@@ -94,9 +94,6 @@ def extract_city_data(page, cidade_info):
                     })
 
         if len(data) > 1:
-            t2 = data[1]
-            for i in range(0, len(t2), 3):
-                if len(data) > 1:
     t2 = data[1]
     for i in range(0, len(t2), 3):
         if i + 2 < len(t2) and len(t2[i + 2]) >= 5:
