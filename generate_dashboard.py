@@ -19,8 +19,8 @@ from bs4 import BeautifulSoup
 import time
 
 # Configurações
-LOGIN_USER = os.environ.get('LOGIN_USER', 'MANUS')
-LOGIN_PASS = os.environ.get('LOGIN_PASS', 'MANUS2026')
+LOGIN_USER = os.environ.get("LOGIN_USER", "MANUS")
+LOGIN_PASS = os.environ.get("LOGIN_PASS", "MANUS2026")
 
 # URLs das 9 cidades
 CIDADES = {
