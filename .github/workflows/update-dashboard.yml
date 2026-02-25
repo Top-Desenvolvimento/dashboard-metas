@@ -3,7 +3,7 @@ name: Atualizar Dashboard
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"   # a cada 6 horas
+    - cron: "0 */6 * * *"
 
 permissions:
   contents: write
@@ -11,6 +11,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v4
@@ -19,27 +20,34 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-- name: Instalar dependências
-  run: |
-    ...
 
-- name: Rodar extração
-  env:
-    ...
-  run: |
-    python extract_metas.py
+      - name: Instalar dependências Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
 
-- name: Instalar Google Chrome
-  run: |
-    sudo apt-get update
-    sudo apt-get install -y google-chrome-stable
+      - name: Rodar extração
+        env:
+          SYSTEM_LOGIN: ${{ secrets.SYSTEM_LOGIN }}
+          SYSTEM_PASSWORD: ${{ secrets.SYSTEM_PASSWORD }}
+        run: |
+          python extract_metas.py
 
-- name: Gerar dashboard
-  env:
-    LOGIN_USER: ${{ secrets.SYSTEM_LOGIN }}
-    LOGIN_PASS: ${{ secrets.SYSTEM_PASSWORD }}
-  run: |
-    python generate_dashboard.py
+      - name: Instalar Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Gerar dashboard
+        env:
+          LOGIN_USER: ${{ secrets.SYSTEM_LOGIN }}
+          LOGIN_PASS: ${{ secrets.SYSTEM_PASSWORD }}
+        run: |
+          python generate_dashboard.py
+
+      - name: Commit e push (se houver mudanças)
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
