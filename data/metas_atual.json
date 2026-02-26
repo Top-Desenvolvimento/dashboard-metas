@@ -1,18 +1,92 @@
 {
   "Caxias": {
-    "metas_financeiras": {
-      "ortodontia": "R$ 34.377,20",
-      "clinico_geral": "R$ 55.097,04"
-    },
-    "metas_servicos": {
-      "profilaxia": "60 / 89",
-      "restauracao": "41 / 101"
-    },
+    "metas_financeiras": {},
+    "metas_servicos": {},
     "avaliacoes": {
       "inicial": 285,
-      "atual": 292,
-      "novas": 7
+      "atual": 0,
+      "novas": -285
     },
-    "timestamp": "2026-02-25T16:49:04"
+    "timestamp": "2026-02-26T12:06:41.364544"
+  },
+  "Farroupilha": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 173,
+      "atual": 0,
+      "novas": -173
+    },
+    "timestamp": "2026-02-26T12:06:44.616490"
+  },
+  "Bento": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 76,
+      "atual": 0,
+      "novas": -76
+    },
+    "timestamp": "2026-02-26T12:06:47.744742"
+  },
+  "Encantado": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 206,
+      "atual": 0,
+      "novas": -206
+    },
+    "timestamp": "2026-02-26T12:06:51.278686"
+  },
+  "Soledade": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 413,
+      "atual": 0,
+      "novas": -413
+    },
+    "timestamp": "2026-02-26T12:06:54.637471"
+  },
+  "Garibaldi": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 128,
+      "atual": 0,
+      "novas": -128
+    },
+    "timestamp": "2026-02-26T12:06:57.665165"
+  },
+  "Veranópolis": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 128,
+      "atual": 0,
+      "novas": -128
+    },
+    "timestamp": "2026-02-26T12:07:00.996509"
+  },
+  "SS do Caí": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 88,
+      "atual": 0,
+      "novas": -88
+    },
+    "timestamp": "2026-02-26T12:07:04.425966"
+  },
+  "Flores": {
+    "metas_financeiras": {},
+    "metas_servicos": {},
+    "avaliacoes": {
+      "inicial": 94,
+      "atual": 0,
+      "novas": -94
+    },
+    "timestamp": "2026-02-26T12:07:07.590319"
   }
 }
