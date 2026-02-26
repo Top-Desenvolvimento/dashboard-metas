@@ -83,19 +83,40 @@ def fazer_login(driver, base_url) -> bool:
 
 def ir_para_metas(driver) -> bool:
     """
-    Clique em FINANÇAS -> Metas (igual seu print)
+    Clique em FINANÇAS -> Metas (robusto: não depende de ser <a> com link text).
     """
-    try:
-        wait = WebDriverWait(driver, 25)
+    wait = WebDriverWait(driver, 30)
 
-        # FINANÇAS (no seu print está exatamente assim)
-        click_wait(wait, By.LINK_TEXT, "FINANÇAS")
+    try:
+        # Espera o body existir
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+        # 1) Clicar em FINANÇAS (aceita FINANÇAS / Finanças / FINANCAS)
+        financas_xpath = (
+            "//*[self::a or self::button or self::div or self::span]"
+            "[contains(translate(normalize-space(.),"
+            " 'ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇFINANÇAS',"
+            " 'AAAAAEEEEIIIIOOOOOUUUUCFINANCAS'),"
+            " 'FINANCAS')]"
+        )
+        el_fin = wait.until(EC.element_to_be_clickable((By.XPATH, financas_xpath)))
+        el_fin.click()
         time.sleep(1)
 
-        # Metas (botão/aba)
-        click_wait(wait, By.LINK_TEXT, "Metas")
-        time.sleep(2)
+        # 2) Clicar em METAS
+        metas_xpath = (
+            "//*[self::a or self::button or self::div or self::span]"
+            "[contains(translate(normalize-space(.),"
+            " 'ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇMETAS',"
+            " 'AAAAAEEEEIIIIOOOOOUUUUCMETAS'),"
+            " 'METAS')]"
+        )
+        el_metas = wait.until(EC.element_to_be_clickable((By.XPATH, metas_xpath)))
+        el_metas.click()
 
+        # Aguarda a página de metas carregar (presença do select do mês/ano ajuda)
+        wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
+        time.sleep(2)
         return True
 
     except Exception as e:
