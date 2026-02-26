@@ -74,22 +74,28 @@ def fazer_login(driver, url):
     """Faz login no sistema da clínica"""
     try:
         driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        
-        # Aguarda campos de login
-        username_field = wait.until(EC.presence_of_element_located((By.NAME, 'username')))
-        password_field = driver.find_element(By.NAME, 'password')
-        
-        # Preenche credenciais
-        username_field.send_keys(LOGIN_USER)
-        password_field.send_keys(LOGIN_PASS)
-        
-        # Submete formulário
-        password_field.submit()
-        
-        # Aguarda carregamento
+        wait = WebDriverWait(driver, 30)
+
+        # Aguarda campos de login (IDs do sistema)
+        usuario = wait.until(EC.presence_of_element_located((By.ID, "usuario")))
+        senha = wait.until(EC.presence_of_element_located((By.ID, "senha")))
+
+        usuario.clear()
+        usuario.send_keys(LOGIN_USER)
+
+        senha.clear()
+        senha.send_keys(LOGIN_PASS)
+
+        # Clica no botão entrar
+        botao = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']")))
+        botao.click()
+
+        # Espera a página pós-login carregar (evita seguir antes da hora)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         time.sleep(2)
+
         return True
+
     except Exception as e:
         print(f"Erro no login: {e}")
         return False
