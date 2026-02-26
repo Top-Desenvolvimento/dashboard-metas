@@ -122,7 +122,17 @@ def ir_para_metas(driver) -> bool:
     except Exception as e:
         print(f"Erro ao navegar FINANÇAS > Metas: {e}")
         return False
+        
+if not ir_para_metas(driver):
+    print("Tentando plano B por URL direta de metas...")
+    ir_para_metas_por_url(driver, url)  # precisa ter essa função
 
+def ir_para_metas_por_url(driver, base_url):
+    wait = WebDriverWait(driver, 30)
+    metas_url = base_url.rstrip("/") + "/index2.php?conteudo=lista_metas"
+    driver.get(metas_url)
+    wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
+    time.sleep(2)
 
 def extrair_tabelas(driver):
     """
