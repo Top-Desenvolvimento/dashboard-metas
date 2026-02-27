@@ -26,10 +26,10 @@ def debug_state(driver, label):
     except Exception as e:
         print(f"[DEBUG] {label} | (falha ao ler url/title): {e}")
 
-def save_debug(driver, cidade, etapa):
+def save_debug(driver, , etapa):
     try:
         os.makedirs("debug", exist_ok=True)
-        path = f"debug/{cidade}_{etapa}.png".replace(" ", "_").replace("/", "_")
+        path = f"debug/{}_{etapa}.png".replace(" ", "_").replace("/", "_")
         driver.save_screenshot(path)
         print(f"[DEBUG] screenshot: {path}")
     except Exception as e:
@@ -39,8 +39,8 @@ def save_debug(driver, cidade, etapa):
 LOGIN_USER = os.environ.get("LOGIN_USER", "MANUS")
 LOGIN_PASS = os.environ.get("LOGIN_PASS", "MANUS2026")
 
-# ====== Cidades ======
-CIDADES = {
+# ====== s ======
+S = {
     "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
     "Farroupilha": "http://farroupilha.topesteticabucal.com.br/sistema",
     "Bento": "http://bento.topesteticabucal.com.br/sistema",
@@ -154,28 +154,28 @@ def ir_para_metas_por_url(driver, base_url) -> bool:
         return False
 
 
-def garantir_pagina_metas(driver, base_url, cidade) -> bool:
-    debug_state(driver, f"{cidade} | antes do login")
+def garantir_pagina_metas(driver, base_url, ) -> bool:
+    debug_state(driver, f"{} | antes do login")
 
     if not fazer_login(driver, base_url):
-        debug_state(driver, f"{cidade} | falhou login")
-        save_debug(driver, cidade, "falha_login")
+        debug_state(driver, f"{} | falhou login")
+        save_debug(driver, , "falha_login")
         return False
 
-    debug_state(driver, f"{cidade} | logou")
+    debug_state(driver, f"{} | logou")
 
     if ir_para_metas_via_menu(driver):
-        debug_state(driver, f"{cidade} | abriu metas via menu")
+        debug_state(driver, f"{} | abriu metas via menu")
         return True
 
-    debug_state(driver, f"{cidade} | falhou menu, tentando URL direta")
+    debug_state(driver, f"{} | falhou menu, tentando URL direta")
     ok = ir_para_metas_por_url(driver, base_url)
     if not ok:
-        debug_state(driver, f"{cidade} | falhou URL direta")
-        save_debug(driver, cidade, "falha_url_metas")
+        debug_state(driver, f"{} | falhou URL direta")
+        save_debug(driver, , "falha_url_metas")
         return False
 
-    debug_state(driver, f"{cidade} | abriu metas via URL direta")
+    debug_state(driver, f"{} | abriu metas via URL direta")
     return True
 def detectar_mes_ano(driver) -> str:
     try:
@@ -218,9 +218,8 @@ def main():
 
     try:
         for cidade, url in CIDADES.items():
-            print(f"Coletando dados de {cidade}...")
 
-            if not garantir_pagina_metas(driver, url):
+    if not garantir_pagina_metas(driver, url, cidade):
                 print(f"Falha ao coletar dados de {cidade} (login/menu/url).")
                 continue
 
