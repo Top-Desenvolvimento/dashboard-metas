@@ -20,6 +20,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+def debug_state(driver, label):
+    try:
+        print(f"[DEBUG] {label} | url={driver.current_url} | title={driver.title}")
+    except Exception as e:
+        print(f"[DEBUG] {label} | (falha ao ler url/title): {e}")
+
+def save_debug(driver, cidade, etapa):
+    try:
+        os.makedirs("debug", exist_ok=True)
+        path = f"debug/{cidade}_{etapa}.png".replace(" ", "_").replace("/", "_")
+        driver.save_screenshot(path)
+        print(f"[DEBUG] screenshot: {path}")
+    except Exception as e:
+        print(f"[DEBUG] falha ao salvar screenshot: {e}")
 
 # ====== Credenciais (vem do GitHub Secrets via workflow) ======
 LOGIN_USER = os.environ.get("LOGIN_USER", "MANUS")
@@ -140,20 +154,29 @@ def ir_para_metas_por_url(driver, base_url) -> bool:
         return False
 
 
-def garantir_pagina_metas(driver, base_url) -> bool:
-    """
-    Login -> menu FINANÇAS/METAS -> fallback por URL.
-    """
+def garantir_pagina_metas(driver, base_url, cidade) -> bool:
+    debug_state(driver, f"{cidade} | antes do login")
+
     if not fazer_login(driver, base_url):
+        debug_state(driver, f"{cidade} | falhou login")
+        save_debug(driver, cidade, "falha_login")
         return False
 
+    debug_state(driver, f"{cidade} | logou")
+
     if ir_para_metas_via_menu(driver):
+        debug_state(driver, f"{cidade} | abriu metas via menu")
         return True
 
-    return ir_para_metas_por_url(driver, base_url)
+    debug_state(driver, f"{cidade} | falhou menu, tentando URL direta")
+    ok = ir_para_metas_por_url(driver, base_url)
+    if not ok:
+        debug_state(driver, f"{cidade} | falhou URL direta")
+        save_debug(driver, cidade, "falha_url_metas")
+        return False
 
-
-# ====== Extração ======
+    debug_state(driver, f"{cidade} | abriu metas via URL direta")
+    return True
 def detectar_mes_ano(driver) -> str:
     try:
         sel = driver.find_element(By.ID, "mes_ano")
