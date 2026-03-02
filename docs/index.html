@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Dashboard - Top Estética</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Top Estética</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; }
+    .city { border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin: 12px 0; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .card { border: 1px solid #eee; border-radius: 10px; padding: 10px; min-width: 220px; }
+    .muted { color: #666; font-size: 14px; }
+    pre { white-space: pre-wrap; background: #f7f7f7; padding: 12px; border-radius: 10px; }
+  </style>
 </head>
 <body>
-    <h1>Dashboard em construção...</h1>
-    <p>Será atualizado automaticamente em breve!</p>
+  <h1>Dashboard de Metas</h1>
+  <div class="muted" id="status">Carregando dados...</div>
+  <div id="content"></div>
+
+  <script>
+    async function load() {
+      try {
+        // cache-buster pra não pegar JSON antigo
+        const res = await fetch("../data/metas_atual.json?v=" + Date.now());
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        document.getElementById("status").textContent =
+          "Atualizado em: " + (data.atualizado_em || "—");
+
+        const content = document.getElementById("content");
+        content.innerHTML = "";
+
+        // Tenta achar um formato comum: data.cidades (se existir)
+        const cidades = data.cidades || data;
+
+        for (const [cidade, info] of Object.entries(cidades)) {
+          const div = document.createElement("div");
+          div.className = "city";
+
+          const mes = (info && (info["Mês/Ano"] || info.mes_ano || info.mesAno)) ? (info["Mês/Ano"] || info.mes_ano || info.mesAno) : "";
+          div.innerHTML = `<h2>${cidade}</h2>${mes ? `<div class="muted">Mês/Ano: ${mes}</div>` : ""}`;
+
+          // Se tiver tabelas/linhas, mostra um resumo
+          // (como não sei seu JSON exato, eu mostro o conteúdo bruto também)
+          const pre = document.createElement("pre");
+          pre.textContent = JSON.stringify(info, null, 2);
+          div.appendChild(pre);
+
+          content.appendChild(div);
+        }
+
+      } catch (e) {
+        document.getElementById("status").textContent = "Erro ao carregar dados: " + e.message;
+      }
+    }
+
+    load();
+  </script>
 </body>
 </html>
