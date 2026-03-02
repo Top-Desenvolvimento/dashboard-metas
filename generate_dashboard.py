@@ -3,10 +3,14 @@
 Generate Dashboard - Top Estética Bucal
 
 Fluxo:
-Login -> FINANÇAS -> Metas -> extrair tabelas (financeiro + serviços)
+Login -> FINANÇAS -> Metas -> extrair tabelas
 
 Saída:
 - data/metas_atual.json
+
+Debug:
+- logs [DEBUG]
+- screenshots em debug/ quando falhar
 """
 
 import os
@@ -20,27 +24,13 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def debug_state(driver, label):
-    try:
-        print(f"[DEBUG] {label} | url={driver.current_url} | title={driver.title}")
-    except Exception as e:
-        print(f"[DEBUG] {label} | (falha ao ler url/title): {e}")
 
-def save_debug(driver, , etapa):
-    try:
-        os.makedirs("debug", exist_ok=True)
-        path = f"debug/{}_{etapa}.png".replace(" ", "_").replace("/", "_")
-        driver.save_screenshot(path)
-        print(f"[DEBUG] screenshot: {path}")
-    except Exception as e:
-        print(f"[DEBUG] falha ao salvar screenshot: {e}")
-
-# ====== Credenciais (vem do GitHub Secrets via workflow) ======
+# ===== Credenciais (GitHub Secrets via workflow) =====
 LOGIN_USER = os.environ.get("LOGIN_USER", "MANUS")
 LOGIN_PASS = os.environ.get("LOGIN_PASS", "MANUS2026")
 
-# ====== s ======
-S = {
+# ===== Cidades =====
+CIDADES = {
     "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
     "Farroupilha": "http://farroupilha.topesteticabucal.com.br/sistema",
     "Bento": "http://bento.topesteticabucal.com.br/sistema",
@@ -55,7 +45,24 @@ S = {
 OUTPUT_JSON = os.path.join("data", "metas_atual.json")
 
 
-# ====== Selenium setup ======
+# ===== Debug helpers =====
+def debug_state(driver, label):
+    try:
+        print(f"[DEBUG] {label} | url={driver.current_url} | title={driver.title}")
+    except Exception as e:
+        print(f"[DEBUG] {label} | (falha ao ler url/title): {e}")
+
+def save_debug(driver, cidade, etapa):
+    try:
+        os.makedirs("debug", exist_ok=True)
+        path = f"debug/{cidade}_{etapa}.png".replace(" ", "_").replace("/", "_")
+        driver.save_screenshot(path)
+        print(f"[DEBUG] screenshot: {path}")
+    except Exception as e:
+        print(f"[DEBUG] falha ao salvar screenshot: {e}")
+
+
+# ===== Selenium setup =====
 def setup_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
@@ -66,11 +73,13 @@ def setup_driver():
     return webdriver.Chrome(options=chrome_options)
 
 
-# ====== Navegação ======
-def fazer_login(driver, base_url) -> bool:
+# ===== Core steps =====
+def fazer_login(driver, base_url, cidade) -> bool:
     try:
         wait = WebDriverWait(driver, 30)
         driver.get(base_url)
+
+        debug_state(driver, f"{cidade} | abriu login")
 
         usuario = wait.until(EC.presence_of_element_located((By.ID, "usuario")))
         senha = wait.until(EC.presence_of_element_located((By.ID, "senha")))
@@ -86,22 +95,24 @@ def fazer_login(driver, base_url) -> bool:
 
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         time.sleep(1)
+
+        debug_state(driver, f"{cidade} | após login")
         return True
 
     except Exception as e:
-        print(f"Erro no login ({base_url}): {e}")
+        print(f"Erro no login em {cidade}: {e}")
+        save_debug(driver, cidade, "falha_login")
         return False
 
 
-def ir_para_metas_via_menu(driver) -> bool:
+def ir_para_metas_via_menu(driver, cidade) -> bool:
     """
-    Clica em FINANÇAS -> Metas, sem depender de <a>.
-    Aceita variações com/sem acento e maiúsculas/minúsculas.
+    Clica FINANÇAS -> Metas de forma robusta (não depende de ser <a>).
     """
     wait = WebDriverWait(driver, 30)
 
     try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        debug_state(driver, f"{cidade} | antes menu")
 
         financas_xpath = (
             "//*[self::a or self::button or self::div or self::span]"
@@ -125,58 +136,62 @@ def ir_para_metas_via_menu(driver) -> bool:
         el_metas = wait.until(EC.element_to_be_clickable((By.XPATH, metas_xpath)))
         el_metas.click()
 
-        # Na página de metas do seu print existe o select "mes_ano"
-        wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
-        time.sleep(2)
+        # tenta esperar o select do mês/ano (se existir)
+        try:
+            wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
+        except Exception:
+            pass
 
+        time.sleep(2)
+        debug_state(driver, f"{cidade} | após menu FINANÇAS>Metas")
         return True
 
     except Exception as e:
-        print(f"Erro ao navegar FINANÇAS > Metas (menu): {e}")
+        print(f"Erro ao navegar FINANÇAS > Metas (menu) em {cidade}: {e}")
+        save_debug(driver, cidade, "falha_menu_metas")
         return False
 
 
-def ir_para_metas_por_url(driver, base_url) -> bool:
+def ir_para_metas_por_url(driver, base_url, cidade) -> bool:
     """
-    Plano B: vai direto na URL da lista de metas.
+    Plano B: abre direto a página de lista de metas.
     """
+    wait = WebDriverWait(driver, 30)
+
     try:
-        wait = WebDriverWait(driver, 30)
         metas_url = base_url.rstrip("/") + "/index2.php?conteudo=lista_metas"
         driver.get(metas_url)
 
-        wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
+        # tenta esperar mes_ano, mas não falha se não existir
+        try:
+            wait.until(EC.presence_of_element_located((By.ID, "mes_ano")))
+        except Exception:
+            pass
+
         time.sleep(2)
+        debug_state(driver, f"{cidade} | abriu metas via URL direta")
         return True
 
     except Exception as e:
-        print(f"Erro ao abrir metas por URL ({base_url}): {e}")
+        print(f"Erro ao abrir metas por URL em {cidade}: {e}")
+        save_debug(driver, cidade, "falha_url_metas")
         return False
 
 
-def garantir_pagina_metas(driver, base_url, ) -> bool:
-    debug_state(driver, f"{} | antes do login")
+def garantir_pagina_metas(driver, base_url, cidade) -> bool:
+    debug_state(driver, f"{cidade} | start")
 
-    if not fazer_login(driver, base_url):
-        debug_state(driver, f"{} | falhou login")
-        save_debug(driver, , "falha_login")
+    if not fazer_login(driver, base_url, cidade):
         return False
 
-    debug_state(driver, f"{} | logou")
-
-    if ir_para_metas_via_menu(driver):
-        debug_state(driver, f"{} | abriu metas via menu")
+    if ir_para_metas_via_menu(driver, cidade):
         return True
 
-    debug_state(driver, f"{} | falhou menu, tentando URL direta")
-    ok = ir_para_metas_por_url(driver, base_url)
-    if not ok:
-        debug_state(driver, f"{} | falhou URL direta")
-        save_debug(driver, , "falha_url_metas")
-        return False
+    print(f"[DEBUG] {cidade} | menu falhou, tentando URL direta")
+    return ir_para_metas_por_url(driver, base_url, cidade)
 
-    debug_state(driver, f"{} | abriu metas via URL direta")
-    return True
+
+# ===== Extração =====
 def detectar_mes_ano(driver) -> str:
     try:
         sel = driver.find_element(By.ID, "mes_ano")
@@ -205,7 +220,7 @@ def extrair_tabelas(driver):
     return all_tables
 
 
-# ====== Main ======
+# ===== Main =====
 def main():
     os.makedirs("data", exist_ok=True)
 
@@ -218,9 +233,10 @@ def main():
 
     try:
         for cidade, url in CIDADES.items():
+            print(f"Coletando dados de {cidade}...")
 
-    if not garantir_pagina_metas(driver, url, cidade):
-                print(f"Falha ao coletar dados de {cidade} (login/menu/url).")
+            if not garantir_pagina_metas(driver, url, cidade):
+                print(f"Falha ao coletar dados de {cidade}.")
                 continue
 
             mes_ano = detectar_mes_ano(driver)
@@ -228,6 +244,7 @@ def main():
 
             if not tabelas:
                 print(f"Falha ao coletar dados de {cidade}: nenhuma tabela encontrada.")
+                save_debug(driver, cidade, "sem_tabelas")
                 continue
 
             resultado["cidades"][cidade] = {
