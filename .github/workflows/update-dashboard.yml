@@ -30,7 +30,7 @@ jobs:
         env:
           SYSTEM_LOGIN: ${{ secrets.SYSTEM_LOGIN }}
           SYSTEM_PASSWORD: ${{ secrets.SYSTEM_PASSWORD }}
-        run: |
+         run: |
           python extract_metas.py
 
       - name: Instalar Google Chrome
