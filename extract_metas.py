@@ -1,23 +1,11 @@
-"""
-Script de extração automática de metas do sistema Top Estética Bucal.
-Acessa 9 unidades via web scraping, extrai dados de metas financeiras e de serviços,
-e gera uma planilha Excel com abas por cidade + aba de ranking.
-"""
-
 import os
-import json
 import pandas as pd
 from playwright.sync_api import sync_playwright
 from datetime import datetime
-from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
 
-# Configurações
 USERNAME = os.getenv("SYSTEM_LOGIN")
 PASSWORD = os.getenv("SYSTEM_PASSWORD")
-OUTPUT_DIR = "."
-EXCEL_PATH = os.path.join("data", "metas_top_estetica.xlsx")
+
 CSV_HISTORY_PATH = os.path.join("data", "historico_metas.csv")
 JSON_CURRENT_PATH = os.path.join("data", "current_metas.json")
 
@@ -33,35 +21,31 @@ CIDADES = [
     {"nome": "SS do Caí", "url": "https://ssdocai.topesteticabucal.com.br/sistema/"},
 ]
 
-
 def extract_city_data(page, cidade_info):
-    """Extrai dados de metas de uma cidade."""
     nome = cidade_info["nome"]
     base_url = cidade_info["url"]
 
     try:
-        # Login
         page.goto(base_url, timeout=30000)
         page.fill("#usuario", USERNAME)
         page.fill("#senha", PASSWORD)
         page.click("input[type='submit']")
         page.wait_for_load_state("networkidle", timeout=15000)
 
-        # Navegar para Metas
         metas_url = base_url.rstrip("/") + "/index2.php?conteudo=lista_metas"
         if base_url.endswith("/sistema/"):
             metas_url = base_url + "index2.php?conteudo=lista_metas"
+
         page.goto(metas_url, timeout=30000)
         page.wait_for_load_state("networkidle", timeout=15000)
 
-        # Extrair dados
         data = page.evaluate("""() => {
             const tables = Array.from(document.querySelectorAll('table'));
-            return tables.map(table => {
-                return Array.from(table.querySelectorAll('tr')).map(tr => {
-                    return Array.from(tr.querySelectorAll('td, th')).map(td => td.innerText.trim());
-                });
-            });
+            return tables.map(table =>
+                Array.from(table.querySelectorAll('tr')).map(tr =>
+                    Array.from(tr.querySelectorAll('td, th')).map(td => td.innerText.trim())
+                )
+            );
         }""")
 
         mes_ano = page.evaluate("""() => {
@@ -73,14 +57,13 @@ def extract_city_data(page, cidade_info):
             return 'N/A';
         }""")
 
-        # Processar
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         rows = []
 
         if len(data) > 0:
             t1 = data[0]
             for i in range(0, len(t1), 3):
-                if i + 2 < len(t1) and len(t1[i + 2]) >= 5:
+                if i + 2 < len(t1) and len(t1[i + 2]) >= 5 and len(t1[i]) > 0:
                     rows.append({
                         "Data/Hora": timestamp,
                         "Cidade": nome,
@@ -92,10 +75,11 @@ def extract_city_data(page, cidade_info):
                         "Falta": t1[i + 2][3],
                         "Progresso": t1[i + 2][4],
                     })
+
         if len(data) > 1:
             t2 = data[1]
             for i in range(0, len(t2), 3):
-                if i + 2 < len(t2) and len(t2[i + 2]) >= 5:
+                if i + 2 < len(t2) and len(t2[i + 2]) >= 5 and len(t2[i]) > 0:
                     rows.append({
                         "Data/Hora": timestamp,
                         "Cidade": nome,
@@ -113,3 +97,44 @@ def extract_city_data(page, cidade_info):
     except Exception as e:
         print(f"Erro ao extrair dados de {nome}: {e}")
         return []
+
+def main():
+    if not USERNAME or not PASSWORD:
+        raise ValueError("SYSTEM_LOGIN e SYSTEM_PASSWORD não definidos.")
+
+    os.makedirs("data", exist_ok=True)
+    all_rows = []
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
+        page = context.new_page()
+
+        for cidade in CIDADES:
+            print(f"Extraindo: {cidade['nome']}")
+            rows = extract_city_data(page, cidade)
+            all_rows.extend(rows)
+
+        context.close()
+        browser.close()
+
+    if not all_rows:
+        raise RuntimeError("Nenhum dado foi extraído.")
+
+    df = pd.DataFrame(all_rows)
+
+    df.to_json(JSON_CURRENT_PATH, orient="records", force_ascii=False, indent=2)
+
+    if os.path.exists(CSV_HISTORY_PATH):
+        old_df = pd.read_csv(CSV_HISTORY_PATH)
+        history_df = pd.concat([old_df, df], ignore_index=True)
+    else:
+        history_df = df.copy()
+
+    history_df.to_csv(CSV_HISTORY_PATH, index=False)
+
+    print(f"Snapshot salvo em {JSON_CURRENT_PATH}")
+    print(f"Histórico salvo em {CSV_HISTORY_PATH}")
+
+if __name__ == "__main__":
+    main()
