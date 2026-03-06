@@ -26,22 +26,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Instalar Google Chrome
+      - name: Instalar browsers do Playwright
         run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+          python -m playwright install --with-deps chromium
 
-      - name: Coletar dados
+      - name: Extrair dados
         env:
-          LOGIN_USER: ${{ secrets.SYSTEM_LOGIN }}
-          LOGIN_PASS: ${{ secrets.SYSTEM_PASSWORD }}
+          SYSTEM_LOGIN: ${{ secrets.SYSTEM_LOGIN }}
+          SYSTEM_PASSWORD: ${{ secrets.SYSTEM_PASSWORD }}
         run: |
           python extract_metas.py
 
       - name: Gerar dashboard
-        env:
-          LOGIN_USER: ${{ secrets.SYSTEM_LOGIN }}
-          LOGIN_PASS: ${{ secrets.SYSTEM_PASSWORD }}
         run: |
           python generate_dashboard.py
 
