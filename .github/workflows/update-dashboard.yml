@@ -46,8 +46,9 @@ jobs:
       
       - name: Executar coleta de dados
         env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
+         LOGIN_USER: ${{ secrets.LOGIN_USER }}
+         LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
+         MES_REFERENCIA: '2026-02'
         run: |
           python3 extract_metas.py
       
