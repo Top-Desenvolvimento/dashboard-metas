@@ -443,13 +443,17 @@ def coletar_dados_todas_cidades():
 
             try:
                 if not fazer_login(driver, url, cidade):
-                    print(f"Falha ao coletar dados de {cidade}")
-                    continue
+    print(f"Falha ao coletar dados de {cidade}")
+    continue
 
-                selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
+if not navegar_ate_metas(driver, cidade):
+    print(f"Falha ao navegar até metas em {cidade}")
+    continue
 
-                metas_financeiras = extrair_metas_financeiras(driver, cidade)
-                metas_servicos = extrair_metas_servicos(driver, cidade)
+selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
+
+metas_financeiras = extrair_metas_financeiras(driver, cidade)
+metas_servicos = extrair_metas_servicos(driver, cidade)
 
                 avaliacoes_atual = obter_avaliacoes_google(GOOGLE_REVIEWS[idx])
                 avaliacoes_inicial = AVALIACOES_INICIAIS.get(cidade, 0)
