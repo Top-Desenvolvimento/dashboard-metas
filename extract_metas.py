@@ -242,63 +242,29 @@ def navegar_ate_metas(driver, cidade):
         print(f"Erro ao abrir tela de metas em {cidade}: {e}")
         salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
         return False
-def selecionar_mes_referencia(driver, mes_referencia, cidade):
-    """
-    Seleciona o mês no campo 'Mês/Ano'
-    Exemplo: Fevereiro / 2026
-    """
+def calcular_mes_referencia():
+    hoje = datetime.now()
 
-    try:
+    if hoje.day <= 5:
+        if hoje.month == 1:
+            ano = hoje.year - 1
+            mes = 12
+        else:
+            ano = hoje.year
+            mes = hoje.month - 1
+    else:
+        ano = hoje.year
+        mes = hoje.month
 
-        wait = WebDriverWait(driver, 15)
+    return f"{ano}-{mes:02d}"
 
-        mapa = {
-            "01": "Janeiro",
-            "02": "Fevereiro",
-            "03": "Março",
-            "04": "Abril",
-            "05": "Maio",
-            "06": "Junho",
-            "07": "Julho",
-            "08": "Agosto",
-            "09": "Setembro",
-            "10": "Outubro",
-            "11": "Novembro",
-            "12": "Dezembro"
-        }
 
-        ano, mes = mes_referencia.split("-")
+MES_REFERENCIA_ENV = os.environ.get("MES_REFERENCIA", "AUTO")
 
-        nome_mes = mapa.get(mes)
-
-        texto_select = f"{nome_mes} / {ano}"
-
-        print(f"Selecionando mês {texto_select} em {cidade}")
-
-        # localizar o select da página
-        select_element = wait.until(
-            EC.presence_of_element_located((By.TAG_NAME, "select"))
-        )
-
-        select = Select(select_element)
-
-        select.select_by_visible_text(texto_select)
-
-        time.sleep(3)
-
-        salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-
-        print(f"Mês selecionado com sucesso em {cidade}")
-
-        return True
-
-    except Exception as e:
-
-        print(f"Erro ao selecionar mês em {cidade}: {e}")
-
-        salvar_screenshot(driver, f"erro_selecao_mes_{cidade}.png")
-
-        return False
+if MES_REFERENCIA_ENV == "AUTO":
+    MES_REFERENCIA = calcular_mes_referencia()
+else:
+    MES_REFERENCIA = MES_REFERENCIA_ENV
 def extrair_metas_financeiras(driver, cidade):
     try:
         time.sleep(2)
