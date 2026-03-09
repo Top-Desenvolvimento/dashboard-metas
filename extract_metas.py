@@ -226,104 +226,74 @@ def fazer_login(driver, url, cidade):
         return False
 
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
-    """
-    Tenta selecionar o mês de referência por diferentes estratégias.
-    Como não conhecemos a tela real, esta função tenta várias opções comuns.
-    """
     info_mes = formatar_mes_para_texto(mes_referencia)
-    wait = WebDriverWait(driver, 8)
+    wait = WebDriverWait(driver, 10)
 
-    print(f"Tentando selecionar mês de referência {mes_referencia} em {cidade}...")
+    print(f"Tentando selecionar mês {mes_referencia} em {cidade}")
 
-    # Estratégia 1: select por name/id comuns
-    seletores_select = [
-        (By.NAME, "mes_referencia"),
-        (By.NAME, "mes"),
-        (By.NAME, "competencia"),
-        (By.ID, "mes_referencia"),
-        (By.ID, "mes"),
-        (By.ID, "competencia"),
-        (By.ID, "month"),
-    ]
-
-    for by, valor in seletores_select:
+    # 1. tenta abrir algum filtro/menu de competência/mês
+    for by, value in [
+        (By.XPATH, "//*[contains(text(), 'Competência')]"),
+        (By.XPATH, "//*[contains(text(), 'Mês')]"),
+        (By.XPATH, "//*[contains(text(), 'Período')]"),
+        (By.XPATH, "//*[contains(text(), 'Referência')]"),
+        (By.CSS_SELECTOR, "select"),
+        (By.CSS_SELECTOR, "input[type='month']"),
+    ]:
         try:
-            campo = wait.until(EC.presence_of_element_located((by, valor)))
+            elem = driver.find_element(by, value)
+            elem.click()
+            time.sleep(1)
+            break
+        except Exception:
+            pass
+
+    # 2. tenta select normal
+    for by, value in [
+        (By.NAME, "mes"),
+        (By.NAME, "mes_referencia"),
+        (By.NAME, "competencia"),
+        (By.ID, "mes"),
+        (By.ID, "mes_referencia"),
+        (By.ID, "competencia"),
+    ]:
+        try:
+            campo = driver.find_element(by, value)
+            Select(campo).select_by_visible_text(info_mes["nome_mes"])
+            time.sleep(2)
+            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
+            return True
+        except Exception:
+            pass
+
+        try:
+            campo = driver.find_element(by, value)
             Select(campo).select_by_value(mes_referencia)
             time.sleep(2)
-            print(f"Mês selecionado por select value: {mes_referencia}")
+            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
             return True
         except Exception:
             pass
 
+    # 3. tenta clicar no texto Fevereiro/2026
+    for texto in [
+        info_mes["nome_mes"],
+        info_mes["texto"],
+        info_mes["texto_com_espaco"],
+        "Fevereiro",
+        "fevereiro",
+    ]:
         try:
-            campo = driver.find_element(by, valor)
-            select = Select(campo)
-
-            for texto_opcao in [
-                info_mes["texto"],
-                info_mes["texto_com_espaco"],
-                info_mes["nome_mes"],
-                f'{info_mes["nome_mes"]}/{info_mes["ano"]}',
-            ]:
-                try:
-                    select.select_by_visible_text(texto_opcao)
-                    time.sleep(2)
-                    print(f"Mês selecionado por texto: {texto_opcao}")
-                    return True
-                except Exception:
-                    continue
-        except Exception:
-            pass
-
-    # Estratégia 2: input comum
-    seletores_input = [
-        (By.NAME, "mes_referencia"),
-        (By.NAME, "mes"),
-        (By.NAME, "competencia"),
-        (By.ID, "mes_referencia"),
-        (By.ID, "mes"),
-        (By.ID, "competencia"),
-        (By.ID, "month"),
-        (By.CSS_SELECTOR, "input[type='month']"),
-    ]
-
-    for by, valor in seletores_input:
-        try:
-            campo = driver.find_element(by, valor)
-            campo.clear()
-            campo.send_keys(mes_referencia)
+            driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]").click()
             time.sleep(2)
-            print(f"Mês preenchido em input: {mes_referencia}")
+            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
             return True
         except Exception:
             pass
 
-    # Estratégia 3: tentar clicar em algo com texto do mês
-    xpaths_texto = [
-        f"//*[contains(text(), '{info_mes['texto']}')]",
-        f"//*[contains(text(), '{info_mes['texto_com_espaco']}')]",
-        f"//*[contains(text(), '{info_mes['nome_mes']}')]",
-    ]
-
-    for xpath in xpaths_texto:
-        try:
-            elem = driver.find_element(By.XPATH, xpath)
-            elem.click()
-            time.sleep(2)
-            print(f"Mês selecionado por clique em texto: {xpath}")
-            return True
-        except Exception:
-            pass
-
-    print(f"Atenção: não foi possível selecionar automaticamente o mês em {cidade}.")
+    print(f"Não foi possível selecionar o mês em {cidade}")
     salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
     return False
-
-
-# =========================
-# EXTRAÇÃO
-# =========================
 
 def abrir_menu_por_texto(driver, textos):
     """
