@@ -141,34 +141,89 @@ def formatar_mes_para_texto(mes_referencia):
 # =========================
 
 def fazer_login(driver, url, cidade):
-    """Faz login no sistema da clínica."""
     try:
         print(f"Abrindo URL: {url}")
         driver.get(url)
+        wait = WebDriverWait(driver, 20)
 
-        wait = WebDriverWait(driver, 15)
+        print(f"Título da página em {cidade}: {driver.title}")
+        print(f"URL final em {cidade}: {driver.current_url}")
 
-        username_field = wait.until(
-            EC.presence_of_element_located((By.NAME, "username"))
-        )
-        password_field = driver.find_element(By.NAME, "password")
+        # tenta vários seletores possíveis para usuário
+        username_field = None
+        for by, value in [
+            (By.NAME, "username"),
+            (By.NAME, "login"),
+            (By.NAME, "usuario"),
+            (By.ID, "username"),
+            (By.ID, "login"),
+            (By.ID, "usuario"),
+            (By.CSS_SELECTOR, "input[type='text']"),
+            (By.CSS_SELECTOR, "input[name*='user']"),
+        ]:
+            try:
+                username_field = wait.until(EC.presence_of_element_located((by, value)))
+                break
+            except Exception:
+                continue
+
+        # tenta vários seletores possíveis para senha
+        password_field = None
+        for by, value in [
+            (By.NAME, "password"),
+            (By.NAME, "senha"),
+            (By.ID, "password"),
+            (By.ID, "senha"),
+            (By.CSS_SELECTOR, "input[type='password']"),
+        ]:
+            try:
+                password_field = driver.find_element(by, value)
+                break
+            except Exception:
+                continue
+
+        if not username_field or not password_field:
+            print(f"Campos de login não encontrados em {cidade}")
+            print(driver.page_source[:3000])
+            salvar_screenshot(driver, f"erro_login_{cidade}.png")
+            return False
 
         username_field.clear()
         username_field.send_keys(LOGIN_USER)
 
         password_field.clear()
         password_field.send_keys(LOGIN_PASS)
-        password_field.submit()
 
-        time.sleep(3)
-        print(f"Login realizado em {cidade}")
+        # tenta clicar no botão de login
+        clicou = False
+        for by, value in [
+            (By.CSS_SELECTOR, "button[type='submit']"),
+            (By.CSS_SELECTOR, "input[type='submit']"),
+            (By.XPATH, "//button[contains(., 'Entrar')]"),
+            (By.XPATH, "//button[contains(., 'Login')]"),
+            (By.XPATH, "//input[@value='Entrar']"),
+        ]:
+            try:
+                driver.find_element(by, value).click()
+                clicou = True
+                break
+            except Exception:
+                continue
+
+        if not clicou:
+            password_field.submit()
+
+        time.sleep(4)
+
+        print(f"Após login em {cidade}: {driver.current_url}")
+        salvar_screenshot(driver, f"pos_login_{cidade}.png")
+
         return True
 
     except Exception as e:
         print(f"Erro no login em {cidade}: {e}")
         salvar_screenshot(driver, f"erro_login_{cidade}.png")
         return False
-
 
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
     """
