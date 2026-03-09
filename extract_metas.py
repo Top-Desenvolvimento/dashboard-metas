@@ -244,103 +244,61 @@ def navegar_ate_metas(driver, cidade):
         return False
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
     """
-    Seleciona o Mês/Ano na tela de metas.
+    Seleciona o mês no campo 'Mês/Ano'
+    Exemplo: Fevereiro / 2026
     """
+
     try:
-        info_mes = formatar_mes_para_texto(mes_referencia)
+
         wait = WebDriverWait(driver, 15)
 
-        print(f"Tentando selecionar mês {mes_referencia} em {cidade}...")
+        mapa = {
+            "01": "Janeiro",
+            "02": "Fevereiro",
+            "03": "Março",
+            "04": "Abril",
+            "05": "Maio",
+            "06": "Junho",
+            "07": "Julho",
+            "08": "Agosto",
+            "09": "Setembro",
+            "10": "Outubro",
+            "11": "Novembro",
+            "12": "Dezembro"
+        }
 
-        texto_mes = info_mes["nome_mes"]
-        texto_mes_ano = f"{info_mes['nome_mes']} / {info_mes['ano']}"
-        texto_mes_ano_sem_espaco = f"{info_mes['nome_mes']}/{info_mes['ano']}"
+        ano, mes = mes_referencia.split("-")
 
-        try:
-            wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//*[contains(text(), 'Mês/Ano') or contains(text(), 'Mes/Ano')]")
-                )
-            )
-        except Exception:
-            pass
+        nome_mes = mapa.get(mes)
 
-        selects = driver.find_elements(By.TAG_NAME, "select")
-        for select_elem in selects:
-            try:
-                select = Select(select_elem)
+        texto_select = f"{nome_mes} / {ano}"
 
-                for opcao in [
-                    texto_mes_ano,
-                    texto_mes_ano_sem_espaco,
-                    texto_mes,
-                    mes_referencia,
-                ]:
-                    try:
-                        select.select_by_visible_text(opcao)
-                        time.sleep(2)
-                        print(f"Mês selecionado por texto: {opcao}")
-                        salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-                        return True
-                    except Exception:
-                        pass
+        print(f"Selecionando mês {texto_select} em {cidade}")
 
-                try:
-                    select.select_by_value(mes_referencia)
-                    time.sleep(2)
-                    print(f"Mês selecionado por value: {mes_referencia}")
-                    salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-                    return True
-                except Exception:
-                    pass
+        # localizar o select da página
+        select_element = wait.until(
+            EC.presence_of_element_located((By.TAG_NAME, "select"))
+        )
 
-            except Exception:
-                continue
+        select = Select(select_element)
 
-        for campo in driver.find_elements(By.CSS_SELECTOR, "input, select"):
-            try:
-                nome = (campo.get_attribute("name") or "").lower()
-                campo_id = (campo.get_attribute("id") or "").lower()
+        select.select_by_visible_text(texto_select)
 
-                if "mes" in nome or "mes" in campo_id or "ano" in nome or "ano" in campo_id:
-                    try:
-                        campo.clear()
-                    except Exception:
-                        pass
+        time.sleep(3)
 
-                    campo.send_keys(mes_referencia)
-                    time.sleep(2)
-                    print(f"Mês preenchido manualmente: {mes_referencia}")
-                    salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-                    return True
-            except Exception:
-                pass
+        salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
 
-        for texto in [texto_mes_ano, texto_mes_ano_sem_espaco, texto_mes]:
-            try:
-                opcao = driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]")
-                driver.execute_script("arguments[0].click();", opcao)
-                time.sleep(2)
-                print(f"Mês selecionado por clique: {texto}")
-                salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-                return True
-            except Exception:
-                pass
+        print(f"Mês selecionado com sucesso em {cidade}")
 
-        print(f"Não foi possível selecionar o mês em {cidade}")
-        salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
-        return False
+        return True
 
     except Exception as e:
+
         print(f"Erro ao selecionar mês em {cidade}: {e}")
+
         salvar_screenshot(driver, f"erro_selecao_mes_{cidade}.png")
+
         return False
-
-
-# =========================
-# EXTRAÇÃO
-# =========================
-
 def extrair_metas_financeiras(driver, cidade):
     try:
         time.sleep(2)
