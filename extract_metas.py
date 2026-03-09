@@ -58,7 +58,7 @@ GOOGLE_REVIEWS = [
 
 AVALIACOES_INICIAIS = {
     "Caxias": 285,
-    "Flores": 94,
+    "Flores": 96,
     "Farroupilha": 173,
     "Bento": 76,
     "Encantado": 206,
