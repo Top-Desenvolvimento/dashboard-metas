@@ -33,12 +33,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Executar coleta de dados
+            - name: Executar coleta de dados
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
           MES_REFERENCIA: '2026-02'
-        run: |
+         run: |
           python extract_metas.py
 
       - name: Atualizar dashboard HTML
