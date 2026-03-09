@@ -368,7 +368,13 @@ def coletar_dados_todas_cidades():
                     print(f"Falha ao navegar até metas em {cidade}")
                     continue
 
-                selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
+                if not navegar_ate_metas(driver, cidade):
+                    print(f"Falha ao navegar até metas em {cidade}")
+                    continue
+
+                # NÃO selecionar mês
+                metas_financeiras = extrair_metas_financeiras(driver, cidade)
+                metas_servicos = extrair_metas_servicos(driver, cidade)
 
                 metas_financeiras = extrair_metas_financeiras(driver, cidade)
                 metas_servicos = extrair_metas_servicos(driver, cidade)
