@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
 Script de extração de metas da Top Estética Bucal
-Coleta dados de 9 cidades e avaliações do Google
+Fluxo:
+1. Faz login em cada unidade
+2. Navega em FINANÇAS > METAS
+3. Seleciona o mês de referência
+4. Extrai metas financeiras e de serviços
+5. Salva JSON, CSV e Excel
 """
 
 import os
@@ -12,7 +17,7 @@ from datetime import datetime
 import pandas as pd
 import requests
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
@@ -26,24 +31,20 @@ from selenium.webdriver.chrome.service import Service
 
 LOGIN_USER = os.environ.get("LOGIN_USER", "")
 LOGIN_PASS = os.environ.get("LOGIN_PASS", "")
-
-# Fixe fevereiro no workflow com MES_REFERENCIA=2026-02
 MES_REFERENCIA = os.environ.get("MES_REFERENCIA", datetime.now().strftime("%Y-%m"))
 
-# URLs das 9 cidades
 CIDADES = {
     "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
     "Farroupilha": "http://farroupilha.topesteticabucal.com.br/sistema",
     "Bento": "http://bento.topesteticabucal.com.br/sistema",
-    "Encantado": "http://encantado.topesteticabucal.com.br/sistema",
+    "Encantado": "https://encantado.topesteticabucal.com.br/sistema",
     "Soledade": "http://soledade.topesteticabucal.com.br/sistema",
     "Garibaldi": "http://garibaldi.topesteticabucal.com.br/sistema",
     "Veranópolis": "http://veranopolis.topesteticabucal.com.br/sistema",
-    "SS do Caí": "http://ssdocai.topesteticabucal.com.br/sistema",
-    "Flores": "http://flores.topesteticabucal.com.br/sistema",
+    "SS do Caí": "https://ssdocai.topesteticabucal.com.br/sistema",
+    "Flores": "https://flores.topesteticabucal.com.br/sistema",
 }
 
-# URLs de avaliações do Google
 GOOGLE_REVIEWS = [
     "https://share.google/3f8yPEfrb24AQYYOp",   # Caxias
     "https://share.google/ffSPadgdvp8WUEXq0",   # Farroupilha
@@ -58,7 +59,7 @@ GOOGLE_REVIEWS = [
 
 AVALIACOES_INICIAIS = {
     "Caxias": 285,
-    "Flores": 96,
+    "Flores": 94,
     "Farroupilha": 173,
     "Bento": 76,
     "Encantado": 206,
@@ -89,23 +90,21 @@ def salvar_screenshot(driver, nome_arquivo):
 
 def setup_driver():
     chrome_options = Options()
-
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
     service = Service("/usr/bin/chromedriver")
-
     driver = webdriver.Chrome(service=service, options=chrome_options)
-
+    driver.set_page_load_timeout(40)
     return driver
+
+
 def formatar_mes_para_texto(mes_referencia):
-    """
-    Converte 2026-02 em textos úteis para tentar selecionar na interface.
-    """
     mapa = {
         "01": "Janeiro",
         "02": "Fevereiro",
@@ -123,18 +122,34 @@ def formatar_mes_para_texto(mes_referencia):
 
     ano, mes = mes_referencia.split("-")
     nome_mes = mapa.get(mes, mes)
+
     return {
-        "valor": mes_referencia,
-        "mes": mes,
         "ano": ano,
+        "mes": mes,
+        "nome_mes": nome_mes,
         "texto": f"{nome_mes}/{ano}",
         "texto_com_espaco": f"{nome_mes} / {ano}",
-        "nome_mes": nome_mes,
+        "valor": mes_referencia,
     }
 
 
+def extrair_texto_seguro(driver, seletores):
+    for by, valor in seletores:
+        try:
+            el = driver.find_element(by, valor)
+            texto = el.text.strip()
+            if texto:
+                return texto
+            value = (el.get_attribute("value") or "").strip()
+            if value:
+                return value
+        except Exception:
+            continue
+    return ""
+
+
 # =========================
-# LOGIN E FILTROS
+# LOGIN E NAVEGAÇÃO
 # =========================
 
 def fazer_login(driver, url, cidade):
@@ -147,38 +162,52 @@ def fazer_login(driver, url, cidade):
         print(f"Título da página em {cidade}: {driver.title}")
         print(f"URL final em {cidade}: {driver.current_url}")
 
-        # esperar campos de login realmente estarem utilizáveis
         username = wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='text'], input[name='username'], input[id='username']"))
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "input[type='text'], input[name='username'], input[id='username']")
+            )
         )
 
         password = wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='password']"))
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "input[type='password']")
+            )
         )
 
-        # limpar campos
+        driver.execute_script("arguments[0].scrollIntoView(true);", username)
+        time.sleep(0.5)
+
         driver.execute_script("arguments[0].value = '';", username)
         driver.execute_script("arguments[0].value = '';", password)
 
-        # preencher via JS (evita invalid element state)
         driver.execute_script("arguments[0].value = arguments[1];", username, LOGIN_USER)
         driver.execute_script("arguments[0].value = arguments[1];", password, LOGIN_PASS)
 
         time.sleep(1)
 
-        # tentar clicar no botão
-        try:
-            botao = driver.find_element(By.CSS_SELECTOR, "button[type='submit'], input[type='submit']")
-            botao.click()
-        except:
+        clicou = False
+        for seletor in [
+            (By.CSS_SELECTOR, "button[type='submit']"),
+            (By.CSS_SELECTOR, "input[type='submit']"),
+            (By.XPATH, "//button[contains(., 'Entrar')]"),
+            (By.XPATH, "//button[contains(., 'Login')]"),
+            (By.XPATH, "//input[@value='Entrar']"),
+        ]:
+            try:
+                botao = driver.find_element(*seletor)
+                driver.execute_script("arguments[0].click();", botao)
+                clicou = True
+                break
+            except Exception:
+                continue
+
+        if not clicou:
             password.submit()
 
         time.sleep(4)
 
         print(f"Após login em {cidade}: {driver.current_url}")
-
         salvar_screenshot(driver, f"pos_login_{cidade}.png")
-
         return True
 
     except Exception as e:
@@ -186,10 +215,45 @@ def fazer_login(driver, url, cidade):
         salvar_screenshot(driver, f"erro_login_{cidade}.png")
         return False
 
+
+def navegar_ate_metas(driver, cidade):
+    """
+    Navega pelo caminho: FINANÇAS > METAS
+    """
+    try:
+        wait = WebDriverWait(driver, 15)
+
+        print(f"Navegando até FINANÇAS > METAS em {cidade}...")
+
+        financas = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[contains(text(), 'FINANÇAS') or contains(text(), 'Finanças')]")
+            )
+        )
+        driver.execute_script("arguments[0].click();", financas)
+        time.sleep(2)
+
+        metas = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[contains(text(), 'METAS') or contains(text(), 'Metas')]")
+            )
+        )
+        driver.execute_script("arguments[0].click();", metas)
+        time.sleep(3)
+
+        print(f"Chegou na tela de metas em {cidade}: {driver.current_url}")
+        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
+        return True
+
+    except Exception as e:
+        print(f"Erro ao navegar até FINANÇAS > METAS em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
+        return False
+
+
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
     """
-    Seleciona o campo Mês/Ano com o valor desejado.
-    Exemplo: Fevereiro / 2026
+    Seleciona o Mês/Ano na tela de metas.
     """
     try:
         info_mes = formatar_mes_para_texto(mes_referencia)
@@ -201,18 +265,15 @@ def selecionar_mes_referencia(driver, mes_referencia, cidade):
         texto_mes_ano = f"{info_mes['nome_mes']} / {info_mes['ano']}"
         texto_mes_ano_sem_espaco = f"{info_mes['nome_mes']}/{info_mes['ano']}"
 
-        # Primeiro tenta localizar um select próximo ao texto "Mês/Ano"
         try:
-            label_mes = wait.until(
+            wait.until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//*[contains(text(), 'Mês/Ano') or contains(text(), 'Mes/Ano')]")
                 )
             )
-            salvar_screenshot(driver, f"campo_mes_encontrado_{cidade}.png")
         except Exception:
-            label_mes = None
+            pass
 
-        # Tenta selects comuns
         selects = driver.find_elements(By.TAG_NAME, "select")
         for select_elem in selects:
             try:
@@ -222,7 +283,7 @@ def selecionar_mes_referencia(driver, mes_referencia, cidade):
                     texto_mes_ano,
                     texto_mes_ano_sem_espaco,
                     texto_mes,
-                    mes_referencia
+                    mes_referencia,
                 ]:
                     try:
                         select.select_by_visible_text(opcao)
@@ -245,24 +306,25 @@ def selecionar_mes_referencia(driver, mes_referencia, cidade):
             except Exception:
                 continue
 
-        # Tenta inputs
         for campo in driver.find_elements(By.CSS_SELECTOR, "input, select"):
             try:
                 nome = (campo.get_attribute("name") or "").lower()
                 campo_id = (campo.get_attribute("id") or "").lower()
+
                 if "mes" in nome or "mes" in campo_id or "ano" in nome or "ano" in campo_id:
                     try:
                         campo.clear()
                     except Exception:
                         pass
+
                     campo.send_keys(mes_referencia)
                     time.sleep(2)
+                    print(f"Mês preenchido manualmente: {mes_referencia}")
                     salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
                     return True
             except Exception:
                 pass
 
-        # Tenta clicar em opção visível
         for texto in [texto_mes_ano, texto_mes_ano_sem_espaco, texto_mes]:
             try:
                 opcao = driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]")
@@ -283,55 +345,49 @@ def selecionar_mes_referencia(driver, mes_referencia, cidade):
         salvar_screenshot(driver, f"erro_selecao_mes_{cidade}.png")
         return False
 
-def navegar_ate_metas(driver, cidade):
-    """
-    Navega: FINANÇAS > METAS
-    """
+
+# =========================
+# EXTRAÇÃO
+# =========================
+
+def extrair_metas_financeiras(driver, cidade):
     try:
-        wait = WebDriverWait(driver, 15)
-
-        print(f"Navegando até FINANÇAS > METAS em {cidade}...")
-
-        # 1. Clicar em FINANÇAS
-        financas = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'FINANÇAS') or contains(text(), 'Finanças')]"))
-        )
-        driver.execute_script("arguments[0].click();", financas)
         time.sleep(2)
 
-        # 2. Clicar em METAS
-        metas = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'METAS') or contains(text(), 'Metas')]"))
-        )
-        driver.execute_script("arguments[0].click();", metas)
-        time.sleep(3)
+        ortodontia = extrair_texto_seguro(driver, [
+            (By.ID, "ortodontia_valor"),
+            (By.ID, "ortodontia"),
+            (By.NAME, "ortodontia"),
+            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
+        ])
 
-        print(f"Chegou na tela de metas em {cidade}: {driver.current_url}")
-        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
-        return True
+        clinico = extrair_texto_seguro(driver, [
+            (By.ID, "clinico_valor"),
+            (By.ID, "clinico_geral"),
+            (By.NAME, "clinico_geral"),
+            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Clinico Geral')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
+        ])
+
+        salvar_screenshot(driver, f"financeiro_extraido_{cidade}.png")
+
+        return {
+            "ortodontia": ortodontia or "R$ 0",
+            "clinico_geral": clinico or "R$ 0",
+        }
 
     except Exception as e:
-        print(f"Erro ao navegar até FINANÇAS > METAS em {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
-        return False
-
-
-def extrair_texto_seguro(driver, seletores):
-    """
-    Tenta vários seletores até encontrar um valor.
-    """
-    for by, valor in seletores:
-        try:
-            texto = driver.find_element(by, valor).text.strip()
-            if texto:
-                return texto
-        except Exception:
-            continue
-    return ""
+        print(f"Erro ao extrair metas financeiras de {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_financeiro_{cidade}.png")
+        return {
+            "ortodontia": "R$ 0",
+            "clinico_geral": "R$ 0",
+        }
 
 
 def extrair_metas_servicos(driver, cidade):
-    """Extrai dados de serviços já na tela de metas."""
     try:
         time.sleep(2)
 
@@ -362,51 +418,9 @@ def extrair_metas_servicos(driver, cidade):
             "profilaxia": "0",
             "restauracao": "0",
         }
-def extrair_metas_servicos(driver, cidade):
-    """Extrai dados de metas de serviços."""
-    try:
-        abriu = abrir_menu_por_texto(driver, [
-            "Metas de Serviços",
-            "Meta de Serviços",
-            "Serviços",
-            "Metas Serviços",
-        ])
-
-        if not abriu:
-            raise Exception("Menu de metas de serviços não encontrado")
-
-        profilaxia = extrair_texto_seguro(driver, [
-            (By.ID, "profilaxia"),
-            (By.NAME, "profilaxia"),
-            (By.XPATH, "//*[contains(text(), 'Profilaxia')]/following::*[1]"),
-        ])
-
-        restauracao = extrair_texto_seguro(driver, [
-            (By.ID, "restauracao"),
-            (By.NAME, "restauracao"),
-            (By.XPATH, "//*[contains(text(), 'Restauração')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Restauracao')]/following::*[1]"),
-        ])
-
-        return {
-            "profilaxia": profilaxia or "0",
-            "restauracao": restauracao or "0",
-        }
-
-    except Exception as e:
-        print(f"Erro ao extrair metas de serviços de {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_servicos_{cidade}.png")
-        return {
-            "profilaxia": "0",
-            "restauracao": "0",
-        }
 
 
 def obter_avaliacoes_google(url):
-    """
-    Mantido simples por enquanto.
-    Hoje retorna 0 quando não conseguir obter.
-    """
     try:
         response = requests.get(url, timeout=10)
         if response.status_code == 200:
@@ -418,11 +432,10 @@ def obter_avaliacoes_google(url):
 
 
 # =========================
-# COLETA GERAL
+# COLETA
 # =========================
 
 def coletar_dados_todas_cidades():
-    """Coleta dados de todas as cidades."""
     dados = {}
     driver = setup_driver()
 
@@ -433,17 +446,17 @@ def coletar_dados_todas_cidades():
 
             try:
                 if not fazer_login(driver, url, cidade):
-    print(f"Falha ao coletar dados de {cidade}")
-    continue
+                    print(f"Falha ao coletar dados de {cidade}")
+                    continue
 
-if not navegar_ate_metas(driver, cidade):
-    print(f"Falha ao navegar até metas em {cidade}")
-    continue
+                if not navegar_ate_metas(driver, cidade):
+                    print(f"Falha ao navegar até metas em {cidade}")
+                    continue
 
-selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
+                selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
 
-metas_financeiras = extrair_metas_financeiras(driver, cidade)
-metas_servicos = extrair_metas_servicos(driver, cidade)
+                metas_financeiras = extrair_metas_financeiras(driver, cidade)
+                metas_servicos = extrair_metas_servicos(driver, cidade)
 
                 avaliacoes_atual = obter_avaliacoes_google(GOOGLE_REVIEWS[idx])
                 avaliacoes_inicial = AVALIACOES_INICIAIS.get(cidade, 0)
