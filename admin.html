@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Baseline de Avaliações Google</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 24px;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    h1 { margin: 0 0 6px 0; color: #2d3748; }
+    .muted { color: #718096; margin: 0 0 18px 0; }
+    .bar {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      align-items: center; justify-content: space-between;
+      background: #f7fafc; border: 1px solid #e2e8f0;
+      border-radius: 12px; padding: 12px;
+      margin-bottom: 16px;
+    }
+    .bar > div { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    input, select, button {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+    button.secondary { background: #2d3748; }
+    button.ghost { background: transparent; color: #667eea; border: 1px solid #667eea; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #edf2f7; }
+    th { background: #f7fafc; }
+    .row-city { font-weight: 700; color: #2d3748; }
+    .hint { background: #fffaf0; border: 1px solid #fbd38d; padding: 12px; border-radius: 12px; color: #744210; }
+    .links { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    a { color: #667eea; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Admin — Avaliações Google (baseline mensal)</h1>
+    <p class="muted">
+      Aqui você ajusta o número <strong>inicial</strong> de avaliações por cidade no início de cada mês.
+      O script calcula <strong>novas = atual - inicial</strong>.
+    </p>
+
+    <div class="hint">
+      Se este site estiver hospedado como página estática (ex.: GitHub Pages), ele <strong>não consegue salvar no servidor</strong>.
+      Então você vai <strong>baixar</strong> o arquivo atualizado e substituir em <code>data/google_baselines.json</code> (ou subir pro repositório).
+    </div>
+
+    <div class="bar">
+      <div>
+        <label for="mes">Mês (YYYY-MM)</label>
+        <input id="mes" placeholder="2026-03" />
+        <button id="carregar" class="ghost">Carregar</button>
+      </div>
+      <div>
+        <button id="baixar">Baixar google_baselines.json</button>
+        <button id="importarBtn" class="secondary">Importar arquivo</button>
+        <input id="importar" type="file" accept="application/json" style="display:none" />
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cidade</th>
+          <th>Baseline (inicial do mês)</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div class="links">
+      <a href="index.html">Voltar ao dashboard</a>
+      <a href="data/google_baselines.json">Ver arquivo atual</a>
+    </div>
+  </div>
+
+  <script>
+    const CIDADES = ["Caxias","Farroupilha","Bento","Encantado","Soledade","Garibaldi","Veranópolis","SS do Caí","Flores"];
+    const $ = (id) => document.getElementById(id);
+
+    function pad2(n){ return String(n).padStart(2,"0"); }
+    function defaultMes(){
+      const d = new Date();
+      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}`;
+    }
+
+    let baselines = {};
+
+    function ensureMonth(mes){
+      if (!baselines[mes]) baselines[mes] = {};
+      for (const c of CIDADES) if (baselines[mes][c] == null) baselines[mes][c] = 0;
+    }
+
+    function render(mes){
+      ensureMonth(mes);
+      const tb = $("tbody");
+      tb.innerHTML = CIDADES.map((c) => {
+        const val = baselines[mes][c] ?? 0;
+        return `
+          <tr>
+            <td class="row-city">${c}</td>
+            <td>
+              <input data-city="${c}" type="number" min="0" step="1" value="${val}" style="width: 180px;" />
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      tb.querySelectorAll("input[data-city]").forEach((inp) => {
+        inp.addEventListener("input", () => {
+          const c = inp.getAttribute("data-city");
+          baselines[mes][c] = parseInt(inp.value || "0", 10);
+        });
+      });
+    }
+
+    async function loadCurrent(){
+      try {
+        const r = await fetch("data/google_baselines.json", {cache:"no-store"});
+        if (r.ok) baselines = await r.json();
+      } catch (e) {
+        console.warn("Sem google_baselines.json ainda; vou iniciar vazio.");
+      }
+    }
+
+    function downloadJson(){
+      const blob = new Blob([JSON.stringify(baselines, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "google_baselines.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    $("carregar").addEventListener("click", async () => {
+      const mes = ($("mes").value || "").trim() || defaultMes();
+      $("mes").value = mes;
+      await loadCurrent();
+      render(mes);
+    });
+
+    $("baixar").addEventListener("click", () => downloadJson());
+    $("importarBtn").addEventListener("click", () => $("importar").click());
+    $("importar").addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const txt = await file.text();
+      baselines = JSON.parse(txt);
+      const mes = ($("mes").value || "").trim() || defaultMes();
+      $("mes").value = mes;
+      render(mes);
+    });
+
+    // init
+    $("mes").value = defaultMes();
+    (async () => {
+      await loadCurrent();
+      render($("mes").value);
+    })();
+  </script>
+</body>
+</html>
+
