@@ -62,7 +62,8 @@ AVALIACOES_INICIAIS = {
 }
 
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+
+from selenium.webdriver.chrome.service import Service
 
 def setup_driver():
     chrome_options = Options()
@@ -70,10 +71,9 @@ def setup_driver():
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--remote-debugging-port=9222')
 
-    driver_path = ChromeDriverManager().install()
-
-    service = Service(driver_path)
+    service = Service('/usr/bin/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
