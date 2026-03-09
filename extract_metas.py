@@ -61,15 +61,19 @@ AVALIACOES_INICIAIS = {
     'SS do Caí': 88
 }
 
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+
 def setup_driver():
-    """Configura o driver do Chrome em modo headless"""
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
-    return webdriver.Chrome(options=chrome_options)
 
+    service = Service(ChromeDriverManager().install())
+
+    return webdriver.Chrome(service=service, options=chrome_options)
 def fazer_login(driver, url):
     """Faz login no sistema da clínica"""
     try:
