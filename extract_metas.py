@@ -42,7 +42,7 @@ CIDADES = {
     "Garibaldi": "http://garibaldi.topesteticabucal.com.br/sistema",
     "Veranópolis": "http://veranopolis.topesteticabucal.com.br/sistema",
     "SS do Caí": "https://ssdocai.topesteticabucal.com.br/sistema",
-    "Flores": "https://flores.topesteticabucal.com.br/sistema",
+    "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
 GOOGLE_REVIEWS = [
@@ -59,7 +59,7 @@ GOOGLE_REVIEWS = [
 
 AVALIACOES_INICIAIS = {
     "Caxias": 285,
-    "Flores": 94,
+    "Flores": 96,
     "Farroupilha": 173,
     "Bento": 76,
     "Encantado": 206,
