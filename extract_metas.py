@@ -331,23 +331,16 @@ def extrair_texto_seguro(driver, seletores):
 
 
 def extrair_metas_financeiras(driver, cidade):
-    """Extrai dados de metas financeiras."""
+    """Extrai dados financeiros já na tela de metas."""
     try:
-        abriu = abrir_menu_por_texto(driver, [
-            "Metas Financeiras",
-            "Meta Financeira",
-            "Financeiro",
-            "Metas",
-        ])
-
-        if not abriu:
-            raise Exception("Menu de metas financeiras não encontrado")
+        time.sleep(2)
 
         ortodontia = extrair_texto_seguro(driver, [
             (By.ID, "ortodontia_valor"),
             (By.ID, "ortodontia"),
             (By.NAME, "ortodontia"),
             (By.XPATH, "//*[contains(text(), 'Ortodontia')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
         ])
 
         clinico = extrair_texto_seguro(driver, [
@@ -356,7 +349,10 @@ def extrair_metas_financeiras(driver, cidade):
             (By.NAME, "clinico_geral"),
             (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/following::*[1]"),
             (By.XPATH, "//*[contains(text(), 'Clinico Geral')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
         ])
+
+        salvar_screenshot(driver, f"financeiro_extraido_{cidade}.png")
 
         return {
             "ortodontia": ortodontia or "R$ 0",
@@ -370,8 +366,6 @@ def extrair_metas_financeiras(driver, cidade):
             "ortodontia": "R$ 0",
             "clinico_geral": "R$ 0",
         }
-
-
 def extrair_metas_servicos(driver, cidade):
     """Extrai dados de metas de serviços."""
     try:
