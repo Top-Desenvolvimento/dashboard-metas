@@ -1,0 +1,70 @@
+name: Atualizar Dashboard - A cada hora
+
+on:
+  schedule:
+    # Roda a cada hora, todos os dias
+    - cron: '0 * * * *'
+  
+  # Permite executar manualmente via GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Instalar Chrome e ChromeDriver
+        run: |
+          # Instala Chrome
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          
+          # Instala ChromeDriver
+          wget -q https://chromedriver.storage.googleapis.com/LATEST_RELEASE -O /tmp/version
+          VERSION=$(cat /tmp/version)
+          wget -q https://chromedriver.storage.googleapis.com/$VERSION/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+      
+      - name: Executar coleta de dados
+        env:
+          LOGIN_USER: ${{ secrets.LOGIN_USER }}
+          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
+        run: |
+          python3 extract_metas.py
+      
+      - name: Atualizar dashboard HTML
+        run: |
+          python3 generate_dashboard.py
+      
+      - name: Commit e push das alterações
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/ docs/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Atualização automática - $(date +'%d/%m/%Y %H:%M')" && git push)
+      
+      - name: Deploy no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
