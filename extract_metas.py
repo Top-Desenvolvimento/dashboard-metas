@@ -103,7 +103,7 @@ def setup_driver():
     driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.set_page_load_timeout(30)
     return driver
-
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
 def formatar_mes_para_texto(mes_referencia):
     """
