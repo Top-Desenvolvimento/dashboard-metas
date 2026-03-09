@@ -1,6 +1,6 @@
 {
   "Caxias": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -14,10 +14,10 @@
       "atual": 0,
       "novas": -285
     },
-    "timestamp": "2026-03-09T17:47:17.013143"
+    "timestamp": "2026-03-09T20:14:58.402136"
   },
   "Farroupilha": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -31,10 +31,10 @@
       "atual": 0,
       "novas": -173
     },
-    "timestamp": "2026-03-09T17:47:47.867976"
+    "timestamp": "2026-03-09T20:15:22.882161"
   },
   "Bento": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -48,10 +48,10 @@
       "atual": 0,
       "novas": -76
     },
-    "timestamp": "2026-03-09T17:48:18.980813"
+    "timestamp": "2026-03-09T20:15:48.384449"
   },
   "Encantado": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -65,10 +65,10 @@
       "atual": 0,
       "novas": -206
     },
-    "timestamp": "2026-03-09T17:48:49.929120"
+    "timestamp": "2026-03-09T20:16:14.107404"
   },
   "Soledade": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -82,10 +82,10 @@
       "atual": 0,
       "novas": -413
     },
-    "timestamp": "2026-03-09T17:49:20.439929"
+    "timestamp": "2026-03-09T20:16:39.564928"
   },
   "Garibaldi": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -99,10 +99,10 @@
       "atual": 0,
       "novas": -128
     },
-    "timestamp": "2026-03-09T17:49:51.943708"
+    "timestamp": "2026-03-09T20:17:03.836703"
   },
   "Veranópolis": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -116,10 +116,10 @@
       "atual": 0,
       "novas": -128
     },
-    "timestamp": "2026-03-09T17:50:23.796410"
+    "timestamp": "2026-03-09T20:17:29.046378"
   },
   "SS do Caí": {
-    "mes_referencia": "2026-02",
+    "mes_referencia": "2026-03",
     "metas_financeiras": {
       "ortodontia": "R$ 0",
       "clinico_geral": "R$ 0"
@@ -133,6 +133,6 @@
       "atual": 0,
       "novas": -88
     },
-    "timestamp": "2026-03-09T17:50:54.627171"
+    "timestamp": "2026-03-09T20:17:55.160759"
   }
 }
