@@ -6,284 +6,574 @@ Coleta dados de 9 cidades e avaliações do Google
 
 import os
 import json
-import csv
+import time
 from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup
-import time
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
-# Configurações
-LOGIN_USER = os.environ.get('LOGIN_USER', 'MANUS')
-LOGIN_PASS = os.environ.get('LOGIN_PASS', 'MANUS2026')
+
+# =========================
+# CONFIGURAÇÕES
+# =========================
+
+LOGIN_USER = os.environ.get("LOGIN_USER", "")
+LOGIN_PASS = os.environ.get("LOGIN_PASS", "")
+
+# Fixe fevereiro no workflow com MES_REFERENCIA=2026-02
+MES_REFERENCIA = os.environ.get("MES_REFERENCIA", datetime.now().strftime("%Y-%m"))
 
 # URLs das 9 cidades
 CIDADES = {
-    'Caxias': 'http://caxias.topesteticabucal.com.br/sistema',
-    'Farroupilha': 'http://farroupilha.topesteticabucal.com.br/sistema',
-    'Bento': 'http://bento.topesteticabucal.com.br/sistema',
-    'Encantado': 'https://encantado.topesteticabucal.com.br/sistema',
-    'Soledade': 'http://soledade.topesteticabucal.com.br/sistema',
-    'Garibaldi': 'http://garibaldi.topesteticabucal.com.br/sistema',
-    'Veranópolis': 'http://veranopolis.topesteticabucal.com.br/sistema',
-    'SS do Caí': 'https://ssdocai.topesteticabucal.com.br/sistema',
-    'Flores': 'https://flores.topesteticabucal.com.br/sistema'
+    "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
+    "Farroupilha": "http://farroupilha.topesteticabucal.com.br/sistema",
+    "Bento": "http://bento.topesteticabucal.com.br/sistema",
+    "Encantado": "https://encantado.topesteticabucal.com.br/sistema",
+    "Soledade": "http://soledade.topesteticabucal.com.br/sistema",
+    "Garibaldi": "http://garibaldi.topesteticabucal.com.br/sistema",
+    "Veranópolis": "http://veranopolis.topesteticabucal.com.br/sistema",
+    "SS do Caí": "https://ssdocai.topesteticabucal.com.br/sistema",
+    "Flores": "https://flores.topesteticabucal.com.br/sistema",
 }
 
-# URLs de avaliações do Google (na ordem das cidades)
+# URLs de avaliações do Google
 GOOGLE_REVIEWS = [
-    'https://share.google/3f8yPEfrb24AQYYOp',   # Caxias
-    'https://share.google/ffSPadgdvp8WUEXq0',   # Farroupilha
-    'https://share.google/g1snAopsGqM5I8sOl',   # Bento
-    'https://share.google/sEdZu4jHIPYL77RA6',   # Encantado
-    'https://share.google/5CUABlRksD1cPYWiK',   # Soledade
-    'https://share.google/rOGEnBONHO2kTYVk3',   # Garibaldi
-    'https://share.google/UlnGSp8MES2AnB7Yz',   # Veranópolis
-    'https://share.google/33XgmkKW7UnW8o8WB',   # SS do Caí
-    'https://share.google/U2cO3MWeXsKQZUenB'    # Flores
+    "https://share.google/3f8yPEfrb24AQYYOp",   # Caxias
+    "https://share.google/ffSPadgdvp8WUEXq0",   # Farroupilha
+    "https://share.google/g1snAopsGqM5I8sOl",   # Bento
+    "https://share.google/sEdZu4jHIPYL77RA6",   # Encantado
+    "https://share.google/5CUABlRksD1cPYWiK",   # Soledade
+    "https://share.google/rOGEnBONHO2kTYVk3",   # Garibaldi
+    "https://share.google/UlnGSp8MES2AnB7Yz",   # Veranópolis
+    "https://share.google/33XgmkKW7UnW8o8WB",   # SS do Caí
+    "https://share.google/U2cO3MWeXsKQZUenB",   # Flores
 ]
 
-# Valores iniciais de avaliações (antes da meta começar)
 AVALIACOES_INICIAIS = {
-    'Caxias': 285,
-    'Flores': 94,
-    'Farroupilha': 173,
-    'Bento': 76,
-    'Encantado': 206,
-    'Soledade': 413,
-    'Garibaldi': 128,
-    'Veranópolis': 128,
-    'SS do Caí': 88
+    "Caxias": 285,
+    "Flores": 94,
+    "Farroupilha": 173,
+    "Bento": 76,
+    "Encantado": 206,
+    "Soledade": 413,
+    "Garibaldi": 128,
+    "Veranópolis": 128,
+    "SS do Caí": 88,
 }
 
-from selenium.webdriver.chrome.service import Service
 
-from selenium.webdriver.chrome.service import Service
+# =========================
+# UTILITÁRIOS
+# =========================
+
+def garantir_pasta_logs():
+    os.makedirs("logs", exist_ok=True)
+
+
+def salvar_screenshot(driver, nome_arquivo):
+    try:
+        garantir_pasta_logs()
+        caminho = os.path.join("logs", nome_arquivo)
+        driver.save_screenshot(caminho)
+        print(f"Screenshot salvo em: {caminho}")
+    except Exception as e:
+        print(f"Não foi possível salvar screenshot: {e}")
+
 
 def setup_driver():
+    """Configura o Chrome headless no GitHub Actions."""
     chrome_options = Options()
-    chrome_options.add_argument('--headless=new')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--remote-debugging-port=9222')
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--window-size=1920,1080")
 
-    service = Service('/usr/bin/chromedriver')
+    # GitHub Actions geralmente usa este caminho
+    service = Service("/usr/bin/chromedriver")
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
-
+    driver.set_page_load_timeout(30)
     return driver
-def fazer_login(driver, url):
-    """Faz login no sistema da clínica"""
+
+
+def formatar_mes_para_texto(mes_referencia):
+    """
+    Converte 2026-02 em textos úteis para tentar selecionar na interface.
+    """
+    mapa = {
+        "01": "Janeiro",
+        "02": "Fevereiro",
+        "03": "Março",
+        "04": "Abril",
+        "05": "Maio",
+        "06": "Junho",
+        "07": "Julho",
+        "08": "Agosto",
+        "09": "Setembro",
+        "10": "Outubro",
+        "11": "Novembro",
+        "12": "Dezembro",
+    }
+
+    ano, mes = mes_referencia.split("-")
+    nome_mes = mapa.get(mes, mes)
+    return {
+        "valor": mes_referencia,
+        "mes": mes,
+        "ano": ano,
+        "texto": f"{nome_mes}/{ano}",
+        "texto_com_espaco": f"{nome_mes} / {ano}",
+        "nome_mes": nome_mes,
+    }
+
+
+# =========================
+# LOGIN E FILTROS
+# =========================
+
+def fazer_login(driver, url, cidade):
+    """Faz login no sistema da clínica."""
     try:
+        print(f"Abrindo URL: {url}")
         driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        
-        # Aguarda campos de login
-        username_field = wait.until(EC.presence_of_element_located((By.NAME, 'username')))
-        password_field = driver.find_element(By.NAME, 'password')
-        
-        # Preenche credenciais
+
+        wait = WebDriverWait(driver, 15)
+
+        username_field = wait.until(
+            EC.presence_of_element_located((By.NAME, "username"))
+        )
+        password_field = driver.find_element(By.NAME, "password")
+
+        username_field.clear()
         username_field.send_keys(LOGIN_USER)
+
+        password_field.clear()
         password_field.send_keys(LOGIN_PASS)
-        
-        # Submete formulário
         password_field.submit()
-        
-        # Aguarda carregamento
-        time.sleep(2)
+
+        time.sleep(3)
+        print(f"Login realizado em {cidade}")
         return True
+
     except Exception as e:
-        print(f"Erro no login: {e}")
+        print(f"Erro no login em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_login_{cidade}.png")
         return False
 
-def extrair_metas_financeiras(driver):
-    """Extrai dados de metas financeiras"""
-    try:
-        # Navega para página de metas financeiras
-        driver.find_element(By.LINK_TEXT, 'Metas Financeiras').click()
-        time.sleep(2)
-        
-        # Extrai dados (ajuste os seletores conforme seu sistema)
-        ortodontia = driver.find_element(By.ID, 'ortodontia_valor').text
-        clinico = driver.find_element(By.ID, 'clinico_valor').text
-        
-        return {
-            'ortodontia': ortodontia,
-            'clinico_geral': clinico
-        }
-    except Exception as e:
-        print(f"Erro ao extrair metas financeiras: {e}")
-        return {}
 
-def extrair_metas_servicos(driver):
-    """Extrai dados de metas de serviços"""
+def selecionar_mes_referencia(driver, mes_referencia, cidade):
+    """
+    Tenta selecionar o mês de referência por diferentes estratégias.
+    Como não conhecemos a tela real, esta função tenta várias opções comuns.
+    """
+    info_mes = formatar_mes_para_texto(mes_referencia)
+    wait = WebDriverWait(driver, 8)
+
+    print(f"Tentando selecionar mês de referência {mes_referencia} em {cidade}...")
+
+    # Estratégia 1: select por name/id comuns
+    seletores_select = [
+        (By.NAME, "mes_referencia"),
+        (By.NAME, "mes"),
+        (By.NAME, "competencia"),
+        (By.ID, "mes_referencia"),
+        (By.ID, "mes"),
+        (By.ID, "competencia"),
+        (By.ID, "month"),
+    ]
+
+    for by, valor in seletores_select:
+        try:
+            campo = wait.until(EC.presence_of_element_located((by, valor)))
+            Select(campo).select_by_value(mes_referencia)
+            time.sleep(2)
+            print(f"Mês selecionado por select value: {mes_referencia}")
+            return True
+        except Exception:
+            pass
+
+        try:
+            campo = driver.find_element(by, valor)
+            select = Select(campo)
+
+            for texto_opcao in [
+                info_mes["texto"],
+                info_mes["texto_com_espaco"],
+                info_mes["nome_mes"],
+                f'{info_mes["nome_mes"]}/{info_mes["ano"]}',
+            ]:
+                try:
+                    select.select_by_visible_text(texto_opcao)
+                    time.sleep(2)
+                    print(f"Mês selecionado por texto: {texto_opcao}")
+                    return True
+                except Exception:
+                    continue
+        except Exception:
+            pass
+
+    # Estratégia 2: input comum
+    seletores_input = [
+        (By.NAME, "mes_referencia"),
+        (By.NAME, "mes"),
+        (By.NAME, "competencia"),
+        (By.ID, "mes_referencia"),
+        (By.ID, "mes"),
+        (By.ID, "competencia"),
+        (By.ID, "month"),
+        (By.CSS_SELECTOR, "input[type='month']"),
+    ]
+
+    for by, valor in seletores_input:
+        try:
+            campo = driver.find_element(by, valor)
+            campo.clear()
+            campo.send_keys(mes_referencia)
+            time.sleep(2)
+            print(f"Mês preenchido em input: {mes_referencia}")
+            return True
+        except Exception:
+            pass
+
+    # Estratégia 3: tentar clicar em algo com texto do mês
+    xpaths_texto = [
+        f"//*[contains(text(), '{info_mes['texto']}')]",
+        f"//*[contains(text(), '{info_mes['texto_com_espaco']}')]",
+        f"//*[contains(text(), '{info_mes['nome_mes']}')]",
+    ]
+
+    for xpath in xpaths_texto:
+        try:
+            elem = driver.find_element(By.XPATH, xpath)
+            elem.click()
+            time.sleep(2)
+            print(f"Mês selecionado por clique em texto: {xpath}")
+            return True
+        except Exception:
+            pass
+
+    print(f"Atenção: não foi possível selecionar automaticamente o mês em {cidade}.")
+    salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
+    return False
+
+
+# =========================
+# EXTRAÇÃO
+# =========================
+
+def abrir_menu_por_texto(driver, textos):
+    """
+    Tenta clicar em um link/menu usando uma lista de possíveis textos.
+    """
+    for texto in textos:
+        try:
+            driver.find_element(By.LINK_TEXT, texto).click()
+            time.sleep(2)
+            return True
+        except Exception:
+            pass
+
+        try:
+            driver.find_element(By.PARTIAL_LINK_TEXT, texto).click()
+            time.sleep(2)
+            return True
+        except Exception:
+            pass
+
+        try:
+            driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]").click()
+            time.sleep(2)
+            return True
+        except Exception:
+            pass
+
+    return False
+
+
+def extrair_texto_seguro(driver, seletores):
+    """
+    Tenta vários seletores até encontrar um valor.
+    """
+    for by, valor in seletores:
+        try:
+            texto = driver.find_element(by, valor).text.strip()
+            if texto:
+                return texto
+        except Exception:
+            continue
+    return ""
+
+
+def extrair_metas_financeiras(driver, cidade):
+    """Extrai dados de metas financeiras."""
     try:
-        # Navega para página de serviços
-        driver.find_element(By.LINK_TEXT, 'Metas de Serviços').click()
-        time.sleep(2)
-        
-        # Extrai dados (ajuste os seletores conforme seu sistema)
-        profilaxia = driver.find_element(By.ID, 'profilaxia').text
-        restauracao = driver.find_element(By.ID, 'restauracao').text
-        
+        abriu = abrir_menu_por_texto(driver, [
+            "Metas Financeiras",
+            "Meta Financeira",
+            "Financeiro",
+            "Metas",
+        ])
+
+        if not abriu:
+            raise Exception("Menu de metas financeiras não encontrado")
+
+        ortodontia = extrair_texto_seguro(driver, [
+            (By.ID, "ortodontia_valor"),
+            (By.ID, "ortodontia"),
+            (By.NAME, "ortodontia"),
+            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/following::*[1]"),
+        ])
+
+        clinico = extrair_texto_seguro(driver, [
+            (By.ID, "clinico_valor"),
+            (By.ID, "clinico_geral"),
+            (By.NAME, "clinico_geral"),
+            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Clinico Geral')]/following::*[1]"),
+        ])
+
         return {
-            'profilaxia': profilaxia,
-            'restauracao': restauracao
+            "ortodontia": ortodontia or "R$ 0",
+            "clinico_geral": clinico or "R$ 0",
         }
+
     except Exception as e:
-        print(f"Erro ao extrair metas de serviços: {e}")
-        return {}
+        print(f"Erro ao extrair metas financeiras de {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_financeiro_{cidade}.png")
+        return {
+            "ortodontia": "R$ 0",
+            "clinico_geral": "R$ 0",
+        }
+
+
+def extrair_metas_servicos(driver, cidade):
+    """Extrai dados de metas de serviços."""
+    try:
+        abriu = abrir_menu_por_texto(driver, [
+            "Metas de Serviços",
+            "Meta de Serviços",
+            "Serviços",
+            "Metas Serviços",
+        ])
+
+        if not abriu:
+            raise Exception("Menu de metas de serviços não encontrado")
+
+        profilaxia = extrair_texto_seguro(driver, [
+            (By.ID, "profilaxia"),
+            (By.NAME, "profilaxia"),
+            (By.XPATH, "//*[contains(text(), 'Profilaxia')]/following::*[1]"),
+        ])
+
+        restauracao = extrair_texto_seguro(driver, [
+            (By.ID, "restauracao"),
+            (By.NAME, "restauracao"),
+            (By.XPATH, "//*[contains(text(), 'Restauração')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Restauracao')]/following::*[1]"),
+        ])
+
+        return {
+            "profilaxia": profilaxia or "0",
+            "restauracao": restauracao or "0",
+        }
+
+    except Exception as e:
+        print(f"Erro ao extrair metas de serviços de {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_servicos_{cidade}.png")
+        return {
+            "profilaxia": "0",
+            "restauracao": "0",
+        }
+
 
 def obter_avaliacoes_google(url):
-    """Obtém número de avaliações do Google"""
+    """
+    Mantido simples por enquanto.
+    Hoje retorna 0 quando não conseguir obter.
+    """
     try:
-        # Aqui você pode implementar web scraping ou usar API do Google
-        # Por enquanto retorna valor simulado
         response = requests.get(url, timeout=10)
-        # Implementar parsing conforme estrutura da página
+        if response.status_code == 200:
+            return 0
         return 0
     except Exception as e:
         print(f"Erro ao obter avaliações do Google: {e}")
         return 0
 
+
+# =========================
+# COLETA GERAL
+# =========================
+
 def coletar_dados_todas_cidades():
-    """Coleta dados de todas as 9 cidades"""
-    driver = setup_driver()
+    """Coleta dados de todas as cidades."""
     dados = {}
-    
+    driver = setup_driver()
+
     try:
         for idx, (cidade, url) in enumerate(CIDADES.items()):
+            print("-" * 60)
             print(f"Coletando dados de {cidade}...")
-            
-            if fazer_login(driver, url):
-                metas_financeiras = extrair_metas_financeiras(driver)
-                metas_servicos = extrair_metas_servicos(driver)
-                
-                # Coleta avaliações do Google
+
+            try:
+                if not fazer_login(driver, url, cidade):
+                    print(f"Falha ao coletar dados de {cidade}")
+                    continue
+
+                selecionar_mes_referencia(driver, MES_REFERENCIA, cidade)
+
+                metas_financeiras = extrair_metas_financeiras(driver, cidade)
+                metas_servicos = extrair_metas_servicos(driver, cidade)
+
                 avaliacoes_atual = obter_avaliacoes_google(GOOGLE_REVIEWS[idx])
-                avaliacoes_inicial = AVALIACOES_INICIAIS[cidade]
+                avaliacoes_inicial = AVALIACOES_INICIAIS.get(cidade, 0)
                 avaliacoes_novas = avaliacoes_atual - avaliacoes_inicial
-                
+
                 dados[cidade] = {
-                    'metas_financeiras': metas_financeiras,
-                    'metas_servicos': metas_servicos,
-                    'avaliacoes': {
-                        'inicial': avaliacoes_inicial,
-                        'atual': avaliacoes_atual,
-                        'novas': avaliacoes_novas
+                    "mes_referencia": MES_REFERENCIA,
+                    "metas_financeiras": metas_financeiras,
+                    "metas_servicos": metas_servicos,
+                    "avaliacoes": {
+                        "inicial": avaliacoes_inicial,
+                        "atual": avaliacoes_atual,
+                        "novas": avaliacoes_novas,
                     },
-                    'timestamp': datetime.now().isoformat()
+                    "timestamp": datetime.now().isoformat(),
                 }
-            else:
-                print(f"Falha ao coletar dados de {cidade}")
-                
+
+                print(f"Coleta concluída em {cidade}")
+
+            except WebDriverException as e:
+                print(f"Erro de navegador em {cidade}: {e}")
+                salvar_screenshot(driver, f"erro_driver_{cidade}.png")
+                continue
+            except Exception as e:
+                print(f"Erro inesperado em {cidade}: {e}")
+                salvar_screenshot(driver, f"erro_geral_{cidade}.png")
+                continue
+
     finally:
         driver.quit()
-    
+
     return dados
 
+
+# =========================
+# SAÍDAS
+# =========================
+
 def salvar_json(dados):
-    """Salva dados em JSON"""
-    output_path = 'data/metas_atual.json'
-    os.makedirs('data', exist_ok=True)
-    
-    with open(output_path, 'w', encoding='utf-8') as f:
+    output_path = "data/metas_atual.json"
+    os.makedirs("data", exist_ok=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=2)
-    
+
     print(f"JSON salvo em: {output_path}")
 
+
 def salvar_csv(dados):
-    """Salva histórico em CSV"""
-    output_path = 'data/historico_metas.csv'
-    os.makedirs('data', exist_ok=True)
-    
-    # Prepara dados para CSV
+    output_path = "data/historico_metas.csv"
+    os.makedirs("data", exist_ok=True)
+
     rows = []
     for cidade, info in dados.items():
         row = {
-            'cidade': cidade,
-            'timestamp': info['timestamp'],
-            'ortodontia': info['metas_financeiras'].get('ortodontia', ''),
-            'clinico_geral': info['metas_financeiras'].get('clinico_geral', ''),
-            'profilaxia': info['metas_servicos'].get('profilaxia', ''),
-            'restauracao': info['metas_servicos'].get('restauracao', ''),
-            'avaliacoes_novas': info['avaliacoes']['novas']
+            "cidade": cidade,
+            "mes_referencia": info.get("mes_referencia", MES_REFERENCIA),
+            "timestamp": info["timestamp"],
+            "ortodontia": info["metas_financeiras"].get("ortodontia", ""),
+            "clinico_geral": info["metas_financeiras"].get("clinico_geral", ""),
+            "profilaxia": info["metas_servicos"].get("profilaxia", ""),
+            "restauracao": info["metas_servicos"].get("restauracao", ""),
+            "avaliacoes_novas": info["avaliacoes"]["novas"],
         }
         rows.append(row)
-    
-    # Append ao CSV existente ou cria novo
+
     df = pd.DataFrame(rows)
     if os.path.exists(output_path):
-        df.to_csv(output_path, mode='a', header=False, index=False)
+        df.to_csv(output_path, mode="a", header=False, index=False)
     else:
         df.to_csv(output_path, index=False)
-    
+
     print(f"CSV atualizado em: {output_path}")
 
+
 def gerar_excel(dados):
-    """Gera planilha Excel formatada"""
-    output_path = 'data/metas_top_estetica.xlsx'
-    
-    # Cria DataFrames
+    output_path = "data/metas_top_estetica.xlsx"
+
     df_financeiro = []
     df_servicos = []
     df_avaliacoes = []
-    
+
     for cidade, info in dados.items():
         df_financeiro.append({
-            'Cidade': cidade,
-            'Ortodontia': info['metas_financeiras'].get('ortodontia', ''),
-            'Clínico Geral': info['metas_financeiras'].get('clinico_geral', '')
+            "Cidade": cidade,
+            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
+            "Ortodontia": info["metas_financeiras"].get("ortodontia", ""),
+            "Clínico Geral": info["metas_financeiras"].get("clinico_geral", ""),
         })
-        
+
         df_servicos.append({
-            'Cidade': cidade,
-            'Profilaxia': info['metas_servicos'].get('profilaxia', ''),
-            'Restauração': info['metas_servicos'].get('restauracao', '')
+            "Cidade": cidade,
+            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
+            "Profilaxia": info["metas_servicos"].get("profilaxia", ""),
+            "Restauração": info["metas_servicos"].get("restauracao", ""),
         })
-        
+
         df_avaliacoes.append({
-            'Cidade': cidade,
-            'Avaliações Iniciais': info['avaliacoes']['inicial'],
-            'Avaliações Atuais': info['avaliacoes']['atual'],
-            'Novas Avaliações': info['avaliacoes']['novas']
+            "Cidade": cidade,
+            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
+            "Avaliações Iniciais": info["avaliacoes"]["inicial"],
+            "Avaliações Atuais": info["avaliacoes"]["atual"],
+            "Novas Avaliações": info["avaliacoes"]["novas"],
         })
-    
-    # Salva em Excel com múltiplas abas
-    with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
-        pd.DataFrame(df_financeiro).to_excel(writer, sheet_name='Metas Financeiras', index=False)
-        pd.DataFrame(df_servicos).to_excel(writer, sheet_name='Metas Serviços', index=False)
-        pd.DataFrame(df_avaliacoes).to_excel(writer, sheet_name='Avaliações Google', index=False)
-    
+
+    with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+        pd.DataFrame(df_financeiro).to_excel(writer, sheet_name="Metas Financeiras", index=False)
+        pd.DataFrame(df_servicos).to_excel(writer, sheet_name="Metas Serviços", index=False)
+        pd.DataFrame(df_avaliacoes).to_excel(writer, sheet_name="Avaliações Google", index=False)
+
     print(f"Excel gerado em: {output_path}")
 
+
+# =========================
+# MAIN
+# =========================
+
 def main():
-    """Função principal"""
     print("=" * 60)
     print("Iniciando coleta de dados - Top Estética Bucal")
     print(f"Data/Hora: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+    print(f"Mês de referência: {MES_REFERENCIA}")
     print("=" * 60)
-    
-    # Coleta dados
+
+    if not LOGIN_USER or not LOGIN_PASS:
+        print("✗ LOGIN_USER ou LOGIN_PASS não configurados.")
+        raise SystemExit(1)
+
     dados = coletar_dados_todas_cidades()
-    
+
     if dados:
-        # Salva em diferentes formatos
         salvar_json(dados)
         salvar_csv(dados)
         gerar_excel(dados)
-        
+
         print("\n✓ Coleta concluída com sucesso!")
         print(f"Total de cidades processadas: {len(dados)}")
     else:
         print("\n✗ Nenhum dado foi coletado!")
-        exit(1)
+        raise SystemExit(1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
