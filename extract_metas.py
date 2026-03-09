@@ -187,74 +187,101 @@ def fazer_login(driver, url, cidade):
         return False
 
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
-    info_mes = formatar_mes_para_texto(mes_referencia)
-    wait = WebDriverWait(driver, 10)
+    """
+    Seleciona o campo Mês/Ano com o valor desejado.
+    Exemplo: Fevereiro / 2026
+    """
+    try:
+        info_mes = formatar_mes_para_texto(mes_referencia)
+        wait = WebDriverWait(driver, 15)
 
-    print(f"Tentando selecionar mês {mes_referencia} em {cidade}")
+        print(f"Tentando selecionar mês {mes_referencia} em {cidade}...")
 
-    # 1. tenta abrir algum filtro/menu de competência/mês
-    for by, value in [
-        (By.XPATH, "//*[contains(text(), 'Competência')]"),
-        (By.XPATH, "//*[contains(text(), 'Mês')]"),
-        (By.XPATH, "//*[contains(text(), 'Período')]"),
-        (By.XPATH, "//*[contains(text(), 'Referência')]"),
-        (By.CSS_SELECTOR, "select"),
-        (By.CSS_SELECTOR, "input[type='month']"),
-    ]:
+        texto_mes = info_mes["nome_mes"]
+        texto_mes_ano = f"{info_mes['nome_mes']} / {info_mes['ano']}"
+        texto_mes_ano_sem_espaco = f"{info_mes['nome_mes']}/{info_mes['ano']}"
+
+        # Primeiro tenta localizar um select próximo ao texto "Mês/Ano"
         try:
-            elem = driver.find_element(by, value)
-            elem.click()
-            time.sleep(1)
-            break
+            label_mes = wait.until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//*[contains(text(), 'Mês/Ano') or contains(text(), 'Mes/Ano')]")
+                )
+            )
+            salvar_screenshot(driver, f"campo_mes_encontrado_{cidade}.png")
         except Exception:
-            pass
+            label_mes = None
 
-    # 2. tenta select normal
-    for by, value in [
-        (By.NAME, "mes"),
-        (By.NAME, "mes_referencia"),
-        (By.NAME, "competencia"),
-        (By.ID, "mes"),
-        (By.ID, "mes_referencia"),
-        (By.ID, "competencia"),
-    ]:
-        try:
-            campo = driver.find_element(by, value)
-            Select(campo).select_by_visible_text(info_mes["nome_mes"])
-            time.sleep(2)
-            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-            return True
-        except Exception:
-            pass
+        # Tenta selects comuns
+        selects = driver.find_elements(By.TAG_NAME, "select")
+        for select_elem in selects:
+            try:
+                select = Select(select_elem)
 
-        try:
-            campo = driver.find_element(by, value)
-            Select(campo).select_by_value(mes_referencia)
-            time.sleep(2)
-            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-            return True
-        except Exception:
-            pass
+                for opcao in [
+                    texto_mes_ano,
+                    texto_mes_ano_sem_espaco,
+                    texto_mes,
+                    mes_referencia
+                ]:
+                    try:
+                        select.select_by_visible_text(opcao)
+                        time.sleep(2)
+                        print(f"Mês selecionado por texto: {opcao}")
+                        salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
+                        return True
+                    except Exception:
+                        pass
 
-    # 3. tenta clicar no texto Fevereiro/2026
-    for texto in [
-        info_mes["nome_mes"],
-        info_mes["texto"],
-        info_mes["texto_com_espaco"],
-        "Fevereiro",
-        "fevereiro",
-    ]:
-        try:
-            driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]").click()
-            time.sleep(2)
-            salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
-            return True
-        except Exception:
-            pass
+                try:
+                    select.select_by_value(mes_referencia)
+                    time.sleep(2)
+                    print(f"Mês selecionado por value: {mes_referencia}")
+                    salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
+                    return True
+                except Exception:
+                    pass
 
-    print(f"Não foi possível selecionar o mês em {cidade}")
-    salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
-    return False
+            except Exception:
+                continue
+
+        # Tenta inputs
+        for campo in driver.find_elements(By.CSS_SELECTOR, "input, select"):
+            try:
+                nome = (campo.get_attribute("name") or "").lower()
+                campo_id = (campo.get_attribute("id") or "").lower()
+                if "mes" in nome or "mes" in campo_id or "ano" in nome or "ano" in campo_id:
+                    try:
+                        campo.clear()
+                    except Exception:
+                        pass
+                    campo.send_keys(mes_referencia)
+                    time.sleep(2)
+                    salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
+                    return True
+            except Exception:
+                pass
+
+        # Tenta clicar em opção visível
+        for texto in [texto_mes_ano, texto_mes_ano_sem_espaco, texto_mes]:
+            try:
+                opcao = driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]")
+                driver.execute_script("arguments[0].click();", opcao)
+                time.sleep(2)
+                print(f"Mês selecionado por clique: {texto}")
+                salvar_screenshot(driver, f"mes_selecionado_{cidade}.png")
+                return True
+            except Exception:
+                pass
+
+        print(f"Não foi possível selecionar o mês em {cidade}")
+        salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
+        return False
+
+    except Exception as e:
+        print(f"Erro ao selecionar mês em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_selecao_mes_{cidade}.png")
+        return False
 
 def navegar_ate_metas(driver, cidade):
     """
