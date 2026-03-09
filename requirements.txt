@@ -1,0 +1,6 @@
+selenium==4.16.0
+pandas==2.1.4
+openpyxl==3.1.2
+requests==2.31.0
+beautifulsoup4==4.12.2
+webdriver-manager==4.0.1
