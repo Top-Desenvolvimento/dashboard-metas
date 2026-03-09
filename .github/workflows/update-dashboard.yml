@@ -20,25 +20,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-
-      - name: Instalar Google Chrome
-        uses: browser-actions/setup-chrome@v1
-
-      - name: Verificar Chrome instalado
-        run: google-chrome --version
 
       - name: Instalar dependências
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-            - name: Executar coleta de dados
+      - name: Executar coleta de dados
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
           MES_REFERENCIA: '2026-02'
-         run: |
+        run: |
           python extract_metas.py
 
       - name: Atualizar dashboard HTML
@@ -50,7 +43,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/ docs/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Atualização automática - $(date +'%d/%m/%Y %H:%M')" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualização automática $(date +'%d/%m/%Y %H:%M')" && git push)
 
       - name: Deploy no GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
