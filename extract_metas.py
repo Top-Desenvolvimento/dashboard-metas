@@ -35,12 +35,12 @@ CIDADES = {
     "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
     "Farroupilha": "http://farroupilha.topesteticabucal.com.br/sistema",
     "Bento": "http://bento.topesteticabucal.com.br/sistema",
-    "Encantado": "https://encantado.topesteticabucal.com.br/sistema",
+    "Encantado": "http://encantado.topesteticabucal.com.br/sistema",
     "Soledade": "http://soledade.topesteticabucal.com.br/sistema",
     "Garibaldi": "http://garibaldi.topesteticabucal.com.br/sistema",
     "Veranópolis": "http://veranopolis.topesteticabucal.com.br/sistema",
-    "SS do Caí": "https://ssdocai.topesteticabucal.com.br/sistema",
-    "Flores": "https://flores.topesteticabucal.com.br/sistema",
+    "SS do Caí": "http://ssdocai.topesteticabucal.com.br/sistema",
+    "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
 # URLs de avaliações do Google
