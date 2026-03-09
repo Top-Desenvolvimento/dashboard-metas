@@ -330,41 +330,37 @@ def extrair_texto_seguro(driver, seletores):
     return ""
 
 
-def extrair_metas_financeiras(driver, cidade):
-    """Extrai dados financeiros já na tela de metas."""
+def extrair_metas_servicos(driver, cidade):
+    """Extrai dados de serviços já na tela de metas."""
     try:
         time.sleep(2)
 
-        ortodontia = extrair_texto_seguro(driver, [
-            (By.ID, "ortodontia_valor"),
-            (By.ID, "ortodontia"),
-            (By.NAME, "ortodontia"),
-            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
+        profilaxia = extrair_texto_seguro(driver, [
+            (By.ID, "profilaxia"),
+            (By.NAME, "profilaxia"),
+            (By.XPATH, "//*[contains(text(), 'Profilaxia')]/following::*[1]"),
         ])
 
-        clinico = extrair_texto_seguro(driver, [
-            (By.ID, "clinico_valor"),
-            (By.ID, "clinico_geral"),
-            (By.NAME, "clinico_geral"),
-            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Clinico Geral')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
+        restauracao = extrair_texto_seguro(driver, [
+            (By.ID, "restauracao"),
+            (By.NAME, "restauracao"),
+            (By.XPATH, "//*[contains(text(), 'Restauração')]/following::*[1]"),
+            (By.XPATH, "//*[contains(text(), 'Restauracao')]/following::*[1]"),
         ])
 
-        salvar_screenshot(driver, f"financeiro_extraido_{cidade}.png")
+        salvar_screenshot(driver, f"servicos_extraidos_{cidade}.png")
 
         return {
-            "ortodontia": ortodontia or "R$ 0",
-            "clinico_geral": clinico or "R$ 0",
+            "profilaxia": profilaxia or "0",
+            "restauracao": restauracao or "0",
         }
 
     except Exception as e:
-        print(f"Erro ao extrair metas financeiras de {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_financeiro_{cidade}.png")
+        print(f"Erro ao extrair metas de serviços de {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_servicos_{cidade}.png")
         return {
-            "ortodontia": "R$ 0",
-            "clinico_geral": "R$ 0",
+            "profilaxia": "0",
+            "restauracao": "0",
         }
 def extrair_metas_servicos(driver, cidade):
     """Extrai dados de metas de serviços."""
