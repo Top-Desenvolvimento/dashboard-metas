@@ -256,33 +256,37 @@ def selecionar_mes_referencia(driver, mes_referencia, cidade):
     salvar_screenshot(driver, f"mes_nao_encontrado_{cidade}.png")
     return False
 
-def abrir_menu_por_texto(driver, textos):
+def navegar_ate_metas(driver, cidade):
     """
-    Tenta clicar em um link/menu usando uma lista de possíveis textos.
+    Navega: FINANÇAS > METAS
     """
-    for texto in textos:
-        try:
-            driver.find_element(By.LINK_TEXT, texto).click()
-            time.sleep(2)
-            return True
-        except Exception:
-            pass
+    try:
+        wait = WebDriverWait(driver, 15)
 
-        try:
-            driver.find_element(By.PARTIAL_LINK_TEXT, texto).click()
-            time.sleep(2)
-            return True
-        except Exception:
-            pass
+        print(f"Navegando até FINANÇAS > METAS em {cidade}...")
 
-        try:
-            driver.find_element(By.XPATH, f"//*[contains(text(), '{texto}')]").click()
-            time.sleep(2)
-            return True
-        except Exception:
-            pass
+        # 1. Clicar em FINANÇAS
+        financas = wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'FINANÇAS') or contains(text(), 'Finanças')]"))
+        )
+        driver.execute_script("arguments[0].click();", financas)
+        time.sleep(2)
 
-    return False
+        # 2. Clicar em METAS
+        metas = wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'METAS') or contains(text(), 'Metas')]"))
+        )
+        driver.execute_script("arguments[0].click();", metas)
+        time.sleep(3)
+
+        print(f"Chegou na tela de metas em {cidade}: {driver.current_url}")
+        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
+        return True
+
+    except Exception as e:
+        print(f"Erro ao navegar até FINANÇAS > METAS em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
+        return False
 
 
 def extrair_texto_seguro(driver, seletores):
