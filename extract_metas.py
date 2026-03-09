@@ -218,39 +218,30 @@ def fazer_login(driver, url, cidade):
 
 def navegar_ate_metas(driver, cidade):
     """
-    Navega pelo caminho: FINANÇAS > METAS
+    Abre diretamente a página de metas financeiras
     """
+
     try:
-        wait = WebDriverWait(driver, 15)
+        print(f"Abrindo tela de metas diretamente em {cidade}...")
 
-        print(f"Navegando até FINANÇAS > METAS em {cidade}...")
+        base = driver.current_url.split("index2.php")[0]
 
-        financas = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//*[contains(text(), 'FINANÇAS') or contains(text(), 'Finanças')]")
-            )
-        )
-        driver.execute_script("arguments[0].click();", financas)
-        time.sleep(2)
+        url_metas = base + "index2.php?conteudo=financeiro_metas"
 
-        metas = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//*[contains(text(), 'METAS') or contains(text(), 'Metas')]")
-            )
-        )
-        driver.execute_script("arguments[0].click();", metas)
-        time.sleep(3)
+        driver.get(url_metas)
 
-        print(f"Chegou na tela de metas em {cidade}: {driver.current_url}")
+        time.sleep(4)
+
+        print(f"URL metas em {cidade}: {driver.current_url}")
+
         salvar_screenshot(driver, f"tela_metas_{cidade}.png")
+
         return True
 
     except Exception as e:
-        print(f"Erro ao navegar até FINANÇAS > METAS em {cidade}: {e}")
+        print(f"Erro ao abrir tela de metas em {cidade}: {e}")
         salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
         return False
-
-
 def selecionar_mes_referencia(driver, mes_referencia, cidade):
     """
     Seleciona o Mês/Ano na tela de metas.
