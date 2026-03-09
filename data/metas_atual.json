@@ -14,7 +14,7 @@
       "atual": 0,
       "novas": -285
     },
-    "timestamp": "2026-03-09T16:32:17.839897"
+    "timestamp": "2026-03-09T17:24:52.090862"
   },
   "Farroupilha": {
     "mes_referencia": "2026-02",
@@ -31,7 +31,7 @@
       "atual": 0,
       "novas": -173
     },
-    "timestamp": "2026-03-09T16:32:24.568440"
+    "timestamp": "2026-03-09T17:25:23.234173"
   },
   "Bento": {
     "mes_referencia": "2026-02",
@@ -48,7 +48,7 @@
       "atual": 0,
       "novas": -76
     },
-    "timestamp": "2026-03-09T16:32:31.643747"
+    "timestamp": "2026-03-09T17:25:54.191697"
   },
   "Encantado": {
     "mes_referencia": "2026-02",
@@ -65,7 +65,7 @@
       "atual": 0,
       "novas": -206
     },
-    "timestamp": "2026-03-09T16:32:38.861318"
+    "timestamp": "2026-03-09T17:26:25.265157"
   },
   "Soledade": {
     "mes_referencia": "2026-02",
@@ -82,7 +82,7 @@
       "atual": 0,
       "novas": -413
     },
-    "timestamp": "2026-03-09T16:32:46.173191"
+    "timestamp": "2026-03-09T17:26:56.112300"
   },
   "Garibaldi": {
     "mes_referencia": "2026-02",
@@ -99,7 +99,7 @@
       "atual": 0,
       "novas": -128
     },
-    "timestamp": "2026-03-09T16:32:52.781268"
+    "timestamp": "2026-03-09T17:27:27.202793"
   },
   "Veranópolis": {
     "mes_referencia": "2026-02",
@@ -116,7 +116,7 @@
       "atual": 0,
       "novas": -128
     },
-    "timestamp": "2026-03-09T16:32:59.348491"
+    "timestamp": "2026-03-09T17:27:58.091771"
   },
   "SS do Caí": {
     "mes_referencia": "2026-02",
@@ -133,23 +133,6 @@
       "atual": 0,
       "novas": -88
     },
-    "timestamp": "2026-03-09T16:33:06.692307"
-  },
-  "Flores": {
-    "mes_referencia": "2026-02",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 96,
-      "atual": 0,
-      "novas": -96
-    },
-    "timestamp": "2026-03-09T16:33:14.626926"
+    "timestamp": "2026-03-09T17:28:29.515154"
   }
 }
