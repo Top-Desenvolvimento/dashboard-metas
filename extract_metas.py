@@ -144,78 +144,42 @@ def fazer_login(driver, url, cidade):
     try:
         print(f"Abrindo URL: {url}")
         driver.get(url)
+
         wait = WebDriverWait(driver, 20)
 
         print(f"Título da página em {cidade}: {driver.title}")
         print(f"URL final em {cidade}: {driver.current_url}")
 
-        # tenta vários seletores possíveis para usuário
-        username_field = None
-        for by, value in [
-            (By.NAME, "username"),
-            (By.NAME, "login"),
-            (By.NAME, "usuario"),
-            (By.ID, "username"),
-            (By.ID, "login"),
-            (By.ID, "usuario"),
-            (By.CSS_SELECTOR, "input[type='text']"),
-            (By.CSS_SELECTOR, "input[name*='user']"),
-        ]:
-            try:
-                username_field = wait.until(EC.presence_of_element_located((by, value)))
-                break
-            except Exception:
-                continue
+        # esperar campos de login realmente estarem utilizáveis
+        username = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='text'], input[name='username'], input[id='username']"))
+        )
 
-        # tenta vários seletores possíveis para senha
-        password_field = None
-        for by, value in [
-            (By.NAME, "password"),
-            (By.NAME, "senha"),
-            (By.ID, "password"),
-            (By.ID, "senha"),
-            (By.CSS_SELECTOR, "input[type='password']"),
-        ]:
-            try:
-                password_field = driver.find_element(by, value)
-                break
-            except Exception:
-                continue
+        password = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='password']"))
+        )
 
-        if not username_field or not password_field:
-            print(f"Campos de login não encontrados em {cidade}")
-            print(driver.page_source[:3000])
-            salvar_screenshot(driver, f"erro_login_{cidade}.png")
-            return False
+        # limpar campos
+        driver.execute_script("arguments[0].value = '';", username)
+        driver.execute_script("arguments[0].value = '';", password)
 
-        username_field.clear()
-        username_field.send_keys(LOGIN_USER)
+        # preencher via JS (evita invalid element state)
+        driver.execute_script("arguments[0].value = arguments[1];", username, LOGIN_USER)
+        driver.execute_script("arguments[0].value = arguments[1];", password, LOGIN_PASS)
 
-        password_field.clear()
-        password_field.send_keys(LOGIN_PASS)
+        time.sleep(1)
 
-        # tenta clicar no botão de login
-        clicou = False
-        for by, value in [
-            (By.CSS_SELECTOR, "button[type='submit']"),
-            (By.CSS_SELECTOR, "input[type='submit']"),
-            (By.XPATH, "//button[contains(., 'Entrar')]"),
-            (By.XPATH, "//button[contains(., 'Login')]"),
-            (By.XPATH, "//input[@value='Entrar']"),
-        ]:
-            try:
-                driver.find_element(by, value).click()
-                clicou = True
-                break
-            except Exception:
-                continue
-
-        if not clicou:
-            password_field.submit()
+        # tentar clicar no botão
+        try:
+            botao = driver.find_element(By.CSS_SELECTOR, "button[type='submit'], input[type='submit']")
+            botao.click()
+        except:
+            password.submit()
 
         time.sleep(4)
 
         print(f"Após login em {cidade}: {driver.current_url}")
+
         salvar_screenshot(driver, f"pos_login_{cidade}.png")
 
         return True
