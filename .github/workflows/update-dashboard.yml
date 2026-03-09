@@ -30,7 +30,7 @@ jobs:
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: '2026-02'
+          MES_REFERENCIA: 'AUTO'
         run: |
           python extract_metas.py
 
