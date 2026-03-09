@@ -88,23 +88,20 @@ def salvar_screenshot(driver, nome_arquivo):
 
 
 def setup_driver():
-    """Configura o Chrome headless no GitHub Actions."""
     chrome_options = Options()
+
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-    # GitHub Actions geralmente usa este caminho
     service = Service("/usr/bin/chromedriver")
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.set_page_load_timeout(30)
-    return driver
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
+    return driver
 def formatar_mes_para_texto(mes_referencia):
     """
     Converte 2026-02 em textos úteis para tentar selecionar na interface.
