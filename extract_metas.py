@@ -221,56 +221,15 @@ def abrir_tela_metas(driver, cidade):
         return False
 
 
-def selecionar_mes_e_buscar(driver, mes_referencia, cidade):
-    try:
-        wait = WebDriverWait(driver, 20)
+if not fazer_login(driver, url, cidade):
+    print(f"Falha ao coletar dados de {cidade}")
+    continue
 
-        mapa = {
-            "01": "Janeiro",
-            "02": "Fevereiro",
-            "03": "Março",
-            "04": "Abril",
-            "05": "Maio",
-            "06": "Junho",
-            "07": "Julho",
-            "08": "Agosto",
-            "09": "Setembro",
-            "10": "Outubro",
-            "11": "Novembro",
-            "12": "Dezembro",
-        }
+if not abrir_tela_metas(driver, cidade):
+    print(f"Falha ao abrir metas em {cidade}")
+    continue
 
-        ano, mes = mes_referencia.split("-")
-        texto_mes = f"{mapa[mes]} / {ano}"
-
-        print(f"Selecionando mês {texto_mes} em {cidade}...")
-
-        select_el = wait.until(
-            EC.presence_of_element_located((By.TAG_NAME, "select"))
-        )
-
-        select = Select(select_el)
-        select.select_by_visible_text(texto_mes)
-
-        time.sleep(1)
-
-        btn_buscar = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//*[normalize-space(text())='Buscar']")
-            )
-        )
-        driver.execute_script("arguments[0].click();", btn_buscar)
-
-        time.sleep(3)
-        salvar_screenshot(driver, f"mes_buscado_{cidade}.png")
-        print(f"Mês aplicado com sucesso em {cidade}")
-        return True
-
-    except Exception as e:
-        print(f"Erro ao selecionar mês/buscar em {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_mes_buscar_{cidade}.png")
-        return False
-
+metas = extrair_todas_metas(driver, cidade)
 
 def obter_texto_pagina(driver):
     return driver.find_element(By.TAG_NAME, "body").text
