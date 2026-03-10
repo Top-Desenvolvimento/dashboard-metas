@@ -42,8 +42,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/ docs/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualização automática $(date +'%d/%m/%Y %H:%M')" && git push)
 
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para commit."
+          else
+            git commit -m "Atualização automática $(date +'%d/%m/%Y %H:%M')"
+            git pull --rebase origin main
+            git push origin main
+          fi
       - name: Deploy no GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
