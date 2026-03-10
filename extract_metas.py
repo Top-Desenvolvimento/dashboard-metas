@@ -4,11 +4,12 @@ Coleta de metas da Top Estética Bucal
 
 Fluxo:
 1. Faz login em cada unidade
-2. Navega em FINANÇAS > Metas
-3. Lê exatamente o que estiver visível na tela
-4. Salva JSON / CSV / Excel
+2. Clica em FINANÇAS
+3. Clica em Metas
+4. Lê o que estiver visível na tela
+5. Salva JSON / CSV / Excel
 
-Indicadores exportados no mesmo formato da dashboard:
+Indicadores exportados:
 - ortodontia
 - clinico_geral
 - avaliacoes_google
@@ -18,6 +19,7 @@ Indicadores exportados no mesmo formato da dashboard:
 """
 
 import os
+import re
 import json
 import time
 from datetime import datetime
@@ -68,14 +70,14 @@ CIDADES = {
 }
 
 
-INDICADORES_ORDEM = [
-    ("ortodontia", "Ortodontia"),
-    ("clinico_geral", "Clínico Geral"),
-    ("avaliacoes_google", "Avaliações Google"),
-    ("meta_avaliacao", "Meta de Avaliação"),
-    ("meta_profilaxia", "Meta de Profilaxia"),
-    ("meta_restauracao", "Meta de Restauração"),
-]
+INDICADORES = {
+    "ortodontia": ["Ortodontia"],
+    "clinico_geral": ["Clínico Geral", "Clinico Geral"],
+    "avaliacoes_google": ["Avaliações Google", "Avaliacoes Google"],
+    "meta_avaliacao": ["Meta de Avaliação", "Meta de Avaliacao"],
+    "meta_profilaxia": ["Meta de Profilaxia"],
+    "meta_restauracao": ["Meta de Restauração", "Meta de Restauracao"],
+}
 
 
 def garantir_pasta_logs():
@@ -110,11 +112,6 @@ def setup_driver():
 
 def normalizar_texto(texto):
     return " ".join((texto or "").replace("\xa0", " ").split()).strip()
-
-
-def normalizar_linhas(texto):
-    linhas = [normalizar_texto(l) for l in (texto or "").splitlines()]
-    return [l for l in linhas if l]
 
 
 def fazer_login(driver, url, cidade):
@@ -171,72 +168,91 @@ def fazer_login(driver, url, cidade):
 
 
 def abrir_tela_metas(driver, cidade):
-    base = driver.current_url.split("index2.php")[0]
+    try:
+        wait = WebDriverWait(driver, 20)
 
-    url_metas = base + "index2.php?conteudo=financeiro_metas"
+        print(f"Navegando até FINANÇAS > Metas em {cidade}...")
 
-    print(f"Abrindo tela de metas financeiras em {cidade}...")
+        # Clica em FINANÇAS
+        btn_financas = wait.until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
+            )
+        )
+        driver.execute_script("arguments[0].click();", btn_financas)
+        time.sleep(2)
 
-    driver.get(url_metas)
+        salvar_screenshot(driver, f"menu_financas_{cidade}.png")
 
-    time.sleep(4)
+        # Clica em Metas do submenu
+        candidatos = [
+            (By.LINK_TEXT, "Metas"),
+            (By.PARTIAL_LINK_TEXT, "Metas"),
+            (By.XPATH, "//a[normalize-space(text())='Metas']"),
+            (By.XPATH, "//*[self::a or self::span or self::div][normalize-space(text())='Metas']"),
+        ]
 
-    salvar_screenshot(driver, f"tela_metas_{cidade}.png")
+        clicou = False
 
-    print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
+        for by, value in candidatos:
+            try:
+                elem = wait.until(EC.presence_of_element_located((by, value)))
+                driver.execute_script("arguments[0].scrollIntoView(true);", elem)
+                time.sleep(1)
+                driver.execute_script("arguments[0].click();", elem)
+                clicou = True
+                break
+            except Exception:
+                continue
 
-    return True
-def obter_texto_pagina(driver):
-    return driver.find_element(By.TAG_NAME, "body").text
+        if not clicou:
+            raise Exception("Submenu 'Metas' não encontrado ou não clicável")
+
+        time.sleep(3)
+        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
+        print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
+        return True
+
+    except Exception as e:
+        print(f"Erro ao abrir tela de metas em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
+        return False
 
 
-def extrair_bloco_linhas(linhas, titulo):
+def obter_texto_tela(driver):
+    return driver.find_element(By.TAG_NAME, "body").text or ""
+
+
+def extrair_por_titulos(texto_completo, titulos):
     """
-    Procura blocos no formato visível da tela, por exemplo:
+    Extrai blocos no formato que o Selenium está lendo hoje, por exemplo:
 
-    Meta de Avaliação
-    Até o momento
-    Falta
-    Progresso
-    Meta
-    205
-    33
-    -172
-    16,098%
+    Meta de Avaliação Até o momento Falta Progresso
+    Meta 205 37 -168 18,049%
+
+    ou
+
+    Ortodontia Até o momento Falta Progresso
+    Meta desafio 30.000,00 23.246,13 -6.753,87 77,487%
     """
-    titulo_norm = titulo.lower()
 
-    for i, linha in enumerate(linhas):
-        if linha.lower() != titulo_norm:
-            continue
+    texto = normalizar_texto(texto_completo)
 
-        bloco = linhas[i:i + 14]
+    for titulo in titulos:
+        pattern = re.compile(
+            rf"{re.escape(titulo)}\s+Até o momento\s+Falta\s+Progresso\s+"
+            rf"(?:Meta(?:\s+desafio)?)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)",
+            re.IGNORECASE
+        )
 
-        if len(bloco) >= 9:
-            if (
-                "até o momento" in bloco[1].lower()
-                and "falta" in bloco[2].lower()
-                and "progresso" in bloco[3].lower()
-                and bloco[4].lower() == "meta"
-            ):
-                return {
-                    "meta": bloco[5] if len(bloco) > 5 else "",
-                    "ate_o_momento": bloco[6] if len(bloco) > 6 else "",
-                    "falta": bloco[7] if len(bloco) > 7 else "",
-                    "progresso": bloco[8] if len(bloco) > 8 else "",
-                }
-
-        try:
-            idx_meta = next(idx for idx, item in enumerate(bloco) if item.lower() == "meta")
-            if idx_meta + 4 < len(bloco):
-                return {
-                    "meta": bloco[idx_meta + 1],
-                    "ate_o_momento": bloco[idx_meta + 2],
-                    "falta": bloco[idx_meta + 3],
-                    "progresso": bloco[idx_meta + 4],
-                }
-        except StopIteration:
-            pass
+        match = pattern.search(texto)
+        if match:
+            return {
+                "meta": match.group(1).strip(),
+                "ate_o_momento": match.group(2).strip(),
+                "falta": match.group(3).strip(),
+                "progresso": match.group(4).strip(),
+            }
 
     return {
         "meta": "",
@@ -247,22 +263,21 @@ def extrair_bloco_linhas(linhas, titulo):
 
 
 def extrair_todas_metas(driver, cidade):
-    texto = driver.find_element(By.TAG_NAME, "body").text
+    texto = obter_texto_tela(driver)
 
     print(f"======== TEXTO COMPLETO DA PÁGINA EM {cidade} ========")
     print(texto)
     print(f"======== FIM DO TEXTO EM {cidade} ========")
 
-    salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
+    dados = {}
+    for chave, titulos in INDICADORES.items():
+        dados[chave] = extrair_por_titulos(texto, titulos)
 
-    return {
-        "ortodontia": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
-        "clinico_geral": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
-        "avaliacoes_google": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
-        "meta_avaliacao": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
-        "meta_profilaxia": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
-        "meta_restauracao": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""}
-    }
+    print(f"Metas extraídas em {cidade}: {json.dumps(dados, ensure_ascii=False)}")
+    salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
+    return dados
+
+
 def coletar_dados_todas_cidades():
     dados = {}
     driver = setup_driver()
