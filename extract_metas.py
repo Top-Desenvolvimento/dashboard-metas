@@ -1,6 +1,20 @@
 #!/usr/bin/env python3
 """
 Coleta de metas da Top Estética Bucal
+
+Fluxo:
+1. Faz login em cada unidade
+2. Navega em FINANÇAS > Metas
+3. Lê exatamente o que estiver visível na tela
+4. Salva JSON / CSV / Excel
+
+Indicadores exportados no mesmo formato da dashboard:
+- ortodontia
+- clinico_geral
+- avaliacoes_google
+- meta_avaliacao
+- meta_profilaxia
+- meta_restauracao
 """
 
 import os
@@ -12,7 +26,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -162,7 +176,6 @@ def abrir_tela_metas(driver, cidade):
 
         print(f"Navegando até FINANÇAS > Metas em {cidade}...")
 
-        # 1) Clica no menu FINANÇAS
         btn_financas = wait.until(
             EC.presence_of_element_located(
                 (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
@@ -173,7 +186,6 @@ def abrir_tela_metas(driver, cidade):
 
         salvar_screenshot(driver, f"menu_financas_{cidade}.png")
 
-        # 2) Tenta encontrar o submenu Metas
         candidatos = [
             (By.LINK_TEXT, "Metas"),
             (By.PARTIAL_LINK_TEXT, "Metas"),
@@ -196,7 +208,6 @@ def abrir_tela_metas(driver, cidade):
                 continue
 
         if not clicou:
-            # Debug extra: imprime os links visíveis do submenu
             try:
                 links = driver.find_elements(By.TAG_NAME, "a")
                 print(f"Links encontrados em {cidade}:")
@@ -221,21 +232,24 @@ def abrir_tela_metas(driver, cidade):
         return False
 
 
-if not fazer_login(driver, url, cidade):
-    print(f"Falha ao coletar dados de {cidade}")
-    continue
-
-if not abrir_tela_metas(driver, cidade):
-    print(f"Falha ao abrir metas em {cidade}")
-    continue
-
-metas = extrair_todas_metas(driver, cidade)
-
 def obter_texto_pagina(driver):
     return driver.find_element(By.TAG_NAME, "body").text
 
 
 def extrair_bloco_linhas(linhas, titulo):
+    """
+    Procura blocos no formato visível da tela, por exemplo:
+
+    Meta de Avaliação
+    Até o momento
+    Falta
+    Progresso
+    Meta
+    205
+    33
+    -172
+    16,098%
+    """
     titulo_norm = titulo.lower()
 
     for i, linha in enumerate(linhas):
@@ -312,7 +326,6 @@ def coletar_dados_todas_cidades():
                 if not abrir_tela_metas(driver, cidade):
                     print(f"Falha ao abrir metas em {cidade}")
                     continue
-
 
                 metas = extrair_todas_metas(driver, cidade)
 
