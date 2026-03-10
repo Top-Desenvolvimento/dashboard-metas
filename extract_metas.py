@@ -162,8 +162,9 @@ def abrir_tela_metas(driver, cidade):
 
         print(f"Navegando até FINANÇAS > Metas em {cidade}...")
 
+        # 1) Clica no menu FINANÇAS
         btn_financas = wait.until(
-            EC.element_to_be_clickable(
+            EC.presence_of_element_located(
                 (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
             )
         )
@@ -172,14 +173,44 @@ def abrir_tela_metas(driver, cidade):
 
         salvar_screenshot(driver, f"menu_financas_{cidade}.png")
 
-        btn_metas = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//*[normalize-space(text())='Metas']")
-            )
-        )
-        driver.execute_script("arguments[0].click();", btn_metas)
-        time.sleep(3)
+        # 2) Tenta encontrar o submenu Metas
+        candidatos = [
+            (By.LINK_TEXT, "Metas"),
+            (By.PARTIAL_LINK_TEXT, "Metas"),
+            (By.XPATH, "//a[normalize-space(text())='Metas']"),
+            (By.XPATH, "//*[self::a or self::span or self::div][normalize-space(text())='Metas']"),
+            (By.XPATH, "//*[contains(@href,'metas')]"),
+        ]
 
+        clicou = False
+
+        for by, value in candidatos:
+            try:
+                elem = wait.until(EC.presence_of_element_located((by, value)))
+                driver.execute_script("arguments[0].scrollIntoView(true);", elem)
+                time.sleep(1)
+                driver.execute_script("arguments[0].click();", elem)
+                clicou = True
+                break
+            except Exception:
+                continue
+
+        if not clicou:
+            # Debug extra: imprime os links visíveis do submenu
+            try:
+                links = driver.find_elements(By.TAG_NAME, "a")
+                print(f"Links encontrados em {cidade}:")
+                for link in links[:80]:
+                    txt = (link.text or "").strip()
+                    href = link.get_attribute("href")
+                    if txt:
+                        print(f"- {txt} -> {href}")
+            except Exception:
+                pass
+
+            raise Exception("Submenu 'Metas' não encontrado ou não clicável")
+
+        time.sleep(3)
         salvar_screenshot(driver, f"tela_metas_{cidade}.png")
         print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
         return True
