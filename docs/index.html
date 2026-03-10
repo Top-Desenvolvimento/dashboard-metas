@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard de Metas - Top Estética</title>
+<title>Dashboard de Metas</title>
 <style>
 :root {
     --bg: #030a12;
-    --bg-2: #071320;
-    --panel: rgba(7, 19, 32, 0.88);
-    --border: rgba(0, 232, 255, 0.14);
+    --panel: rgba(7, 19, 32, 0.92);
+    --panel-2: rgba(4, 14, 24, 0.92);
+    --border: rgba(0, 232, 255, 0.16);
     --line: rgba(255, 255, 255, 0.06);
     --text: #e6f7ff;
     --muted: #7e95a7;
@@ -19,7 +19,13 @@
     --red: #ff4d7a;
     --shadow: 0 0 0 1px rgba(0, 232, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.35);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Inter, Segoe UI, Arial, sans-serif;
     color: var(--text);
@@ -29,15 +35,39 @@ body {
         linear-gradient(180deg, #02060d, #04101b 45%, #02070d 100%);
     min-height: 100vh;
 }
-.wrap { max-width: 1440px; margin: 0 auto; padding: 16px; }
+
+.wrap {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
 .hero {
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 8px 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 8px 0 24px;
 }
+
 .hero-left h1 {
-    font-size: 2.8rem; font-weight: 800; line-height: 1.05; text-shadow: 0 0 18px rgba(0, 232, 255, 0.18);
+    font-size: 2.8rem;
+    font-weight: 800;
 }
-.hero-left p { margin-top: 8px; color: var(--muted); font-size: 1.05rem; }
-.hero-right { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+.hero-left p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 1.05rem;
+}
+
+.hero-right {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .pill {
     background: rgba(7, 19, 32, 0.8);
     border: 1px solid var(--border);
@@ -47,70 +77,302 @@ body {
     color: var(--text);
     min-width: 120px;
 }
+
 .pill.btn {
     text-decoration: none;
     background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(16,224,163,.95));
-    color: #031018; font-weight: 700;
+    color: #031018;
+    font-weight: 700;
 }
+
 .tabs {
-    display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 10px 0 16px;
-    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 0 16px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 20px;
 }
+
 .tab-btn {
-    background: transparent; color: var(--muted); border: 1px solid transparent; border-radius: 12px;
-    padding: 10px 14px; cursor: pointer; white-space: nowrap; transition: .2s ease; font-weight: 600;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: .2s ease;
+    font-weight: 600;
 }
+
+.tab-btn:hover {
+    color: var(--text);
+    border-color: var(--border);
+}
+
 .tab-btn.active {
-    color: var(--cyan); border-color: rgba(0, 232, 255, 0.35);
-    background: rgba(0,232,255,.08); box-shadow: inset 0 0 14px rgba(0,232,255,.09);
+    color: var(--cyan);
+    border-color: rgba(0, 232, 255, 0.35);
+    background: rgba(0,232,255,.08);
 }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.top-grid, .city-top-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 18px;
+
+.tab-content {
+    display: none;
 }
-.summary-card, .city-card, .beat-panel {
-    background: linear-gradient(180deg, rgba(7, 19, 32, 0.95), rgba(4, 14, 24, 0.95));
-    border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow);
+
+.tab-content.active {
+    display: block;
 }
-.summary-card { padding: 18px; min-height: 112px; }
+
+.highlight-panel,
+.panel,
+.city-panel,
+.summary-card {
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.highlight-panel {
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.highlight-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.hit-badge {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.05);
+}
+
+.hit-city {
+    color: #fff;
+    font-weight: 800;
+}
+
+.hit-meta {
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+.hit-perc {
+    color: var(--green);
+    font-weight: 900;
+}
+
+.hit-sep {
+    color: var(--muted);
+}
+
+.highlight-empty {
+    color: var(--muted);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.summary-card {
+    padding: 18px;
+    min-height: 110px;
+}
+
 .summary-label {
-    color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px;
+    color: var(--muted);
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 12px;
 }
-.summary-value { font-size: 2rem; font-weight: 800; color: var(--cyan); }
-.beat-panel { padding: 16px; margin-bottom: 18px; }
-.beat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
-.beat-item {
-    padding: 14px; border-radius: 14px; background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--cyan);
 }
-.beat-city { font-weight: 800; color: var(--green); margin-bottom: 8px; }
-.beat-line { display: flex; justify-content: space-between; gap: 10px; color: #b9d8e6; padding: 4px 0; }
-.city-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.city-card { padding: 16px; }
-.city-card-head {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px;
+
+.panel,
+.city-panel {
+    padding: 16px;
+    margin-bottom: 18px;
 }
-.city-card-title { font-size: 1.15rem; font-weight: 800; }
-.city-card-perc { font-size: 1.6rem; font-weight: 800; }
-.city-progress {
-    height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.05);
+
+.panel-header {
+    margin-bottom: 14px;
 }
-.city-progress-fill { height: 100%; border-radius: 999px; }
+
+.panel-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.rankings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.rank-row {
+    display: grid;
+    grid-template-columns: 42px 1.2fr 1fr 1fr 110px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.rank-row:first-child {
+    border-top: none;
+}
+
+.rank-pos {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    background: rgba(255,255,255,.08);
+}
+
+.pos-1 { background: rgba(245,179,1,.20); color: #ffd45c; }
+.pos-2 { background: rgba(180,196,210,.20); color: #dbe6ef; }
+.pos-3 { background: rgba(165,102,38,.22); color: #ffb56d; }
+.pos-other { color: #fff; }
+
+.rank-city {
+    font-weight: 700;
+    color: #fff;
+}
+
+.rank-meta,
+.rank-ate {
+    color: var(--muted);
+    font-size: .92rem;
+}
+
+.rank-perc {
+    text-align: right;
+    font-weight: 800;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dash-table th,
+.dash-table td {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255,255,255,.05);
+    text-align: left;
+}
+
+.dash-table th {
+    color: var(--muted);
+    font-size: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.dash-table td {
+    color: #fff;
+}
+
+.cell-title {
+    font-weight: 800;
+}
+
+.perc.ok {
+    color: var(--green);
+    font-weight: 800;
+}
+
+.perc.warn {
+    color: var(--yellow);
+    font-weight: 800;
+}
+
+.perc.bad {
+    color: var(--red);
+    font-weight: 800;
+}
+
+.perc.empty {
+    color: var(--muted);
+    font-weight: 700;
+}
+
 .ok { color: var(--green); }
 .warn { color: var(--yellow); }
 .bad { color: var(--red); }
-.city-progress-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
-.city-progress-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
-.city-progress-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
-.city-metrics {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,.05);
+.empty { color: var(--muted); }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(1.03); }
 }
-.city-metrics span { display: block; color: var(--muted); margin-bottom: 6px; }
-.city-metrics strong { color: #fff; font-size: 1rem; }
-.section-title { margin: 22px 0 12px; font-size: 1.2rem; font-weight: 800; color: #fff; }
-@media (max-width: 1100px) {
-    .city-grid, .beat-grid, .top-grid, .city-top-grid { grid-template-columns: 1fr; }
+
+.blink {
+    animation: pulse 1.2s infinite;
+}
+
+@media (max-width: 1200px) {
+    .rankings-grid,
+    .highlight-grid,
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rank-row {
+        grid-template-columns: 36px 1fr;
+        gap: 8px;
+    }
+
+    .rank-meta,
+    .rank-ate,
+    .rank-perc {
+        grid-column: 2;
+        text-align: left;
+    }
+}
+
+@media (max-width: 760px) {
+    .hero {
+        flex-direction: column;
+    }
+
+    .hero-left h1 {
+        font-size: 2rem;
+    }
 }
 </style>
 </head>
@@ -123,1321 +385,1423 @@ body {
         </div>
         <div class="hero-right">
             <div class="pill"><strong>Março/2026</strong></div>
-            <div class="pill"><strong>17:17:16</strong></div>
+            <div class="pill"><strong>18:22:21</strong></div>
             <div class="pill"><strong>● Online</strong></div>
             <a class="pill btn" href="../data/metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
         </div>
     </header>
 
     <nav class="tabs">
-        <button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button><button class="tab-btn" data-tab="caxias">📍 Caxias</button><button class="tab-btn" data-tab="farroupilha">📍 Farroupilha</button><button class="tab-btn" data-tab="bento">📍 Bento</button><button class="tab-btn" data-tab="encantado">📍 Encantado</button><button class="tab-btn" data-tab="soledade">📍 Soledade</button><button class="tab-btn" data-tab="garibaldi">📍 Garibaldi</button><button class="tab-btn" data-tab="veranopolis">📍 Veranópolis</button><button class="tab-btn" data-tab="ss-do-cai">📍 SS do Caí</button><button class="tab-btn" data-tab="flores">📍 Flores</button>
+        <button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button><button class="tab-btn" data-tab="bento">📍 Bento</button><button class="tab-btn" data-tab="caxias">📍 Caxias</button><button class="tab-btn" data-tab="encantado">📍 Encantado</button><button class="tab-btn" data-tab="farroupilha">📍 Farroupilha</button><button class="tab-btn" data-tab="flores">📍 Flores</button><button class="tab-btn" data-tab="garibaldi">📍 Garibaldi</button><button class="tab-btn" data-tab="ss-do-cai">📍 SS do Caí</button><button class="tab-btn" data-tab="soledade">📍 Soledade</button><button class="tab-btn" data-tab="veranopolis">📍 Veranópolis</button>
     </nav>
 
     <div id="ranking-geral" class="tab-content active">
-        <section class="top-grid">
-            <div class="summary-card">
-                <div class="summary-label">Unidades</div>
-                <div class="summary-value">9</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-label">Melhor desempenho</div>
-                <div class="summary-value">Caxias</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-label">Mês de referência</div>
-                <div class="summary-value">Março/2026</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-label">Atualizado</div>
-                <div class="summary-value">17:17:16</div>
-            </div>
+        
+        <section class="highlight-panel">
+            <div class="highlight-title">🏆 Metas Batidas</div>
+            <div class="highlight-empty">Nenhuma cidade atingiu 100% em alguma meta até o momento.</div>
         </section>
+        
 
-        <section class="beat-panel">
-            <div class="section-title">Metas por cidade</div>
-            <div class="beat-grid">
-                
-        <div class="beat-item">
-            <div class="beat-city">Caxias</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rankings-grid">
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Ortodontia</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Farroupilha</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Bento</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Encantado</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Soledade</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Garibaldi</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Veranópolis</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">SS do Caí</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-        <div class="beat-item">
-            <div class="beat-city">Flores</div>
-            <div class="beat-line">Progresso geral <strong>0.0%</strong></div>
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
         </div>
         
-            </div>
-        </section>
+        </div>
+    </section>
+    
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Clínico Geral</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        </div>
+    </section>
+    
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Avaliações Google</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        </div>
+    </section>
+    
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Meta de Avaliação</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        </div>
+    </section>
+    
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Meta de Profilaxia</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        </div>
+    </section>
+    
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Meta de Restauração</div>
+        </div>
+        <div class="panel-body">
+            
+        <div class="rank-row">
+            <div class="rank-pos pos-1">1</div>
+            <div class="rank-city">Bento</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-2">2</div>
+            <div class="rank-city">Caxias</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-3">3</div>
+            <div class="rank-city">Encantado</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">4</div>
+            <div class="rank-city">Farroupilha</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">5</div>
+            <div class="rank-city">Flores</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">6</div>
+            <div class="rank-city">Garibaldi</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">7</div>
+            <div class="rank-city">SS do Caí</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">8</div>
+            <div class="rank-city">Soledade</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-pos pos-other">9</div>
+            <div class="rank-city">Veranópolis</div>
+            <div class="rank-meta">Meta: —</div>
+            <div class="rank-ate">Até o momento: —</div>
+            <div class="rank-perc empty">—</div>
+        </div>
+        
+        </div>
+    </section>
+    
+        </div>
     </div>
 
     
-        <div id="caxias" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Caxias</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
-            </section>
-
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>33</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>33</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-        </div>
-        
-        <div id="farroupilha" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Farroupilha</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
-            </section>
-
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>12</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>12</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-        </div>
-        
         <div id="bento" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Bento</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Bento</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
             </section>
 
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
         </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+        
+        <div id="caxias" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>13</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>13</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Caxias</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
     
+            </section>
+
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
     
-            </div>
+            </section>
         </div>
         
         <div id="encantado" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Encantado</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Encantado</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
             </section>
 
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
     
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>95</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>95</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
+            </section>
         </div>
         
-        <div id="soledade" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Soledade</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
+        <div id="farroupilha" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Farroupilha</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
             </section>
 
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>59</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>59</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-        </div>
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
         
-        <div id="garibaldi" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Garibaldi</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
-            </section>
-
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>10</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>10</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-        </div>
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
         
-        <div id="veranopolis" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Veranópolis</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
-            </section>
-
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>8</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>8</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-        </div>
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
         
-        <div id="ss-do-cai" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">SS do Caí</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
             </section>
-
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>12</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>12</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
         </div>
         
         <div id="flores" class="tab-content">
-            <section class="city-top-grid">
-                <div class="summary-card">
-                    <div class="summary-label">Mês de Referência</div>
-                    <div class="summary-value">Março/2026</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Progresso Geral</div>
-                    <div class="summary-value">0.0%</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Cidade</div>
-                    <div class="summary-value">Flores</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-label">Atualizado em</div>
-                    <div class="summary-value">17:17:16</div>
-                </div>
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Flores</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
             </section>
 
-            <div class="section-title">💰 Metas Financeiras</div>
-            <div class="city-grid">
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Ortodontia</div>
-            <div class="city-card-perc bad">0</div>
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
         </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+        
+        <div id="garibaldi" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Clínico Geral</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
-    
-            </div>
-
-            <div class="section-title">⚡ Metas de Serviços</div>
-            <div class="city-grid">
-                
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Avaliações Google</div>
-            <div class="city-card-perc bad">0,0%</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>18</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>18</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Avaliação</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Garibaldi</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Profilaxia</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
+            </section>
 
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
+                
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
         </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+        
+        <div id="ss-do-cai" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
     
                 
-    <section class="city-card">
-        <div class="city-card-head">
-            <div class="city-card-title">Meta de Restauração</div>
-            <div class="city-card-perc bad">0</div>
-        </div>
-
-        <div class="city-progress">
-            <div class="city-progress-fill bad" style="width:0.0%"></div>
-        </div>
-
-        <div class="city-metrics">
-            <div><span>Meta:</span><strong>0</strong></div>
-            <div><span>Até o momento:</span><strong>0</strong></div>
-            <div><span>Falta:</span><strong>0</strong></div>
-        </div>
-    </section>
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
     
-            </div>
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">SS do Caí</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
+            </section>
+
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
+                
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
+        </div>
+        
+        <div id="soledade" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Soledade</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
+            </section>
+
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
+                
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
+        </div>
+        
+        <div id="veranopolis" class="tab-content">
+            <section class="summary-grid">
+                
+    <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">Março/2026</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">—</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">Veranópolis</div>
+    </div>
+    
+                
+    <div class="summary-card">
+        <div class="summary-label">Atualizado em</div>
+        <div class="summary-value">18:22:21</div>
+    </div>
+    
+            </section>
+
+            <section class="city-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Dados da Cidade</div>
+                </div>
+                
+    <div class="table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Indicador</th>
+                    <th>Meta</th>
+                    <th>Até o momento</th>
+                    <th>Falta</th>
+                    <th>Progresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="cell-title">Ortodontia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Clínico Geral</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Avaliação</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Profilaxia</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="cell-title">Meta de Restauração</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="perc empty">—</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </section>
         </div>
         
 </main>
@@ -1450,6 +1814,7 @@ buttons.forEach(btn => {
     btn.addEventListener('click', () => {
         buttons.forEach(b => b.classList.remove('active'));
         contents.forEach(c => c.classList.remove('active'));
+
         btn.classList.add('active');
         const target = document.getElementById(btn.dataset.tab);
         if (target) target.classList.add('active');
