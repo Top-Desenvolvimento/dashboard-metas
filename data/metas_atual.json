@@ -1,155 +1,389 @@
 {
   "Caxias": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 285,
-      "atual": 0,
-      "novas": -285
-    },
-    "timestamp": "2026-03-10T11:59:59.068042"
+    "timestamp": "2026-03-10T12:15:38.259193",
+    "google_reviews_url": "https://share.google/3f8yPEfrb24AQYYOp",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Farroupilha": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 173,
-      "atual": 0,
-      "novas": -173
-    },
-    "timestamp": "2026-03-10T12:00:23.608498"
+    "timestamp": "2026-03-10T12:15:48.306222",
+    "google_reviews_url": "https://share.google/ffSPadgdvp8WUEXq0",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Bento": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 76,
-      "atual": 0,
-      "novas": -76
-    },
-    "timestamp": "2026-03-10T12:00:47.722068"
+    "timestamp": "2026-03-10T12:15:58.438595",
+    "google_reviews_url": "https://share.google/g1snAopsGqM5I8sOl",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Encantado": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 206,
-      "atual": 0,
-      "novas": -206
-    },
-    "timestamp": "2026-03-10T12:01:11.916811"
+    "timestamp": "2026-03-10T12:16:08.472013",
+    "google_reviews_url": "https://share.google/sEdZu4jHIPYL77RA6",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Soledade": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 413,
-      "atual": 0,
-      "novas": -413
-    },
-    "timestamp": "2026-03-10T12:01:35.723616"
+    "timestamp": "2026-03-10T12:16:18.338020",
+    "google_reviews_url": "https://share.google/5CUABlRksD1cPYWiK",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Garibaldi": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 128,
-      "atual": 0,
-      "novas": -128
-    },
-    "timestamp": "2026-03-10T12:01:59.987473"
+    "timestamp": "2026-03-10T12:16:28.320776",
+    "google_reviews_url": "https://share.google/rOGEnBONHO2kTYVk3",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Veranópolis": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 128,
-      "atual": 0,
-      "novas": -128
-    },
-    "timestamp": "2026-03-10T12:02:24.040686"
+    "timestamp": "2026-03-10T12:16:38.303332",
+    "google_reviews_url": "https://share.google/UlnGSp8MES2AnB7Yz",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "SS do Caí": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 88,
-      "atual": 0,
-      "novas": -88
-    },
-    "timestamp": "2026-03-10T12:02:48.090417"
+    "timestamp": "2026-03-10T12:16:47.986219",
+    "google_reviews_url": "https://share.google/33XgmkKW7UnW8o8WB",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   },
   "Flores": {
     "mes_referencia": "2026-03",
-    "metas_financeiras": {
-      "ortodontia": "R$ 0",
-      "clinico_geral": "R$ 0"
-    },
-    "metas_servicos": {
-      "profilaxia": "0",
-      "restauracao": "0"
-    },
-    "avaliacoes": {
-      "inicial": 96,
-      "atual": 0,
-      "novas": -96
-    },
-    "timestamp": "2026-03-10T12:03:13.264256"
+    "timestamp": "2026-03-10T12:16:58.602890",
+    "google_reviews_url": "https://share.google/U2cO3MWeXsKQZUenB",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "clinico_geral": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_avaliacao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_profilaxia": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "meta_restauracao": {
+        "meta": "",
+        "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      }
+    }
   }
 }
