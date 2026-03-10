@@ -324,47 +324,19 @@ def extrair_todas_metas(driver, cidade):
     return dados
 
 
-def coletar_dados_todas_cidades():
-    dados = {}
-    driver = setup_driver()
+if not fazer_login(driver, url, cidade):
+    print(f"Falha ao coletar dados de {cidade}")
+    continue
 
-    try:
-        for cidade, url in CIDADES.items():
-            print("-" * 60)
-            print(f"Coletando dados de {cidade}...")
+if not abrir_tela_metas(driver, cidade):
+    print(f"Falha ao abrir metas em {cidade}")
+    continue
 
-            try:
-                if not fazer_login(driver, url, cidade):
-                    print(f"Falha ao coletar dados de {cidade}")
-                    continue
+if not selecionar_mes_e_buscar(driver, MES_REFERENCIA, cidade):
+    print(f"Falha ao selecionar mês em {cidade}")
+    continue
 
-                if not abrir_tela_metas(driver, cidade):
-                    print(f"Falha ao abrir metas em {cidade}")
-                    continue
-
-                metas = extrair_todas_metas(driver, cidade)
-
-                dados[cidade] = {
-                    "mes_referencia": MES_REFERENCIA,
-                    "timestamp": datetime.now().isoformat(),
-                    "indicadores": metas,
-                }
-
-                print(f"Coleta concluída em {cidade}")
-
-            except WebDriverException as e:
-                print(f"Erro de navegador em {cidade}: {e}")
-                salvar_screenshot(driver, f"erro_driver_{cidade}.png")
-                continue
-            except Exception as e:
-                print(f"Erro inesperado em {cidade}: {e}")
-                salvar_screenshot(driver, f"erro_geral_{cidade}.png")
-                continue
-    finally:
-        driver.quit()
-
-    return dados
-
+metas = extrair_todas_metas(driver, cidade)
 
 def salvar_json(dados):
     os.makedirs("data", exist_ok=True)
