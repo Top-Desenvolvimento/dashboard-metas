@@ -1,5 +1,4 @@
-name: Atualizar Dashboard - A cada hora
-
+name: Dashboard de Metas
 on:
   schedule:
     - cron: '0 * * * *'
