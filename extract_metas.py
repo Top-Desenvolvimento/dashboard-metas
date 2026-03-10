@@ -171,67 +171,21 @@ def fazer_login(driver, url, cidade):
 
 
 def abrir_tela_metas(driver, cidade):
-    try:
-        wait = WebDriverWait(driver, 20)
+    base = driver.current_url.split("index2.php")[0]
 
-        print(f"Navegando até FINANÇAS > Metas em {cidade}...")
+    url_metas = base + "index2.php?conteudo=financeiro_metas"
 
-        btn_financas = wait.until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
-            )
-        )
-        driver.execute_script("arguments[0].click();", btn_financas)
-        time.sleep(2)
+    print(f"Abrindo tela de metas financeiras em {cidade}...")
 
-        salvar_screenshot(driver, f"menu_financas_{cidade}.png")
+    driver.get(url_metas)
 
-        candidatos = [
-            (By.LINK_TEXT, "Metas"),
-            (By.PARTIAL_LINK_TEXT, "Metas"),
-            (By.XPATH, "//a[normalize-space(text())='Metas']"),
-            (By.XPATH, "//*[self::a or self::span or self::div][normalize-space(text())='Metas']"),
-            (By.XPATH, "//*[contains(@href,'metas')]"),
-        ]
+    time.sleep(4)
 
-        clicou = False
+    salvar_screenshot(driver, f"tela_metas_{cidade}.png")
 
-        for by, value in candidatos:
-            try:
-                elem = wait.until(EC.presence_of_element_located((by, value)))
-                driver.execute_script("arguments[0].scrollIntoView(true);", elem)
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", elem)
-                clicou = True
-                break
-            except Exception:
-                continue
+    print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
 
-        if not clicou:
-            try:
-                links = driver.find_elements(By.TAG_NAME, "a")
-                print(f"Links encontrados em {cidade}:")
-                for link in links[:80]:
-                    txt = (link.text or "").strip()
-                    href = link.get_attribute("href")
-                    if txt:
-                        print(f"- {txt} -> {href}")
-            except Exception:
-                pass
-
-            raise Exception("Submenu 'Metas' não encontrado ou não clicável")
-
-        time.sleep(3)
-        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
-        print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
-        return True
-
-    except Exception as e:
-        print(f"Erro ao abrir tela de metas em {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
-        return False
-
-
+    return True
 def obter_texto_pagina(driver):
     return driver.find_element(By.TAG_NAME, "body").text
 
