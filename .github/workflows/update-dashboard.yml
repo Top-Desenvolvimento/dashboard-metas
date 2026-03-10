@@ -37,7 +37,7 @@ jobs:
         run: |
           python generate_dashboard.py
 
-      - name: Commit e push das alterações
+            - name: Commit e push das alterações
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
