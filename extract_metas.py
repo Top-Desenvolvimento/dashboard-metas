@@ -313,9 +313,6 @@ def coletar_dados_todas_cidades():
                     print(f"Falha ao abrir metas em {cidade}")
                     continue
 
-                if not selecionar_mes_e_buscar(driver, MES_REFERENCIA, cidade):
-                    print(f"Falha ao selecionar mês em {cidade}")
-                    continue
 
                 metas = extrair_todas_metas(driver, cidade)
 
