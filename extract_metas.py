@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """
-Script de extração de metas da Top Estética Bucal
+Coleta de metas da Top Estética Bucal
+
 Fluxo:
 1. Faz login em cada unidade
-2. Navega em FINANÇAS > METAS
-3. Seleciona o mês de referência
-4. Extrai metas financeiras e de serviços
-5. Salva JSON, CSV e Excel
+2. Abre a tela de metas diretamente
+3. Lê as tabelas reais da página
+4. Salva JSON / CSV / Excel
+
+Indicadores coletados:
+- ortodontia
+- clinico_geral
+- avaliacoes_google
+- meta_avaliacao
+- meta_profilaxia
+- meta_restauracao
 """
 
 import os
@@ -17,21 +25,36 @@ from datetime import datetime
 import pandas as pd
 import requests
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
-# =========================
-# CONFIGURAÇÕES
-# =========================
-
 LOGIN_USER = os.environ.get("LOGIN_USER", "")
 LOGIN_PASS = os.environ.get("LOGIN_PASS", "")
-MES_REFERENCIA = os.environ.get("MES_REFERENCIA", datetime.now().strftime("%Y-%m"))
+
+
+def calcular_mes_referencia():
+    hoje = datetime.now()
+    if hoje.day <= 5:
+        if hoje.month == 1:
+            ano = hoje.year - 1
+            mes = 12
+        else:
+            ano = hoje.year
+            mes = hoje.month - 1
+    else:
+        ano = hoje.year
+        mes = hoje.month
+    return f"{ano}-{mes:02d}"
+
+
+MES_REFERENCIA_ENV = os.environ.get("MES_REFERENCIA", "AUTO")
+MES_REFERENCIA = calcular_mes_referencia() if MES_REFERENCIA_ENV == "AUTO" else MES_REFERENCIA_ENV
+
 
 CIDADES = {
     "Caxias": "http://caxias.topesteticabucal.com.br/sistema",
@@ -45,34 +68,18 @@ CIDADES = {
     "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
-GOOGLE_REVIEWS = [
-    "https://share.google/3f8yPEfrb24AQYYOp",   # Caxias
-    "https://share.google/ffSPadgdvp8WUEXq0",   # Farroupilha
-    "https://share.google/g1snAopsGqM5I8sOl",   # Bento
-    "https://share.google/sEdZu4jHIPYL77RA6",   # Encantado
-    "https://share.google/5CUABlRksD1cPYWiK",   # Soledade
-    "https://share.google/rOGEnBONHO2kTYVk3",   # Garibaldi
-    "https://share.google/UlnGSp8MES2AnB7Yz",   # Veranópolis
-    "https://share.google/33XgmkKW7UnW8o8WB",   # SS do Caí
-    "https://share.google/U2cO3MWeXsKQZUenB",   # Flores
-]
-
-AVALIACOES_INICIAIS = {
-    "Caxias": 285,
-    "Flores": 96,
-    "Farroupilha": 173,
-    "Bento": 76,
-    "Encantado": 206,
-    "Soledade": 413,
-    "Garibaldi": 128,
-    "Veranópolis": 128,
-    "SS do Caí": 88,
+GOOGLE_REVIEWS = {
+    "Caxias": "https://share.google/3f8yPEfrb24AQYYOp",
+    "Farroupilha": "https://share.google/ffSPadgdvp8WUEXq0",
+    "Bento": "https://share.google/g1snAopsGqM5I8sOl",
+    "Encantado": "https://share.google/sEdZu4jHIPYL77RA6",
+    "Soledade": "https://share.google/5CUABlRksD1cPYWiK",
+    "Garibaldi": "https://share.google/rOGEnBONHO2kTYVk3",
+    "Veranópolis": "https://share.google/UlnGSp8MES2AnB7Yz",
+    "SS do Caí": "https://share.google/33XgmkKW7UnW8o8WB",
+    "Flores": "https://share.google/U2cO3MWeXsKQZUenB",
 }
 
-
-# =========================
-# UTILITÁRIOS
-# =========================
 
 def garantir_pasta_logs():
     os.makedirs("logs", exist_ok=True)
@@ -104,53 +111,17 @@ def setup_driver():
     return driver
 
 
-def formatar_mes_para_texto(mes_referencia):
-    mapa = {
-        "01": "Janeiro",
-        "02": "Fevereiro",
-        "03": "Março",
-        "04": "Abril",
-        "05": "Maio",
-        "06": "Junho",
-        "07": "Julho",
-        "08": "Agosto",
-        "09": "Setembro",
-        "10": "Outubro",
-        "11": "Novembro",
-        "12": "Dezembro",
-    }
-
-    ano, mes = mes_referencia.split("-")
-    nome_mes = mapa.get(mes, mes)
-
-    return {
-        "ano": ano,
-        "mes": mes,
-        "nome_mes": nome_mes,
-        "texto": f"{nome_mes}/{ano}",
-        "texto_com_espaco": f"{nome_mes} / {ano}",
-        "valor": mes_referencia,
-    }
+def normalizar_texto(texto):
+    return " ".join((texto or "").replace("\xa0", " ").split()).strip()
 
 
-def extrair_texto_seguro(driver, seletores):
-    for by, valor in seletores:
-        try:
-            el = driver.find_element(by, valor)
-            texto = el.text.strip()
-            if texto:
-                return texto
-            value = (el.get_attribute("value") or "").strip()
-            if value:
-                return value
-        except Exception:
-            continue
-    return ""
+def normalizar_chave(texto):
+    t = normalizar_texto(texto).lower()
+    t = t.replace("clínico", "clinico")
+    t = t.replace("avaliações", "avaliacoes")
+    t = t.replace("restauração", "restauracao")
+    return t
 
-
-# =========================
-# LOGIN E NAVEGAÇÃO
-# =========================
 
 def fazer_login(driver, url, cidade):
     try:
@@ -167,23 +138,16 @@ def fazer_login(driver, url, cidade):
                 (By.CSS_SELECTOR, "input[type='text'], input[name='username'], input[id='username']")
             )
         )
-
         password = wait.until(
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "input[type='password']")
             )
         )
 
-        driver.execute_script("arguments[0].scrollIntoView(true);", username)
-        time.sleep(0.5)
-
         driver.execute_script("arguments[0].value = '';", username)
         driver.execute_script("arguments[0].value = '';", password)
-
         driver.execute_script("arguments[0].value = arguments[1];", username, LOGIN_USER)
         driver.execute_script("arguments[0].value = arguments[1];", password, LOGIN_PASS)
-
-        time.sleep(1)
 
         clicou = False
         for seletor in [
@@ -216,126 +180,101 @@ def fazer_login(driver, url, cidade):
         return False
 
 
-def navegar_ate_metas(driver, cidade):
-    """
-    Abre diretamente a página de metas financeiras
-    """
-
+def abrir_tela_metas(driver, cidade):
     try:
         print(f"Abrindo tela de metas diretamente em {cidade}...")
 
         base = driver.current_url.split("index2.php")[0]
-
         url_metas = base + "index2.php?conteudo=financeiro_metas"
 
         driver.get(url_metas)
-
         time.sleep(4)
 
         print(f"URL metas em {cidade}: {driver.current_url}")
-
         salvar_screenshot(driver, f"tela_metas_{cidade}.png")
-
         return True
 
     except Exception as e:
         print(f"Erro ao abrir tela de metas em {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_navegacao_metas_{cidade}.png")
+        salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
         return False
-def calcular_mes_referencia():
-    hoje = datetime.now()
-
-    if hoje.day <= 5:
-        if hoje.month == 1:
-            ano = hoje.year - 1
-            mes = 12
-        else:
-            ano = hoje.year
-            mes = hoje.month - 1
-    else:
-        ano = hoje.year
-        mes = hoje.month
-
-    return f"{ano}-{mes:02d}"
 
 
-MES_REFERENCIA_ENV = os.environ.get("MES_REFERENCIA", "AUTO")
-
-if MES_REFERENCIA_ENV == "AUTO":
-    MES_REFERENCIA = calcular_mes_referencia()
-else:
-    MES_REFERENCIA = MES_REFERENCIA_ENV
-def extrair_metas_financeiras(driver, cidade):
+def coletar_bloco_por_titulo(driver, titulo):
+    """
+    Localiza um bloco pelo título e lê a linha logo abaixo com:
+    Meta | Até o momento | Falta | Progresso
+    """
     try:
-        time.sleep(2)
+        xpath_titulo = (
+            f"//*[self::td or self::th or self::div or self::span]"
+            f"[contains(normalize-space(.), '{titulo}')]"
+        )
+        titulo_el = driver.find_element(By.XPATH, xpath_titulo)
 
-        ortodontia = extrair_texto_seguro(driver, [
-            (By.ID, "ortodontia_valor"),
-            (By.ID, "ortodontia"),
-            (By.NAME, "ortodontia"),
-            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Ortodontia')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
-        ])
+        # Sobe até um container razoável
+        container = titulo_el.find_element(By.XPATH, "./ancestor::table[1] | ./ancestor::tbody[1] | ./ancestor::tr[1]/parent::*")
+        linhas = container.find_elements(By.XPATH, ".//tr")
 
-        clinico = extrair_texto_seguro(driver, [
-            (By.ID, "clinico_valor"),
-            (By.ID, "clinico_geral"),
-            (By.NAME, "clinico_geral"),
-            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Clinico Geral')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Clínico Geral')]/ancestor::*[1]//*[contains(text(), 'R$')]"),
-        ])
+        # Procura a linha de dados que vem depois do título
+        encontrou_titulo = False
+        for linha in linhas:
+            texto_linha = normalizar_texto(linha.text)
+            if not texto_linha:
+                continue
 
-        salvar_screenshot(driver, f"financeiro_extraido_{cidade}.png")
+            if titulo.lower() in texto_linha.lower():
+                encontrou_titulo = True
+                continue
 
-        return {
-            "ortodontia": ortodontia or "R$ 0",
-            "clinico_geral": clinico or "R$ 0",
-        }
-
-    except Exception as e:
-        print(f"Erro ao extrair metas financeiras de {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_financeiro_{cidade}.png")
-        return {
-            "ortodontia": "R$ 0",
-            "clinico_geral": "R$ 0",
-        }
-
-
-def extrair_metas_servicos(driver, cidade):
-    try:
-        time.sleep(2)
-
-        profilaxia = extrair_texto_seguro(driver, [
-            (By.ID, "profilaxia"),
-            (By.NAME, "profilaxia"),
-            (By.XPATH, "//*[contains(text(), 'Profilaxia')]/following::*[1]"),
-        ])
-
-        restauracao = extrair_texto_seguro(driver, [
-            (By.ID, "restauracao"),
-            (By.NAME, "restauracao"),
-            (By.XPATH, "//*[contains(text(), 'Restauração')]/following::*[1]"),
-            (By.XPATH, "//*[contains(text(), 'Restauracao')]/following::*[1]"),
-        ])
-
-        salvar_screenshot(driver, f"servicos_extraidos_{cidade}.png")
+            if encontrou_titulo:
+                colunas = linha.find_elements(By.XPATH, ".//td")
+                if len(colunas) >= 4:
+                    return {
+                        "meta": normalizar_texto(colunas[0].text),
+                        "ate_o_momento": normalizar_texto(colunas[1].text),
+                        "falta": normalizar_texto(colunas[2].text),
+                        "progresso": normalizar_texto(colunas[3].text),
+                    }
 
         return {
-            "profilaxia": profilaxia or "0",
-            "restauracao": restauracao or "0",
+            "meta": "",
+            "ate_o_momento": "",
+            "falta": "",
+            "progresso": "",
         }
 
-    except Exception as e:
-        print(f"Erro ao extrair metas de serviços de {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_servicos_{cidade}.png")
+    except Exception:
         return {
-            "profilaxia": "0",
-            "restauracao": "0",
+            "meta": "",
+            "ate_o_momento": "",
+            "falta": "",
+            "progresso": "",
         }
+
+
+def extrair_todas_metas(driver, cidade):
+    """
+    Extrai as 6 metas reais da tela.
+    """
+    dados = {
+        "ortodontia": coletar_bloco_por_titulo(driver, "Ortodontia"),
+        "clinico_geral": coletar_bloco_por_titulo(driver, "Clínico Geral"),
+        "avaliacoes_google": coletar_bloco_por_titulo(driver, "Avaliações Google"),
+        "meta_avaliacao": coletar_bloco_por_titulo(driver, "Meta de Avaliação"),
+        "meta_profilaxia": coletar_bloco_por_titulo(driver, "Meta de Profilaxia"),
+        "meta_restauracao": coletar_bloco_por_titulo(driver, "Meta de Restauração"),
+    }
+
+    salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
+    return dados
 
 
 def obter_avaliacoes_google(url):
+    """
+    Mantido simples por enquanto.
+    Você comentou que a meta do Google será administrada à parte.
+    """
     try:
         response = requests.get(url, timeout=10)
         if response.status_code == 200:
@@ -346,16 +285,12 @@ def obter_avaliacoes_google(url):
         return 0
 
 
-# =========================
-# COLETA
-# =========================
-
 def coletar_dados_todas_cidades():
     dados = {}
     driver = setup_driver()
 
     try:
-        for idx, (cidade, url) in enumerate(CIDADES.items()):
+        for cidade, url in CIDADES.items():
             print("-" * 60)
             print(f"Coletando dados de {cidade}...")
 
@@ -364,35 +299,17 @@ def coletar_dados_todas_cidades():
                     print(f"Falha ao coletar dados de {cidade}")
                     continue
 
-                if not navegar_ate_metas(driver, cidade):
-                    print(f"Falha ao navegar até metas em {cidade}")
+                if not abrir_tela_metas(driver, cidade):
+                    print(f"Falha ao abrir metas em {cidade}")
                     continue
 
-                if not navegar_ate_metas(driver, cidade):
-                    print(f"Falha ao navegar até metas em {cidade}")
-                    continue
-
-                # NÃO selecionar mês
-                metas_financeiras = extrair_metas_financeiras(driver, cidade)
-                metas_servicos = extrair_metas_servicos(driver, cidade)
-
-                metas_financeiras = extrair_metas_financeiras(driver, cidade)
-                metas_servicos = extrair_metas_servicos(driver, cidade)
-
-                avaliacoes_atual = obter_avaliacoes_google(GOOGLE_REVIEWS[idx])
-                avaliacoes_inicial = AVALIACOES_INICIAIS.get(cidade, 0)
-                avaliacoes_novas = avaliacoes_atual - avaliacoes_inicial
+                metas = extrair_todas_metas(driver, cidade)
 
                 dados[cidade] = {
                     "mes_referencia": MES_REFERENCIA,
-                    "metas_financeiras": metas_financeiras,
-                    "metas_servicos": metas_servicos,
-                    "avaliacoes": {
-                        "inicial": avaliacoes_inicial,
-                        "atual": avaliacoes_atual,
-                        "novas": avaliacoes_novas,
-                    },
                     "timestamp": datetime.now().isoformat(),
+                    "google_reviews_url": GOOGLE_REVIEWS.get(cidade, ""),
+                    "indicadores": metas,
                 }
 
                 print(f"Coleta concluída em {cidade}")
@@ -412,10 +329,6 @@ def coletar_dados_todas_cidades():
     return dados
 
 
-# =========================
-# SAÍDAS
-# =========================
-
 def salvar_json(dados):
     output_path = "data/metas_atual.json"
     os.makedirs("data", exist_ok=True)
@@ -432,17 +345,17 @@ def salvar_csv(dados):
 
     rows = []
     for cidade, info in dados.items():
-        row = {
-            "cidade": cidade,
-            "mes_referencia": info.get("mes_referencia", MES_REFERENCIA),
-            "timestamp": info["timestamp"],
-            "ortodontia": info["metas_financeiras"].get("ortodontia", ""),
-            "clinico_geral": info["metas_financeiras"].get("clinico_geral", ""),
-            "profilaxia": info["metas_servicos"].get("profilaxia", ""),
-            "restauracao": info["metas_servicos"].get("restauracao", ""),
-            "avaliacoes_novas": info["avaliacoes"]["novas"],
-        }
-        rows.append(row)
+        for indicador, valores in info.get("indicadores", {}).items():
+            rows.append({
+                "cidade": cidade,
+                "mes_referencia": info.get("mes_referencia", ""),
+                "timestamp": info.get("timestamp", ""),
+                "indicador": indicador,
+                "meta": valores.get("meta", ""),
+                "ate_o_momento": valores.get("ate_o_momento", ""),
+                "falta": valores.get("falta", ""),
+                "progresso": valores.get("progresso", ""),
+            })
 
     df = pd.DataFrame(rows)
     if os.path.exists(output_path):
@@ -455,45 +368,31 @@ def salvar_csv(dados):
 
 def gerar_excel(dados):
     output_path = "data/metas_top_estetica.xlsx"
+    os.makedirs("data", exist_ok=True)
 
-    df_financeiro = []
-    df_servicos = []
-    df_avaliacoes = []
-
+    rows = []
     for cidade, info in dados.items():
-        df_financeiro.append({
+        base = {
             "Cidade": cidade,
-            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
-            "Ortodontia": info["metas_financeiras"].get("ortodontia", ""),
-            "Clínico Geral": info["metas_financeiras"].get("clinico_geral", ""),
-        })
+            "Mês Referência": info.get("mes_referencia", ""),
+            "Timestamp": info.get("timestamp", ""),
+        }
 
-        df_servicos.append({
-            "Cidade": cidade,
-            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
-            "Profilaxia": info["metas_servicos"].get("profilaxia", ""),
-            "Restauração": info["metas_servicos"].get("restauracao", ""),
-        })
-
-        df_avaliacoes.append({
-            "Cidade": cidade,
-            "Mês Referência": info.get("mes_referencia", MES_REFERENCIA),
-            "Avaliações Iniciais": info["avaliacoes"]["inicial"],
-            "Avaliações Atuais": info["avaliacoes"]["atual"],
-            "Novas Avaliações": info["avaliacoes"]["novas"],
-        })
+        for indicador, valores in info.get("indicadores", {}).items():
+            rows.append({
+                **base,
+                "Indicador": indicador,
+                "Meta": valores.get("meta", ""),
+                "Até o Momento": valores.get("ate_o_momento", ""),
+                "Falta": valores.get("falta", ""),
+                "Progresso": valores.get("progresso", ""),
+            })
 
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
-        pd.DataFrame(df_financeiro).to_excel(writer, sheet_name="Metas Financeiras", index=False)
-        pd.DataFrame(df_servicos).to_excel(writer, sheet_name="Metas Serviços", index=False)
-        pd.DataFrame(df_avaliacoes).to_excel(writer, sheet_name="Avaliações Google", index=False)
+        pd.DataFrame(rows).to_excel(writer, sheet_name="Metas", index=False)
 
     print(f"Excel gerado em: {output_path}")
 
-
-# =========================
-# MAIN
-# =========================
 
 def main():
     print("=" * 60)
