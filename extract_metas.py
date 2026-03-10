@@ -1,26 +1,9 @@
 #!/usr/bin/env python3
 """
 Coleta de metas da Top Estética Bucal
-
-Saída exata para a dashboard:
-{
-  "Cidade": {
-    "mes_referencia": "2026-03",
-    "timestamp": "...",
-    "indicadores": {
-      "ortodontia": {"meta":"", "ate_o_momento":"", "falta":"", "progresso":""},
-      "clinico_geral": {...},
-      "avaliacoes_google": {...},
-      "meta_avaliacao": {...},
-      "meta_profilaxia": {...},
-      "meta_restauracao": {...}
-    }
-  }
-}
 """
 
 import os
-import re
 import json
 import time
 from datetime import datetime
@@ -29,7 +12,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -179,7 +162,6 @@ def abrir_tela_metas(driver, cidade):
 
         print(f"Navegando até FINANÇAS > Metas em {cidade}...")
 
-        # clica em FINANÇAS
         btn_financas = wait.until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
@@ -190,7 +172,6 @@ def abrir_tela_metas(driver, cidade):
 
         salvar_screenshot(driver, f"menu_financas_{cidade}.png")
 
-        # clica em Metas
         btn_metas = wait.until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//*[normalize-space(text())='Metas']")
@@ -201,68 +182,70 @@ def abrir_tela_metas(driver, cidade):
 
         salvar_screenshot(driver, f"tela_metas_{cidade}.png")
         print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
-
         return True
 
     except Exception as e:
         print(f"Erro ao abrir tela de metas em {cidade}: {e}")
         salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
         return False
-def abrir_tela_metas(driver, cidade):
+
+
+def selecionar_mes_e_buscar(driver, mes_referencia, cidade):
     try:
         wait = WebDriverWait(driver, 20)
 
-        print(f"Navegando até FINANÇAS > Metas em {cidade}...")
+        mapa = {
+            "01": "Janeiro",
+            "02": "Fevereiro",
+            "03": "Março",
+            "04": "Abril",
+            "05": "Maio",
+            "06": "Junho",
+            "07": "Julho",
+            "08": "Agosto",
+            "09": "Setembro",
+            "10": "Outubro",
+            "11": "Novembro",
+            "12": "Dezembro",
+        }
 
-        # clica em FINANÇAS
-        btn_financas = wait.until(
+        ano, mes = mes_referencia.split("-")
+        texto_mes = f"{mapa[mes]} / {ano}"
+
+        print(f"Selecionando mês {texto_mes} em {cidade}...")
+
+        select_el = wait.until(
+            EC.presence_of_element_located((By.TAG_NAME, "select"))
+        )
+
+        select = Select(select_el)
+        select.select_by_visible_text(texto_mes)
+
+        time.sleep(1)
+
+        btn_buscar = wait.until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
+                (By.XPATH, "//*[normalize-space(text())='Buscar']")
             )
         )
-        driver.execute_script("arguments[0].click();", btn_financas)
-        time.sleep(2)
+        driver.execute_script("arguments[0].click();", btn_buscar)
 
-        salvar_screenshot(driver, f"menu_financas_{cidade}.png")
-
-        # clica em Metas
-        btn_metas = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//*[normalize-space(text())='Metas']")
-            )
-        )
-        driver.execute_script("arguments[0].click();", btn_metas)
         time.sleep(3)
-
-        salvar_screenshot(driver, f"tela_metas_{cidade}.png")
-        print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
-
+        salvar_screenshot(driver, f"mes_buscado_{cidade}.png")
+        print(f"Mês aplicado com sucesso em {cidade}")
         return True
 
     except Exception as e:
-        print(f"Erro ao abrir tela de metas em {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
+        print(f"Erro ao selecionar mês/buscar em {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_mes_buscar_{cidade}.png")
         return False
 
+
 def obter_texto_pagina(driver):
-    body = driver.find_element(By.TAG_NAME, "body").text
-    return body
+    return driver.find_element(By.TAG_NAME, "body").text
 
 
 def extrair_bloco_linhas(linhas, titulo):
-    """
-    Busca blocos no formato exato visível da página, por exemplo:
-
-    Meta de Avaliação
-    Até o momento
-    Falta
-    Progresso
-    Meta
-    205
-    33
-    -172
-    16,098%
-    """
     titulo_norm = titulo.lower()
 
     for i, linha in enumerate(linhas):
@@ -271,7 +254,6 @@ def extrair_bloco_linhas(linhas, titulo):
 
         bloco = linhas[i:i + 14]
 
-        # Caso padrão
         if len(bloco) >= 9:
             if (
                 "até o momento" in bloco[1].lower()
@@ -286,7 +268,6 @@ def extrair_bloco_linhas(linhas, titulo):
                     "progresso": bloco[8] if len(bloco) > 8 else "",
                 }
 
-        # Fallback
         try:
             idx_meta = next(idx for idx, item in enumerate(bloco) if item.lower() == "meta")
             if idx_meta + 4 < len(bloco):
@@ -324,19 +305,53 @@ def extrair_todas_metas(driver, cidade):
     return dados
 
 
-if not fazer_login(driver, url, cidade):
-    print(f"Falha ao coletar dados de {cidade}")
-    continue
+def coletar_dados_todas_cidades():
+    dados = {}
+    driver = setup_driver()
 
-if not abrir_tela_metas(driver, cidade):
-    print(f"Falha ao abrir metas em {cidade}")
-    continue
+    try:
+        for cidade, url in CIDADES.items():
+            print("-" * 60)
+            print(f"Coletando dados de {cidade}...")
 
-if not selecionar_mes_e_buscar(driver, MES_REFERENCIA, cidade):
-    print(f"Falha ao selecionar mês em {cidade}")
-    continue
+            try:
+                if not fazer_login(driver, url, cidade):
+                    print(f"Falha ao coletar dados de {cidade}")
+                    continue
 
-metas = extrair_todas_metas(driver, cidade)
+                if not abrir_tela_metas(driver, cidade):
+                    print(f"Falha ao abrir metas em {cidade}")
+                    continue
+
+                if not selecionar_mes_e_buscar(driver, MES_REFERENCIA, cidade):
+                    print(f"Falha ao selecionar mês em {cidade}")
+                    continue
+
+                metas = extrair_todas_metas(driver, cidade)
+
+                dados[cidade] = {
+                    "mes_referencia": MES_REFERENCIA,
+                    "timestamp": datetime.now().isoformat(),
+                    "indicadores": metas,
+                }
+
+                print(f"Coleta concluída em {cidade}")
+
+            except WebDriverException as e:
+                print(f"Erro de navegador em {cidade}: {e}")
+                salvar_screenshot(driver, f"erro_driver_{cidade}.png")
+                continue
+
+            except Exception as e:
+                print(f"Erro inesperado em {cidade}: {e}")
+                salvar_screenshot(driver, f"erro_geral_{cidade}.png")
+                continue
+
+    finally:
+        driver.quit()
+
+    return dados
+
 
 def salvar_json(dados):
     os.makedirs("data", exist_ok=True)
