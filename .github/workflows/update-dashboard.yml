@@ -1,9 +1,9 @@
 name: Dashboard de Metas
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 * * * *'
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -33,11 +33,12 @@ jobs:
           MES_REFERENCIA: 'AUTO'
         run: |
           python extract_metas.py
+
       - name: Atualizar dashboard HTML
         run: |
           python generate_dashboard.py
 
-            - name: Commit e push das alterações
+      - name: Commit e push das alterações
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -50,6 +51,7 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
+
       - name: Deploy no GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
