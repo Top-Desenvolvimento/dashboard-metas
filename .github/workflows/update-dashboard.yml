@@ -33,7 +33,6 @@ jobs:
           MES_REFERENCIA: 'AUTO'
         run: |
           python extract_metas.py
-
       - name: Atualizar dashboard HTML
         run: |
           python generate_dashboard.py
