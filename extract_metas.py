@@ -309,8 +309,6 @@ def extrair_todas_metas(driver, cidade):
         "meta_profilaxia": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
         "meta_restauracao": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""}
     }
-
-
 def coletar_dados_todas_cidades():
     dados = {}
     driver = setup_driver()
