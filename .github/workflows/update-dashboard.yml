@@ -1,4 +1,5 @@
 name: Dashboard de Metas
+
 on:
   schedule:
     - cron: '0 * * * *'
