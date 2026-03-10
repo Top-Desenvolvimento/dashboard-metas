@@ -293,20 +293,22 @@ def extrair_bloco_linhas(linhas, titulo):
 
 
 def extrair_todas_metas(driver, cidade):
-    texto = obter_texto_pagina(driver)
-    linhas = normalizar_linhas(texto)
+    texto = driver.find_element(By.TAG_NAME, "body").text
 
-    print(f"Primeiras linhas da página em {cidade}:")
-    for linha in linhas[:120]:
-        print(linha)
+    print(f"======== TEXTO COMPLETO DA PÁGINA EM {cidade} ========")
+    print(texto)
+    print(f"======== FIM DO TEXTO EM {cidade} ========")
 
-    dados = {}
-    for chave, titulo in INDICADORES_ORDEM:
-        dados[chave] = extrair_bloco_linhas(linhas, titulo)
-
-    print(f"Metas extraídas em {cidade}: {json.dumps(dados, ensure_ascii=False)}")
     salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
-    return dados
+
+    return {
+        "ortodontia": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
+        "clinico_geral": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
+        "avaliacoes_google": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
+        "meta_avaliacao": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
+        "meta_profilaxia": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""},
+        "meta_restauracao": {"meta": "", "ate_o_momento": "", "falta": "", "progresso": ""}
+    }
 
 
 def coletar_dados_todas_cidades():
