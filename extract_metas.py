@@ -175,14 +175,35 @@ def fazer_login(driver, url, cidade):
 
 def abrir_tela_metas(driver, cidade):
     try:
-        base = driver.current_url.split("index2.php")[0]
-        url_metas = base + "index2.php?conteudo=financeiro_metas"
-        print(f"Abrindo tela de metas diretamente em {cidade}...")
-        driver.get(url_metas)
-        time.sleep(4)
+        wait = WebDriverWait(driver, 20)
+
+        print(f"Navegando até FINANÇAS > Metas em {cidade}...")
+
+        # clica em FINANÇAS
+        btn_financas = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
+            )
+        )
+        driver.execute_script("arguments[0].click();", btn_financas)
+        time.sleep(2)
+
+        salvar_screenshot(driver, f"menu_financas_{cidade}.png")
+
+        # clica em Metas
+        btn_metas = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[normalize-space(text())='Metas']")
+            )
+        )
+        driver.execute_script("arguments[0].click();", btn_metas)
+        time.sleep(3)
+
         salvar_screenshot(driver, f"tela_metas_{cidade}.png")
-        print(f"URL metas em {cidade}: {driver.current_url}")
+        print(f"Tela de metas aberta em {cidade}: {driver.current_url}")
+
         return True
+
     except Exception as e:
         print(f"Erro ao abrir tela de metas em {cidade}: {e}")
         salvar_screenshot(driver, f"erro_tela_metas_{cidade}.png")
