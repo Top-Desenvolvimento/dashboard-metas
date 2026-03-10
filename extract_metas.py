@@ -115,6 +115,72 @@ def normalizar_texto(texto):
     return " ".join((texto or "").replace("\xa0", " ").split()).strip()
 
 
+def texto_pagina(driver):
+    body = driver.find_element(By.TAG_NAME, "body").text
+    return normalizar_texto(body)
+
+
+def extrair_bloco_por_regex(texto, titulo):
+    """
+    Extrai blocos no formato:
+    TÍTULO
+    Até o momento
+    Falta
+    Progresso
+    Meta
+    VALOR_META
+    VALOR_ATE
+    VALOR_FALTA
+    VALOR_PROGRESSO
+    """
+
+    pattern = re.compile(
+        rf"{re.escape(titulo)}\s+Até o momento\s+Falta\s+Progresso\s+Meta\s+(.+?)\s+(.+?)\s+(.+?)\s+([0-9.,%-]+)",
+        re.IGNORECASE | re.DOTALL
+    )
+
+    match = pattern.search(texto)
+
+    if not match:
+        return {
+            "meta": "",
+            "ate_o_momento": "",
+            "falta": "",
+            "progresso": "",
+        }
+
+    return {
+        "meta": normalizar_texto(match.group(1)),
+        "ate_o_momento": normalizar_texto(match.group(2)),
+        "falta": normalizar_texto(match.group(3)),
+        "progresso": normalizar_texto(match.group(4)),
+    }
+
+
+def extrair_todas_metas(driver, cidade):
+    """
+    Extrai as 6 metas reais a partir do texto visível da página.
+    """
+    texto = texto_pagina(driver)
+
+    print(f"Texto da página em {cidade}:")
+    print(texto[:3000])
+
+    dados = {
+        "ortodontia": extrair_bloco_por_regex(texto, "Ortodontia"),
+        "clinico_geral": extrair_bloco_por_regex(texto, "Clínico Geral"),
+        "avaliacoes_google": extrair_bloco_por_regex(texto, "Avaliações Google"),
+        "meta_avaliacao": extrair_bloco_por_regex(texto, "Meta de Avaliação"),
+        "meta_profilaxia": extrair_bloco_por_regex(texto, "Meta de Profilaxia"),
+        "meta_restauracao": extrair_bloco_por_regex(texto, "Meta de Restauração"),
+    }
+
+    salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
+    print(f"Metas extraídas em {cidade}: {json.dumps(dados, ensure_ascii=False)}")
+
+    return dados
+
+
 def normalizar_chave(texto):
     t = normalizar_texto(texto).lower()
     t = t.replace("clínico", "clinico")
