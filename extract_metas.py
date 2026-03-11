@@ -1,17 +1,4 @@
 #!/usr/bin/env python3
-"""
-Coleta de metas da Top Estética Bucal
-
-Fluxo:
-1. Faz login em cada unidade
-2. Clica em FINANÇAS
-3. Clica em Metas
-4. Lê o que estiver visível na tela
-5. Busca automaticamente o total atual de avaliações no Google
-6. Calcula o indicador avaliacoes_google
-7. Salva JSON / CSV / Excel
-"""
-
 import os
 import re
 import json
@@ -63,18 +50,6 @@ CIDADES = {
     "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
-GOOGLE_REVIEW_URLS = {
-    "Caxias": "https://share.google/3f8yPEfrb24AQYYOp",
-    "Farroupilha": "https://share.google/ffSPadgdvp8WUEXq0",
-    "Bento": "https://share.google/g1snAopsGqM5I8sOl",
-    "Encantado": "https://share.google/sEdZu4jHIPYL77RA6",
-    "Soledade": "https://share.google/5CUABlRksD1cPYWiK",
-    "Garibaldi": "https://share.google/rOGEnBONHO2kTYVk3",
-    "Veranópolis": "https://share.google/UlnGSp8MES2AnB7Yz",
-    "SS do Caí": "https://share.google/33XgmkKW7UnW8o8WB",
-    "Flores": "https://share.google/U2cO3MWeXsKQZUenB",
-}
-
 INDICADORES_SISTEMA = {
     "ortodontia": ["Ortodontia"],
     "clinico_geral": ["Clínico Geral", "Clinico Geral"],
@@ -116,11 +91,6 @@ def setup_driver():
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--lang=pt-BR")
-    chrome_options.add_argument(
-        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-    )
 
     service = Service("/usr/bin/chromedriver")
     driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -139,20 +109,16 @@ def carregar_json_opcional(caminho):
     return {}
 
 
-def carregar_json_metas_existente():
-    caminho = "data/metas_atual.json"
-    if os.path.exists(caminho):
-        with open(caminho, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
-
-
 def carregar_google_inicial():
     return carregar_json_opcional("data/google_inicial.json")
 
 
 def carregar_google_meta():
     return carregar_json_opcional("data/google_meta.json")
+
+
+def carregar_google_atual():
+    return carregar_json_opcional("data/google_atual.json")
 
 
 def inteiro_seguro(valor):
@@ -170,6 +136,32 @@ def formatar_percentual_google(valor):
     return f"{valor:.1f}%".replace(".", ",")
 
 
+def calcular_indicador_google(cidade, mes_referencia, google_atual, google_inicial, google_meta):
+    atual_total = inteiro_seguro(google_atual.get(cidade, 0))
+    inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
+    meta_mes = inteiro_seguro(google_meta.get(mes_referencia, {}).get(cidade, 0))
+
+    ate_o_momento = max(atual_total - inicial_mes, 0)
+
+    if meta_mes > 0:
+        falta = max(meta_mes - ate_o_momento, 0)
+        progresso = (ate_o_momento / meta_mes) * 100
+        progresso_txt = formatar_percentual_google(progresso)
+        meta_txt = str(meta_mes)
+        falta_txt = str(falta)
+    else:
+        progresso_txt = ""
+        meta_txt = ""
+        falta_txt = ""
+
+    return {
+        "meta": meta_txt,
+        "ate_o_momento": str(ate_o_momento),
+        "falta": falta_txt,
+        "progresso": progresso_txt,
+    }
+
+
 def fazer_login(driver, url, cidade):
     try:
         print(f"Abrindo URL: {url}")
@@ -183,9 +175,7 @@ def fazer_login(driver, url, cidade):
             )
         )
         password = wait.until(
-            EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, "input[type='password']")
-            )
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='password']"))
         )
 
         driver.execute_script("arguments[0].value = '';", username)
@@ -247,7 +237,6 @@ def abrir_tela_metas(driver, cidade):
         ]
 
         clicou = False
-
         for by, value in candidatos:
             try:
                 elem = wait.until(EC.presence_of_element_located((by, value)))
@@ -304,146 +293,6 @@ def extrair_por_titulos(texto_completo, titulos):
     }
 
 
-def extrair_total_google_do_texto(texto):
-    """
-    Prioriza exatamente padrões como:
-    '90 avaliações no Google'
-    """
-    if not texto:
-        return None
-
-    texto_norm = " ".join(str(texto).split())
-
-    padroes_prioritarios = [
-        r"(\d[\d.]*)\s+avaliações\s+no\s+Google",
-        r"(\d[\d.]*)\s+avaliação\s+no\s+Google",
-        r"(\d[\d.]*)\s+avaliações",
-        r"(\d[\d.]*)\s+avaliação",
-        r"(\d[\d.]*)\s+reviews",
-        r"(\d[\d.]*)\s+review",
-        r"(\d[\d.]*)\s+comentários",
-        r"(\d[\d.]*)\s+comentário",
-    ]
-
-    for padrao in padroes_prioritarios:
-        m = re.search(padrao, texto_norm, re.IGNORECASE)
-        if m:
-            try:
-                valor = int(m.group(1).replace(".", ""))
-                if 0 <= valor <= 50000:
-                    return valor
-            except Exception:
-                pass
-
-    return None
-
-
-def obter_total_google(driver, cidade, url_google):
-    """
-    Busca o total atual de avaliações.
-    Se o Google bloquear, retorna None.
-    """
-    if not url_google:
-        return None
-
-    aba_original = driver.current_window_handle
-
-    try:
-        print(f"Buscando avaliações Google de {cidade}...")
-        driver.switch_to.new_window("tab")
-        driver.get(url_google)
-        time.sleep(6)
-
-        salvar_screenshot(driver, f"google_{cidade}.png")
-
-        texto = driver.find_element(By.TAG_NAME, "body").text
-        pagina = driver.page_source
-
-        print(f"Texto Google em {cidade}:")
-        print(texto[:3000])
-
-        bloqueios = [
-            "About this page",
-            "Sobre esta página",
-            "unusual traffic",
-            "tráfego incomum",
-            "detected unusual traffic",
-            "Our systems have detected unusual traffic",
-        ]
-
-        texto_total = f"{texto}\n{pagina}"
-        if any(b.lower() in texto_total.lower() for b in bloqueios):
-            print(f"Google bloqueou ou redirecionou a consulta em {cidade}.")
-            return None
-
-        total = extrair_total_google_do_texto(texto)
-
-        if total is None:
-            total = extrair_total_google_do_texto(pagina)
-
-        if total is None:
-            print(f"Nenhum total de avaliações encontrado em {cidade}.")
-            return None
-
-        print(f"Total Google encontrado em {cidade}: {total}")
-        return total
-
-    except Exception as e:
-        print(f"Erro ao buscar Google de {cidade}: {e}")
-        salvar_screenshot(driver, f"erro_google_{cidade}.png")
-        return None
-
-    finally:
-        try:
-            driver.close()
-        except Exception:
-            pass
-        try:
-            driver.switch_to.window(aba_original)
-        except Exception:
-            pass
-
-
-def calcular_indicador_google(cidade, mes_referencia, atual_total, google_inicial, google_meta, anterior=None):
-    """
-    Se atual_total vier como None (bloqueio do Google), mantém o valor anterior.
-    """
-    if atual_total is None:
-        if anterior:
-            print(f"Mantendo último valor válido de Google para {cidade}.")
-            return anterior
-
-        return {
-            "meta": "",
-            "ate_o_momento": "",
-            "falta": "",
-            "progresso": "",
-        }
-
-    inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
-    meta_mes = inteiro_seguro(google_meta.get(mes_referencia, {}).get(cidade, 0))
-
-    ate_o_momento = max(atual_total - inicial_mes, 0)
-
-    if meta_mes > 0:
-        falta = max(meta_mes - ate_o_momento, 0)
-        progresso = (ate_o_momento / meta_mes) * 100
-        progresso_txt = formatar_percentual_google(progresso)
-        meta_txt = str(meta_mes)
-        falta_txt = str(falta)
-    else:
-        progresso_txt = ""
-        meta_txt = ""
-        falta_txt = ""
-
-    return {
-        "meta": meta_txt,
-        "ate_o_momento": str(ate_o_momento),
-        "falta": falta_txt,
-        "progresso": progresso_txt,
-    }
-
-
 def extrair_todas_metas(driver, cidade):
     texto = obter_texto_tela(driver)
 
@@ -473,7 +322,7 @@ def coletar_dados_todas_cidades():
 
     google_inicial = carregar_google_inicial()
     google_meta = carregar_google_meta()
-    dados_anteriores = carregar_json_metas_existente()
+    google_atual = carregar_google_atual()
 
     try:
         for cidade, url in CIDADES.items():
@@ -491,25 +340,12 @@ def coletar_dados_todas_cidades():
 
                 metas = extrair_todas_metas(driver, cidade)
 
-                anterior_google = (
-                    dados_anteriores.get(cidade, {})
-                    .get("indicadores", {})
-                    .get("avaliacoes_google", {})
-                )
-
-                total_google_atual = obter_total_google(
-                    driver=driver,
-                    cidade=cidade,
-                    url_google=GOOGLE_REVIEW_URLS.get(cidade, ""),
-                )
-
                 metas["avaliacoes_google"] = calcular_indicador_google(
                     cidade=cidade,
                     mes_referencia=MES_REFERENCIA,
-                    atual_total=total_google_atual,
+                    google_atual=google_atual,
                     google_inicial=google_inicial,
                     google_meta=google_meta,
-                    anterior=anterior_google,
                 )
 
                 print(f"Indicador Google em {cidade}: {json.dumps(metas['avaliacoes_google'], ensure_ascii=False)}")
