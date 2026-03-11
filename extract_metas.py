@@ -165,15 +165,21 @@ def formatar_percentual_google(valor):
     return f"{valor:.1f}%".replace(".", ",")
 
 
-def extrair_primeiro_inteiro(texto):
+def extrair_primeiro_inteiro_plausivel(texto):
+    """
+    Fallback controlado:
+    pega inteiros plausíveis para quantidade de avaliações
+    e ignora números absurdos como IP, timestamps, ids etc.
+    """
     nums = re.findall(r"\d[\d.]*", texto or "")
-    if not nums:
-        return None
-
     candidatos = []
+
     for n in nums:
         try:
-            candidatos.append(int(n.replace(".", "")))
+            valor = int(n.replace(".", ""))
+            # faixa plausível de avaliações
+            if 0 <= valor <= 50000:
+                candidatos.append(valor)
         except Exception:
             continue
 
@@ -181,6 +187,38 @@ def extrair_primeiro_inteiro(texto):
         return None
 
     return max(candidatos)
+
+
+def extrair_total_google_do_texto(texto):
+    """
+    Tenta achar o total de avaliações do Google por padrões mais seguros.
+    """
+    if not texto:
+        return None
+
+    texto_norm = " ".join(str(texto).split())
+
+    padroes = [
+        r"(\d[\d.]*)\s+avaliações",
+        r"(\d[\d.]*)\s+avaliação",
+        r"(\d[\d.]*)\s+comentários",
+        r"(\d[\d.]*)\s+reviews",
+        r"(\d[\d.]*)\s+review",
+        r"com\s+(\d[\d.]*)\s+avaliações",
+        r"google.*?(\d[\d.]*)\s+avaliações",
+    ]
+
+    for padrao in padroes:
+        m = re.search(padrao, texto_norm, re.IGNORECASE)
+        if m:
+            try:
+                valor = int(m.group(1).replace(".", ""))
+                if 0 <= valor <= 50000:
+                    return valor
+            except Exception:
+                pass
+
+    return None
 
 
 def extrair_total_google_do_texto(texto):
