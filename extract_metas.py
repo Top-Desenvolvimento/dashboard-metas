@@ -252,6 +252,7 @@ def extrair_total_google_do_texto(texto):
 def obter_total_google(driver, cidade, url_google):
     """
     Abre o link share.google da unidade e tenta descobrir o total atual de avaliações.
+    Evita usar números irreais como IP, timestamps e ids.
     """
     if not url_google:
         return 0
@@ -262,7 +263,7 @@ def obter_total_google(driver, cidade, url_google):
         print(f"Buscando avaliações Google de {cidade}...")
         driver.switch_to.new_window("tab")
         driver.get(url_google)
-        time.sleep(5)
+        time.sleep(6)
 
         salvar_screenshot(driver, f"google_{cidade}.png")
 
@@ -278,7 +279,8 @@ def obter_total_google(driver, cidade, url_google):
             total = extrair_total_google_do_texto(pagina)
 
         if total is None:
-            raise Exception("Não foi possível identificar o total de avaliações")
+            print(f"Nenhum padrão de avaliações encontrado em {cidade}. Retornando 0.")
+            return 0
 
         print(f"Total Google encontrado em {cidade}: {total}")
         return total
@@ -297,7 +299,6 @@ def obter_total_google(driver, cidade, url_google):
             driver.switch_to.window(aba_original)
         except Exception:
             pass
-
 
 def calcular_indicador_google(cidade, mes_referencia, atual_total, google_inicial, google_meta):
     inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
