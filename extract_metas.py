@@ -250,12 +250,8 @@ def extrair_total_google_do_texto(texto):
 
 
 def obter_total_google(driver, cidade, url_google):
-    """
-    Abre o link share.google da unidade e tenta descobrir o total atual de avaliações.
-    Evita usar números irreais como IP, timestamps e ids.
-    """
     if not url_google:
-        return 0
+        return None
 
     aba_original = driver.current_window_handle
 
@@ -273,14 +269,28 @@ def obter_total_google(driver, cidade, url_google):
         print(f"Texto Google em {cidade}:")
         print(texto[:3000])
 
+        # bloqueio / página errada
+        bloqueios = [
+            "About this page",
+            "Sobre esta página",
+            "unusual traffic",
+            "tráfego incomum",
+            "detected unusual traffic",
+        ]
+
+        texto_total = f"{texto}\n{pagina}"
+        if any(b.lower() in texto_total.lower() for b in bloqueios):
+            print(f"Google bloqueou ou redirecionou a consulta em {cidade}.")
+            return None
+
         total = extrair_total_google_do_texto(texto)
 
         if total is None:
             total = extrair_total_google_do_texto(pagina)
 
         if total is None:
-            print(f"Nenhum padrão de avaliações encontrado em {cidade}. Retornando 0.")
-            return 0
+            print(f"Nenhum total de avaliações encontrado em {cidade}.")
+            return None
 
         print(f"Total Google encontrado em {cidade}: {total}")
         return total
@@ -288,7 +298,7 @@ def obter_total_google(driver, cidade, url_google):
     except Exception as e:
         print(f"Erro ao buscar Google de {cidade}: {e}")
         salvar_screenshot(driver, f"erro_google_{cidade}.png")
-        return 0
+        return None
 
     finally:
         try:
@@ -299,7 +309,6 @@ def obter_total_google(driver, cidade, url_google):
             driver.switch_to.window(aba_original)
         except Exception:
             pass
-
 def calcular_indicador_google(cidade, mes_referencia, atual_total, google_inicial, google_meta):
     inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
     meta_mes = inteiro_seguro(google_meta.get(mes_referencia, {}).get(cidade, 0))
