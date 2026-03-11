@@ -7,8 +7,9 @@ Fluxo:
 2. Clica em FINANÇAS
 3. Clica em Metas
 4. Lê o que estiver visível na tela
-5. Calcula Avaliações Google por fora
-6. Salva JSON / CSV / Excel
+5. Busca automaticamente o total atual de avaliações no Google
+6. Calcula o indicador avaliacoes_google
+7. Salva JSON / CSV / Excel
 
 Indicadores exportados:
 - ortodontia
@@ -70,6 +71,17 @@ CIDADES = {
     "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
+GOOGLE_REVIEW_URLS = {
+    "Caxias": "https://share.google/3f8yPEfrb24AQYYOp",
+    "Farroupilha": "https://share.google/ffSPadgdvp8WUEXq0",
+    "Bento": "https://share.google/g1snAopsGqM5I8sOl",
+    "Encantado": "https://share.google/sEdZu4jHIPYL77RA6",
+    "Soledade": "https://share.google/5CUABlRksD1cPYWiK",
+    "Garibaldi": "https://share.google/rOGEnBONHO2kTYVk3",
+    "Veranópolis": "https://share.google/UlnGSp8MES2AnB7Yz",
+    "SS do Caí": "https://share.google/33XgmkKW7UnW8o8WB",
+    "Flores": "https://share.google/U2cO3MWeXsKQZUenB",
+}
 
 INDICADORES_SISTEMA = {
     "ortodontia": ["Ortodontia"],
@@ -138,10 +150,6 @@ def carregar_google_meta():
     return carregar_json_opcional("data/google_meta.json")
 
 
-def carregar_google_atual():
-    return carregar_json_opcional("data/google_atual.json")
-
-
 def inteiro_seguro(valor):
     try:
         texto = str(valor).strip()
@@ -157,8 +165,103 @@ def formatar_percentual_google(valor):
     return f"{valor:.1f}%".replace(".", ",")
 
 
-def calcular_indicador_google(cidade, mes_referencia, google_atual, google_inicial, google_meta):
-    atual_total = inteiro_seguro(google_atual.get(cidade, 0))
+def extrair_primeiro_inteiro(texto):
+    nums = re.findall(r"\d[\d.]*", texto or "")
+    if not nums:
+        return None
+
+    candidatos = []
+    for n in nums:
+        try:
+            candidatos.append(int(n.replace(".", "")))
+        except Exception:
+            continue
+
+    if not candidatos:
+        return None
+
+    return max(candidatos)
+
+
+def extrair_total_google_do_texto(texto):
+    """
+    Tenta achar o total de avaliações em textos comuns do Google.
+    """
+    if not texto:
+        return None
+
+    texto_norm = " ".join(str(texto).split())
+
+    padroes = [
+        r"(\d[\d.]*)\s+avaliações",
+        r"(\d[\d.]*)\s+avaliação",
+        r"com\s+(\d[\d.]*)\s+avaliações",
+        r"reviews?\D+(\d[\d.]*)",
+        r"(\d[\d.]*)\s+reviews?",
+    ]
+
+    for padrao in padroes:
+        m = re.search(padrao, texto_norm, re.IGNORECASE)
+        if m:
+            try:
+                return int(m.group(1).replace(".", ""))
+            except Exception:
+                pass
+
+    return extrair_primeiro_inteiro(texto_norm)
+
+
+def obter_total_google(driver, cidade, url_google):
+    """
+    Abre o link share.google da unidade e tenta descobrir o total atual de avaliações.
+    """
+    if not url_google:
+        return 0
+
+    aba_original = driver.current_window_handle
+
+    try:
+        print(f"Buscando avaliações Google de {cidade}...")
+        driver.switch_to.new_window("tab")
+        driver.get(url_google)
+        time.sleep(5)
+
+        salvar_screenshot(driver, f"google_{cidade}.png")
+
+        texto = driver.find_element(By.TAG_NAME, "body").text
+        pagina = driver.page_source
+
+        print(f"Texto Google em {cidade}:")
+        print(texto[:3000])
+
+        total = extrair_total_google_do_texto(texto)
+
+        if total is None:
+            total = extrair_total_google_do_texto(pagina)
+
+        if total is None:
+            raise Exception("Não foi possível identificar o total de avaliações")
+
+        print(f"Total Google encontrado em {cidade}: {total}")
+        return total
+
+    except Exception as e:
+        print(f"Erro ao buscar Google de {cidade}: {e}")
+        salvar_screenshot(driver, f"erro_google_{cidade}.png")
+        return 0
+
+    finally:
+        try:
+            driver.close()
+        except Exception:
+            pass
+        try:
+            driver.switch_to.window(aba_original)
+        except Exception:
+            pass
+
+
+def calcular_indicador_google(cidade, mes_referencia, atual_total, google_inicial, google_meta):
     inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
     meta_mes = inteiro_seguro(google_meta.get(mes_referencia, {}).get(cidade, 0))
 
@@ -340,7 +443,6 @@ def extrair_todas_metas(driver, cidade):
     for chave, titulos in INDICADORES_SISTEMA.items():
         dados[chave] = extrair_por_titulos(texto, titulos)
 
-    # garante a chave do Google mesmo antes de preencher
     dados["avaliacoes_google"] = {
         "meta": "",
         "ate_o_momento": "",
@@ -359,7 +461,6 @@ def coletar_dados_todas_cidades():
 
     google_inicial = carregar_google_inicial()
     google_meta = carregar_google_meta()
-    google_atual = carregar_google_atual()
 
     try:
         for cidade, url in CIDADES.items():
@@ -377,11 +478,16 @@ def coletar_dados_todas_cidades():
 
                 metas = extrair_todas_metas(driver, cidade)
 
-                # sobrescreve somente Avaliações Google
+                total_google_atual = obter_total_google(
+                    driver=driver,
+                    cidade=cidade,
+                    url_google=GOOGLE_REVIEW_URLS.get(cidade, ""),
+                )
+
                 metas["avaliacoes_google"] = calcular_indicador_google(
                     cidade=cidade,
                     mes_referencia=MES_REFERENCIA,
-                    google_atual=google_atual,
+                    atual_total=total_google_atual,
                     google_inicial=google_inicial,
                     google_meta=google_meta,
                 )
