@@ -1,7 +1,7 @@
 {
   "Caxias": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:00:46.110700",
+    "timestamp": "2026-03-11T13:53:02.048972",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -10,12 +10,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -38,12 +32,18 @@
         "ate_o_momento": "7",
         "falta": "-72",
         "progresso": "8,861%"
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
+        "falta": "",
+        "progresso": ""
       }
     }
   },
   "Farroupilha": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:01:38.937847",
+    "timestamp": "2026-03-11T13:53:54.892954",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -52,12 +52,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -78,6 +72,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -85,7 +85,7 @@
   },
   "Bento": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:02:32.219694",
+    "timestamp": "2026-03-11T13:54:47.227555",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -94,12 +94,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -120,6 +114,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -127,7 +127,7 @@
   },
   "Encantado": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:03:24.884393",
+    "timestamp": "2026-03-11T13:55:39.539135",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -136,12 +136,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -162,6 +156,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -169,7 +169,7 @@
   },
   "Soledade": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:04:18.065516",
+    "timestamp": "2026-03-11T13:56:32.387286",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -178,12 +178,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -204,6 +198,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -211,7 +211,7 @@
   },
   "Garibaldi": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:05:11.063541",
+    "timestamp": "2026-03-11T13:57:25.241616",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -220,12 +220,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -246,6 +240,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -253,7 +253,7 @@
   },
   "Veranópolis": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:06:04.111005",
+    "timestamp": "2026-03-11T13:58:17.384121",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -262,12 +262,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -288,6 +282,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -295,7 +295,7 @@
   },
   "SS do Caí": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:06:58.125695",
+    "timestamp": "2026-03-11T13:59:10.248610",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -304,12 +304,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -330,6 +324,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
@@ -337,7 +337,7 @@
   },
   "Flores": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-11T12:07:52.824394",
+    "timestamp": "2026-03-11T14:00:04.229403",
     "indicadores": {
       "ortodontia": {
         "meta": "",
@@ -346,12 +346,6 @@
         "progresso": ""
       },
       "clinico_geral": {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": ""
-      },
-      "avaliacoes_google": {
         "meta": "",
         "ate_o_momento": "",
         "falta": "",
@@ -372,6 +366,12 @@
       "meta_restauracao": {
         "meta": "",
         "ate_o_momento": "",
+        "falta": "",
+        "progresso": ""
+      },
+      "avaliacoes_google": {
+        "meta": "",
+        "ate_o_momento": "0",
         "falta": "",
         "progresso": ""
       }
