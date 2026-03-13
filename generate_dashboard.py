@@ -1,29 +1,10 @@
-#!/usr/bin/env python3
-"""
-Gera dashboard HTML a partir de data/metas_atual.json
-
-Estrutura esperada:
-{
-  "Caxias": {
-    "mes_referencia": "2026-03",
-    "timestamp": "...",
-    "indicadores": {
-      "ortodontia": {"meta":"", "ate_o_momento":"", "falta":"", "progresso":""},
-      ...
-    }
-  }
-}
-"""
-
 import json
 import os
 import re
 from datetime import datetime
 
-
-ARQUIVO_JSON = "data/metas_atual.json"
-ARQUIVO_HTML = "docs/index.html"
-
+INPUT_JSON = "data/metas_atual.json"
+OUTPUT_HTML = "docs/index.html"
 
 MAPA_INDICADORES = {
     "ortodontia": "Ortodontia",
@@ -34,8 +15,7 @@ MAPA_INDICADORES = {
     "meta_restauracao": "Meta de Restauração",
 }
 
-
-ORDEM_INDICADORES = [
+INDICADORES = [
     "ortodontia",
     "clinico_geral",
     "avaliacoes_google",
@@ -46,7 +26,7 @@ ORDEM_INDICADORES = [
 
 
 def carregar_dados():
-    with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
+    with open(INPUT_JSON, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -65,25 +45,47 @@ def slug(texto):
     return re.sub(r"[^a-z0-9]+", "-", texto).strip("-")
 
 
+def percentual(valor):
+    if not valor:
+        return None
+    texto = str(valor).replace("%", "").replace(",", ".").strip()
+    try:
+        return float(texto)
+    except Exception:
+        return None
+
+
+def texto_seguro(valor, padrao="—"):
+    if valor is None:
+        return padrao
+    texto = str(valor).strip()
+    return texto if texto else padrao
+
+
+def classe_percentual(p):
+    if p is None:
+        return "empty"
+    if p >= 100:
+        return "ok"
+    if p >= 50:
+        return "warn"
+    return "bad"
+
+
+def largura_barra(p):
+    if p is None:
+        return 0
+    return max(0, min(p, 100))
+
+
 def mes_label(valor):
     if not valor:
         return datetime.now().strftime("%m/%Y")
-
     mapa = {
-        "01": "Janeiro",
-        "02": "Fevereiro",
-        "03": "Março",
-        "04": "Abril",
-        "05": "Maio",
-        "06": "Junho",
-        "07": "Julho",
-        "08": "Agosto",
-        "09": "Setembro",
-        "10": "Outubro",
-        "11": "Novembro",
-        "12": "Dezembro",
+        "01": "Janeiro", "02": "Fevereiro", "03": "Março", "04": "Abril",
+        "05": "Maio", "06": "Junho", "07": "Julho", "08": "Agosto",
+        "09": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro",
     }
-
     try:
         ano, mes = valor.split("-")
         return f"{mapa.get(mes, mes)}/{ano}"
@@ -91,195 +93,52 @@ def mes_label(valor):
         return valor
 
 
-def garantir_valor(valor):
-    valor = "" if valor is None else str(valor).strip()
-    return valor if valor else "—"
-
-
-def percentual_para_float(valor):
-    if valor is None:
+def progresso_geral(info_cidade):
+    indicadores = info_cidade.get("indicadores", {})
+    valores = []
+    for chave in INDICADORES:
+        p = percentual(indicadores.get(chave, {}).get("progresso"))
+        if p is not None:
+            valores.append(p)
+    if not valores:
         return None
-
-    texto = str(valor).strip()
-    if not texto or texto == "—":
-        return None
-
-    texto = texto.replace("%", "").replace(".", "").replace(",", ".").strip()
-
-    try:
-        return float(texto)
-    except Exception:
-        return None
+    return sum(valores) / len(valores)
 
 
-def indicador_tem_dados(ind):
-    if not ind:
-        return False
-
-    campos = [
-        str(ind.get("meta", "")).strip(),
-        str(ind.get("ate_o_momento", "")).strip(),
-        str(ind.get("falta", "")).strip(),
-        str(ind.get("progresso", "")).strip(),
-    ]
-    return any(campo != "" for campo in campos)
+def gerar_ranking(base, indicador):
+    ranking = []
+    for cidade, info_cidade in base.items():
+        ind = info_cidade.get("indicadores", {}).get(indicador, {})
+        p = percentual(ind.get("progresso"))
+        ranking.append((cidade, p, ind))
+    ranking.sort(key=lambda x: (x[1] is None, -(x[1] or 0), x[0]))
+    return ranking
 
 
-def classe_status(percentual):
-    if percentual is None:
-        return "empty"
-    if percentual >= 100:
-        return "ok"
-    if percentual >= 70:
-        return "warn"
-    return "bad"
-
-
-def processar_cidades(dados):
-    cidades = []
-
-    for cidade, info in dados.items():
-        indicadores = info.get("indicadores", {})
-
-        percentuais_validos = []
-        for chave in ORDEM_INDICADORES:
-            p = percentual_para_float(indicadores.get(chave, {}).get("progresso", ""))
-            if p is not None:
-                percentuais_validos.append(p)
-
-        progresso_geral = sum(percentuais_validos) / len(percentuais_validos) if percentuais_validos else None
-
-        cidades.append({
-            "cidade": cidade,
-            "slug": slug(cidade),
-            "mes_referencia": info.get("mes_referencia", ""),
-            "timestamp": info.get("timestamp", ""),
-            "indicadores": indicadores,
-            "progresso_geral": progresso_geral,
-        })
-
-    cidades.sort(
-        key=lambda c: (c["progresso_geral"] is None, -(c["progresso_geral"] or 0), c["cidade"])
-    )
-
-    return cidades
-
-
-def montar_metas_batidas(cidades):
-    batidas = []
-
-    for cidade in cidades:
-        for chave in ORDEM_INDICADORES:
-            indicador = cidade["indicadores"].get(chave, {})
-            percentual = percentual_para_float(indicador.get("progresso", ""))
-
-            if percentual is not None and percentual >= 100:
-                batidas.append({
-                    "cidade": cidade["cidade"],
-                    "meta": MAPA_INDICADORES[chave],
-                    "progresso": indicador.get("progresso", ""),
-                    "percentual_num": percentual,
+def metas_batidas(base):
+    resultado = []
+    for cidade, info_cidade in base.items():
+        for chave, ind in info_cidade.get("indicadores", {}).items():
+            p = percentual(ind.get("progresso"))
+            if p is not None and p >= 100:
+                resultado.append({
+                    "cidade": cidade,
+                    "indicador": MAPA_INDICADORES.get(chave, chave),
+                    "progresso": texto_seguro(ind.get("progresso")),
+                    "percentual_num": p,
                 })
-
-    batidas.sort(key=lambda x: (-x["percentual_num"], x["cidade"], x["meta"]))
-    return batidas
-
-
-def montar_rankings(cidades):
-    rankings = {}
-
-    for chave in ORDEM_INDICADORES:
-        ranking = []
-
-        for cidade in cidades:
-            indicador = cidade["indicadores"].get(chave, {})
-            percentual = percentual_para_float(indicador.get("progresso", ""))
-
-            ranking.append({
-                "cidade": cidade["cidade"],
-                "progresso": indicador.get("progresso", ""),
-                "percentual_num": percentual,
-                "meta": indicador.get("meta", ""),
-                "ate_o_momento": indicador.get("ate_o_momento", ""),
-                "falta": indicador.get("falta", ""),
-                "tem_dado": indicador_tem_dados(indicador),
-            })
-
-        ranking.sort(
-            key=lambda x: (
-                x["percentual_num"] is None,
-                -(x["percentual_num"] or 0),
-                x["cidade"]
-            )
-        )
-
-        rankings[chave] = ranking
-
-    return rankings
-
-
-def render_metadado_card(titulo, valor):
-    return f"""
-    <div class="summary-card">
-        <div class="summary-label">{titulo}</div>
-        <div class="summary-value">{valor}</div>
-    </div>
-    """
-
-
-def render_tabela_cidade(indicadores):
-    linhas = []
-
-    for chave in ORDEM_INDICADORES:
-        nome = MAPA_INDICADORES[chave]
-        ind = indicadores.get(chave, {})
-
-        progresso = ind.get("progresso", "")
-        percentual = percentual_para_float(progresso)
-        status = classe_status(percentual)
-
-        linhas.append(f"""
-        <tr>
-            <td class="cell-title">{nome}</td>
-            <td>{garantir_valor(ind.get("meta", ""))}</td>
-            <td>{garantir_valor(ind.get("ate_o_momento", ""))}</td>
-            <td>{garantir_valor(ind.get("falta", ""))}</td>
-            <td class="perc {status}">{garantir_valor(progresso)}</td>
-        </tr>
-        """)
-
-    return f"""
-    <div class="table-wrap">
-        <table class="dash-table">
-            <thead>
-                <tr>
-                    <th>Indicador</th>
-                    <th>Meta</th>
-                    <th>Até o momento</th>
-                    <th>Falta</th>
-                    <th>Progresso</th>
-                </tr>
-            </thead>
-            <tbody>
-                {''.join(linhas)}
-            </tbody>
-        </table>
-    </div>
-    """
+    resultado.sort(key=lambda x: (-x["percentual_num"], x["cidade"], x["indicador"]))
+    return resultado
 
 
 def render_ranking_card(titulo, ranking):
     linhas = []
 
     for pos, item in enumerate(ranking, start=1):
-        percentual = item["percentual_num"]
-        status = classe_status(percentual)
+        cidade, p, dados = item
+        status = classe_percentual(p)
+        largura = largura_barra(p)
 
-        progresso_exibido = garantir_valor(item["progresso"])
-        meta = garantir_valor(item["meta"])
-        ate = garantir_valor(item["ate_o_momento"])
-
-        badge = pos
         pos_class = "pos-other"
         if pos == 1:
             pos_class = "pos-1"
@@ -290,119 +149,264 @@ def render_ranking_card(titulo, ranking):
 
         linhas.append(f"""
         <div class="rank-row">
-            <div class="rank-pos {pos_class}">{badge}</div>
-            <div class="rank-city">{item["cidade"]}</div>
-            <div class="rank-meta">Meta: {meta}</div>
-            <div class="rank-ate">Até o momento: {ate}</div>
-            <div class="rank-perc {status}">{progresso_exibido}</div>
+            <div class="rank-left">
+                <div class="rank-pos {pos_class}">{pos:02d}º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">{cidade}</div>
+                    <div class="rank-sub">Meta: {texto_seguro(dados.get("meta"))} | Realizado: {texto_seguro(dados.get("ate_o_momento"))}</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill {status}" style="width:{largura}%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress {status}">{texto_seguro(dados.get("progresso"))}</div>
+            </div>
         </div>
         """)
 
     return f"""
-    <section class="panel">
-        <div class="panel-header">
-            <div class="panel-title">{titulo}</div>
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">{titulo}</div>
         </div>
-        <div class="panel-body">
+        <div class="rank-card-body">
             {''.join(linhas)}
         </div>
     </section>
     """
 
 
-def gerar_html(cidades):
-    mes = cidades[0]["mes_referencia"] if cidades else ""
-    mes_texto = mes_label(mes)
-    agora = datetime.now().strftime("%H:%M:%S")
+def render_city_summary(cidade, info_cidade, agora):
+    pg = progresso_geral(info_cidade)
+    pg_txt = f"{pg:.1f}%".replace(".", ",") if pg is not None else "—"
 
-    metas_batidas = montar_metas_batidas(cidades)
-    rankings = montar_rankings(cidades)
+    return f"""
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">{cidade}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">{mes_label(info_cidade.get("mes_referencia", ""))}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">{pg_txt}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">{agora}</div>
+        </div>
+    </section>
+    """
 
-    tabs = ['<button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button>']
-    for cidade in cidades:
-        tabs.append(f'<button class="tab-btn" data-tab="{cidade["slug"]}">📍 {cidade["cidade"]}</button>')
 
-    destaque_html = ""
-    if metas_batidas:
-        itens = []
-        for item in metas_batidas:
-            itens.append(f"""
-            <div class="hit-badge">
-                <span class="hit-city">{item["cidade"]}</span>
-                <span class="hit-sep">—</span>
-                <span class="hit-meta">{item["meta"]}</span>
-                <span class="hit-sep">—</span>
-                <span class="hit-perc blink">{item["progresso"]}</span>
-            </div>
-            """)
-        destaque_html = f"""
-        <section class="highlight-panel">
-            <div class="highlight-title">🏆 Metas Batidas</div>
-            <div class="highlight-grid">
-                {''.join(itens)}
-            </div>
-        </section>
-        """
-    else:
-        destaque_html = """
-        <section class="highlight-panel">
-            <div class="highlight-title">🏆 Metas Batidas</div>
-            <div class="highlight-empty">Nenhuma cidade atingiu 100% em alguma meta até o momento.</div>
-        </section>
-        """
+def render_city_chart(indicadores):
+    linhas = []
 
-    ranking_cards = []
-    for chave in ORDEM_INDICADORES:
-        ranking_cards.append(
-            render_ranking_card(MAPA_INDICADORES[chave], rankings[chave])
-        )
+    for chave in INDICADORES:
+        ind = indicadores.get(chave, {})
+        p = percentual(ind.get("progresso"))
+        status = classe_percentual(p)
+        largura = largura_barra(p)
 
-    cidades_html = []
-    for cidade in cidades:
-        progresso_geral = (
-            f"{cidade['progresso_geral']:.1f}%".replace(".", ",")
-            if cidade["progresso_geral"] is not None
-            else "—"
-        )
-
-        cidades_html.append(f"""
-        <div id="{cidade["slug"]}" class="tab-content">
-            <section class="summary-grid">
-                {render_metadado_card("Mês de Referência", mes_texto)}
-                {render_metadado_card("Progresso Geral", progresso_geral)}
-                {render_metadado_card("Cidade", cidade["cidade"])}
-                {render_metadado_card("Atualizado em", agora)}
-            </section>
-
-            <section class="city-panel">
-                <div class="panel-header">
-                    <div class="panel-title">Dados da Cidade</div>
+        linhas.append(f"""
+        <div class="evo-row">
+            <div class="evo-label">{MAPA_INDICADORES[chave]}</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill {status}" style="width:{largura}%"></div>
                 </div>
-                {render_tabela_cidade(cidade["indicadores"])}
-            </section>
+            </div>
+            <div class="evo-value {status}">{texto_seguro(ind.get("progresso"))}</div>
         </div>
         """)
 
-    html = f"""<!DOCTYPE html>
+    return f"""
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            {''.join(linhas)}
+        </div>
+    </section>
+    """
+
+
+def render_city_cards(indicadores):
+    cards = []
+
+    for chave in INDICADORES:
+        ind = indicadores.get(chave, {})
+        p = percentual(ind.get("progresso"))
+        status = classe_percentual(p)
+        largura = largura_barra(p)
+
+        cards.append(f"""
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">{MAPA_INDICADORES[chave]}</div>
+                <div class="city-card-progress {status}">{texto_seguro(ind.get("progresso"))}</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill {status}" style="width:{largura}%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>{texto_seguro(ind.get("meta"))}</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>{texto_seguro(ind.get("ate_o_momento"))}</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>{texto_seguro(ind.get("falta"))}</strong>
+                </div>
+            </div>
+        </div>
+        """)
+
+    return "".join(cards)
+
+
+def render_city_table(indicadores):
+    linhas = []
+
+    for chave in INDICADORES:
+        ind = indicadores.get(chave, {})
+        p = percentual(ind.get("progresso"))
+        status = classe_percentual(p)
+
+        linhas.append(f"""
+        <tr>
+            <td class="td-title">{MAPA_INDICADORES[chave]}</td>
+            <td>{texto_seguro(ind.get("meta"))}</td>
+            <td>{texto_seguro(ind.get("ate_o_momento"))}</td>
+            <td>{texto_seguro(ind.get("falta"))}</td>
+            <td class="{status}">{texto_seguro(ind.get("progresso"))}</td>
+        </tr>
+        """)
+
+    return f"""
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(linhas)}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    """
+
+
+def gerar_dashboard():
+    base = carregar_dados()
+    agora = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    cidades_ordenadas = sorted(
+        base.items(),
+        key=lambda item: (
+            progresso_geral(item[1]) is None,
+            -(progresso_geral(item[1]) or 0),
+            item[0]
+        )
+    )
+
+    mes_ref = ""
+    if cidades_ordenadas:
+        mes_ref = mes_label(cidades_ordenadas[0][1].get("mes_referencia", ""))
+
+    tabs = ['<button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button>']
+    for cidade, _ in cidades_ordenadas:
+        tabs.append(f'<button class="tab-btn" data-tab="{slug(cidade)}">📍 {cidade}</button>')
+
+    batidas = metas_batidas(base)
+
+    ranking_cards = []
+    for chave in INDICADORES:
+        ranking_cards.append(
+            render_ranking_card(MAPA_INDICADORES[chave], gerar_ranking(base, chave))
+        )
+
+    if batidas:
+        batidas_html = []
+        for item in batidas:
+            batidas_html.append(f"""
+            <div class="beat-item">
+                <div class="beat-left">
+                    <span class="beat-city">{item["cidade"]}</span>
+                    <span class="beat-meta">{item["indicador"]}</span>
+                </div>
+                <strong class="blink">{item["progresso"]}</strong>
+            </div>
+            """)
+        bloco_batidas = "".join(batidas_html)
+    else:
+        bloco_batidas = '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>'
+
+    cidades_html = []
+    for cidade, info_cidade in cidades_ordenadas:
+        indicadores = info_cidade.get("indicadores", {})
+
+        cidades_html.append(f"""
+        <div id="{slug(cidade)}" class="tab-content">
+            {render_city_summary(cidade, info_cidade, agora)}
+            {render_city_chart(indicadores)}
+
+            <section class="city-grid">
+                {render_city_cards(indicadores)}
+            </section>
+
+            {render_city_table(indicadores)}
+        </div>
+        """)
+
+    html = f"""
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard de Metas</title>
 <style>
 :root {{
-    --bg: #030a12;
-    --panel: rgba(7, 19, 32, 0.92);
-    --panel-2: rgba(4, 14, 24, 0.92);
-    --border: rgba(0, 232, 255, 0.16);
-    --line: rgba(255, 255, 255, 0.06);
-    --text: #e6f7ff;
-    --muted: #7e95a7;
+    --bg: #06111c;
+    --bg2: #081827;
+    --panel: rgba(10, 24, 40, 0.96);
+    --panel-2: rgba(13, 31, 49, 0.98);
+    --line: rgba(255,255,255,0.06);
+    --border: rgba(0, 232, 255, 0.12);
+    --text: #eef8ff;
+    --muted: #7b90a6;
     --cyan: #00e8ff;
-    --green: #10e0a3;
+    --green: #12d99f;
     --yellow: #f5b301;
     --red: #ff4d7a;
-    --shadow: 0 0 0 1px rgba(0, 232, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.35);
+    --shadow: 0 0 0 1px rgba(0,232,255,.05), 0 14px 28px rgba(0,0,0,.28);
 }}
 
 * {{
@@ -412,41 +416,42 @@ def gerar_html(cidades):
 }}
 
 body {{
-    font-family: Inter, Segoe UI, Arial, sans-serif;
-    color: var(--text);
+    font-family: Inter, Arial, sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(0, 232, 255, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(16, 224, 163, 0.08), transparent 25%),
-        linear-gradient(180deg, #02060d, #04101b 45%, #02070d 100%);
+        radial-gradient(circle at top left, rgba(0,232,255,.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(18,217,159,.06), transparent 24%),
+        linear-gradient(180deg, #030912, #06111c 45%, #030912 100%);
+    color: var(--text);
     min-height: 100vh;
 }}
 
 .wrap {{
-    max-width: 1500px;
+    max-width: 1550px;
     margin: 0 auto;
-    padding: 16px;
+    padding: 24px;
 }}
 
-.hero {{
+.header {{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 20px;
-    padding: 8px 0 24px;
+    gap: 18px;
+    margin-bottom: 18px;
 }}
 
-.hero-left h1 {{
+.header-left h1 {{
     font-size: 2.8rem;
-    font-weight: 800;
+    font-weight: 900;
+    letter-spacing: -0.03em;
 }}
 
-.hero-left p {{
+.header-left p {{
     margin-top: 8px;
     color: var(--muted);
-    font-size: 1.05rem;
+    font-size: 1rem;
 }}
 
-.hero-right {{
+.header-right {{
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -454,53 +459,49 @@ body {{
 }}
 
 .pill {{
-    background: rgba(7, 19, 32, 0.8);
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(8, 20, 33, 0.92);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
-    border-radius: 14px;
-    padding: 14px 16px;
-    color: var(--text);
-    min-width: 120px;
+    font-weight: 700;
 }}
 
 .pill.btn {{
+    color: #04111d;
     text-decoration: none;
-    background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(16,224,163,.95));
-    color: #031018;
-    font-weight: 700;
+    background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
 }}
 
 .tabs {{
     display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     padding: 10px 0 16px;
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }}
 
 .tab-btn {{
-    background: transparent;
+    background: rgba(10, 24, 40, 0.7);
     color: var(--muted);
     border: 1px solid transparent;
     border-radius: 12px;
     padding: 10px 14px;
     cursor: pointer;
     white-space: nowrap;
+    font-weight: 700;
     transition: .2s ease;
-    font-weight: 600;
 }}
 
 .tab-btn:hover {{
     color: var(--text);
-    border-color: var(--border);
 }}
 
 .tab-btn.active {{
     color: var(--cyan);
-    border-color: rgba(0, 232, 255, 0.35);
+    border-color: rgba(0,232,255,.26);
     background: rgba(0,232,255,.08);
 }}
 
@@ -512,65 +513,186 @@ body {{
     display: block;
 }}
 
-.highlight-panel,
-.panel,
-.city-panel,
-.summary-card {{
-    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+.top-grid {{
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+}}
+
+.info-card,
+.beats-card,
+.rank-card,
+.summary-card,
+.city-card,
+.panel {{
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
     border: 1px solid var(--border);
     border-radius: 18px;
     box-shadow: var(--shadow);
 }}
 
-.highlight-panel {{
+.info-card,
+.beats-card {{
     padding: 18px;
-    margin-bottom: 18px;
 }}
 
-.highlight-title {{
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 14px;
+.info-title,
+.beats-title,
+.panel-title {{
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .82rem;
+    margin-bottom: 12px;
 }}
 
-.highlight-grid {{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}}
-
-.hit-badge {{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    padding: 14px;
-    border-radius: 14px;
-    background: rgba(255,255,255,.03);
-    border: 1px solid rgba(255,255,255,.05);
-}}
-
-.hit-city {{
-    color: #fff;
-    font-weight: 800;
-}}
-
-.hit-meta {{
+.info-number {{
+    font-size: 3rem;
     color: var(--cyan);
-    font-weight: 700;
-}}
-
-.hit-perc {{
-    color: var(--green);
     font-weight: 900;
 }}
 
-.hit-sep {{
+.info-text {{
+    margin-top: 8px;
     color: var(--muted);
 }}
 
-.highlight-empty {{
+.beats-list {{
+    display: grid;
+    gap: 10px;
+}}
+
+.beat-item {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.04);
+}}
+
+.beat-left {{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}}
+
+.beat-city {{
+    font-weight: 800;
+}}
+
+.beat-meta {{
     color: var(--muted);
+    font-size: .88rem;
+}}
+
+.beat-item strong {{
+    color: var(--green);
+}}
+
+.empty-message {{
+    color: var(--muted);
+}}
+
+.rankings-grid {{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}}
+
+.rank-card {{
+    overflow: hidden;
+}}
+
+.rank-card-header {{
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+}}
+
+.rank-card-title {{
+    font-size: 1.05rem;
+    font-weight: 900;
+}}
+
+.rank-card-body {{
+    padding: 8px 18px 16px;
+}}
+
+.rank-row {{
+    display: grid;
+    grid-template-columns: 290px 1fr 90px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,.05);
+}}
+
+.rank-row:first-child {{
+    border-top: none;
+}}
+
+.rank-left {{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}}
+
+.rank-texts {{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}}
+
+.rank-pos {{
+    min-width: 50px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    background: rgba(255,255,255,.08);
+}}
+
+.pos-1 {{ background: rgba(245,179,1,.22); color: #ffd45c; }}
+.pos-2 {{ background: rgba(180,196,210,.22); color: #dbe6ef; }}
+.pos-3 {{ background: rgba(165,102,38,.22); color: #ffb56d; }}
+.pos-other {{ color: #fff; }}
+
+.rank-city {{
+    font-weight: 800;
+    font-size: 1rem;
+}}
+
+.rank-sub {{
+    color: var(--muted);
+    font-size: .88rem;
+}}
+
+.rank-bar {{
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+}}
+
+.rank-fill {{
+    height: 100%;
+    border-radius: 999px;
+}}
+
+.rank-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
+.rank-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
+.rank-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
+.rank-fill.empty {{ background: #25374a; }}
+
+.rank-right {{
+    text-align: right;
+    font-weight: 900;
 }}
 
 .summary-grid {{
@@ -582,26 +704,24 @@ body {{
 
 .summary-card {{
     padding: 18px;
-    min-height: 110px;
 }}
 
 .summary-label {{
     color: var(--muted);
-    font-size: .85rem;
     text-transform: uppercase;
     letter-spacing: .08em;
+    font-size: .8rem;
     margin-bottom: 12px;
 }}
 
 .summary-value {{
-    font-size: 2rem;
-    font-weight: 800;
     color: var(--cyan);
+    font-size: 1.8rem;
+    font-weight: 900;
 }}
 
-.panel,
-.city-panel {{
-    padding: 16px;
+.panel {{
+    padding: 18px;
     margin-bottom: 18px;
 }}
 
@@ -609,60 +729,112 @@ body {{
     margin-bottom: 14px;
 }}
 
-.panel-title {{
-    font-size: 1.15rem;
-    font-weight: 800;
-}}
-
-.rankings-grid {{
+.evolution-chart {{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
 }}
 
-.rank-row {{
+.evo-row {{
     display: grid;
-    grid-template-columns: 42px 1.2fr 1fr 1fr 110px;
-    gap: 10px;
+    grid-template-columns: 220px 1fr 90px;
+    gap: 14px;
     align-items: center;
-    padding: 12px 0;
-    border-top: 1px solid rgba(255,255,255,.05);
 }}
 
-.rank-row:first-child {{
-    border-top: none;
-}}
-
-.rank-pos {{
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    background: rgba(255,255,255,.08);
-}}
-
-.pos-1 {{ background: rgba(245,179,1,.20); color: #ffd45c; }}
-.pos-2 {{ background: rgba(180,196,210,.20); color: #dbe6ef; }}
-.pos-3 {{ background: rgba(165,102,38,.22); color: #ffb56d; }}
-.pos-other {{ color: #fff; }}
-
-.rank-city {{
+.evo-label {{
     font-weight: 700;
-    color: #fff;
 }}
 
-.rank-meta,
-.rank-ate {{
-    color: var(--muted);
-    font-size: .92rem;
+.evo-bar {{
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
 }}
 
-.rank-perc {{
+.evo-fill {{
+    height: 100%;
+    border-radius: 999px;
+}}
+
+.evo-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
+.evo-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
+.evo-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
+.evo-fill.empty {{ background: #25374a; }}
+
+.evo-value {{
     text-align: right;
-    font-weight: 800;
+    font-weight: 900;
+}}
+
+.city-grid {{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}}
+
+.city-card {{
+    padding: 18px;
+}}
+
+.city-card-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}}
+
+.city-card-title {{
+    font-size: 1.02rem;
+    font-weight: 900;
+}}
+
+.city-card-progress {{
+    font-weight: 900;
+}}
+
+.city-bar {{
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+    margin-bottom: 14px;
+}}
+
+.city-fill {{
+    height: 100%;
+    border-radius: 999px;
+}}
+
+.city-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
+.city-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
+.city-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
+.city-fill.empty {{ background: #25374a; }}
+
+.city-metrics {{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}}
+
+.metric-box {{
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.04);
+    border-radius: 12px;
+    padding: 12px;
+}}
+
+.metric-box span {{
+    display: block;
+    color: var(--muted);
+    font-size: .82rem;
+    margin-bottom: 6px;
+}}
+
+.metric-box strong {{
+    font-size: 1rem;
 }}
 
 .table-wrap {{
@@ -676,102 +848,94 @@ body {{
 
 .dash-table th,
 .dash-table td {{
+    text-align: left;
     padding: 14px 12px;
     border-top: 1px solid rgba(255,255,255,.05);
-    text-align: left;
 }}
 
 .dash-table th {{
     color: var(--muted);
-    font-size: .9rem;
     text-transform: uppercase;
+    font-size: .82rem;
     letter-spacing: .05em;
 }}
 
-.dash-table td {{
-    color: #fff;
-}}
-
-.cell-title {{
+.td-title {{
     font-weight: 800;
 }}
 
-.perc.ok {{
+.ok {{
     color: var(--green);
-    font-weight: 800;
 }}
 
-.perc.warn {{
+.warn {{
     color: var(--yellow);
-    font-weight: 800;
 }}
 
-.perc.bad {{
+.bad {{
     color: var(--red);
-    font-weight: 800;
 }}
 
-.perc.empty {{
+.empty {{
     color: var(--muted);
-    font-weight: 700;
 }}
-
-.ok {{ color: var(--green); }}
-.warn {{ color: var(--yellow); }}
-.bad {{ color: var(--red); }}
-.empty {{ color: var(--muted); }}
 
 @keyframes pulse {{
-    0%, 100% {{ opacity: 1; transform: scale(1); }}
-    50% {{ opacity: .4; transform: scale(1.03); }}
+    0%,100% {{ opacity: 1; transform: scale(1); }}
+    50% {{ opacity: .45; transform: scale(1.03); }}
 }}
 
 .blink {{
     animation: pulse 1.2s infinite;
 }}
 
-@media (max-width: 1200px) {{
+@media (max-width: 1280px) {{
+    .top-grid,
     .rankings-grid,
-    .highlight-grid,
-    .summary-grid {{
+    .summary-grid,
+    .city-grid {{
         grid-template-columns: 1fr;
-    }}
-
-    .rank-row {{
-        grid-template-columns: 36px 1fr;
-        gap: 8px;
-    }}
-
-    .rank-meta,
-    .rank-ate,
-    .rank-perc {{
-        grid-column: 2;
-        text-align: left;
     }}
 }}
 
-@media (max-width: 760px) {{
-    .hero {{
+@media (max-width: 960px) {{
+    .header {{
         flex-direction: column;
     }}
 
-    .hero-left h1 {{
-        font-size: 2rem;
+    .header-left h1 {{
+        font-size: 2.1rem;
+    }}
+
+    .rank-row,
+    .evo-row {{
+        grid-template-columns: 1fr;
+    }}
+
+    .rank-right,
+    .evo-value {{
+        text-align: left;
+    }}
+
+    .city-metrics {{
+        grid-template-columns: 1fr;
     }}
 }}
 </style>
 </head>
 <body>
-<main class="wrap">
-    <header class="hero">
-        <div class="hero-left">
+<div class="wrap">
+
+    <header class="header">
+        <div class="header-left">
             <h1>Dashboard de Metas</h1>
-            <p>Top Estética Bucal — {len(cidades)} Unidades</p>
+            <p>Top Estética Bucal — {len(cidades_ordenadas)} Unidades</p>
         </div>
-        <div class="hero-right">
-            <div class="pill"><strong>{mes_texto}</strong></div>
-            <div class="pill"><strong>{agora}</strong></div>
-            <div class="pill"><strong>● Online</strong></div>
+
+        <div class="header-right">
+            <div class="pill">{mes_ref}</div>
+            <div class="pill">{agora}</div>
+            <div class="pill">● Online</div>
             <a class="pill btn" href="../data/metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
         </div>
     </header>
@@ -781,15 +945,29 @@ body {{
     </nav>
 
     <div id="ranking-geral" class="tab-content active">
-        {destaque_html}
+        <section class="top-grid">
+            <div class="info-card">
+                <div class="info-title">Unidades</div>
+                <div class="info-number">{len(cidades_ordenadas)}</div>
+                <div class="info-text">cidades monitoradas</div>
+            </div>
 
-        <div class="rankings-grid">
+            <div class="beats-card">
+                <div class="beats-title">Metas Batidas</div>
+                <div class="beats-list">
+                    {bloco_batidas}
+                </div>
+            </div>
+        </section>
+
+        <section class="rankings-grid">
             {''.join(ranking_cards)}
-        </div>
+        </section>
     </div>
 
     {''.join(cidades_html)}
-</main>
+
+</div>
 
 <script>
 const buttons = document.querySelectorAll('.tab-btn');
@@ -801,29 +979,25 @@ buttons.forEach(btn => {{
         contents.forEach(c => c.classList.remove('active'));
 
         btn.classList.add('active');
+
         const target = document.getElementById(btn.dataset.tab);
-        if (target) target.classList.add('active');
+        if (target) {{
+            target.classList.add('active');
+            window.scrollTo({{ top: 0, behavior: 'smooth' }});
+        }}
     }});
 }});
 </script>
 </body>
 </html>
 """
-    return html
-
-
-def main():
-    dados = carregar_dados()
-    cidades = processar_cidades(dados)
-
-    html = gerar_html(cidades)
 
     os.makedirs("docs", exist_ok=True)
-    with open(ARQUIVO_HTML, "w", encoding="utf-8") as f:
+    with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"✓ Dashboard gerado com sucesso em {ARQUIVO_HTML}")
+    print("Dashboard gerado com sucesso.")
 
 
 if __name__ == "__main__":
-    pass
+    gerar_dashboard()
