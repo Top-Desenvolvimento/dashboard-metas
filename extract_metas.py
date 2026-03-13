@@ -1,4 +1,23 @@
 #!/usr/bin/env python3
+"""
+Coleta de metas da Top Estética Bucal
+
+Fluxo:
+1. Faz login em cada unidade
+2. Clica em FINANÇAS
+3. Clica em Metas
+4. Lê o que estiver visível na tela
+5. Salva JSON / CSV / Excel
+
+Indicadores exportados:
+- ortodontia
+- clinico_geral
+- avaliacoes_google
+- meta_avaliacao
+- meta_profilaxia
+- meta_restauracao
+"""
+
 import os
 import re
 import json
@@ -50,22 +69,15 @@ CIDADES = {
     "Flores": "http://flores.topesteticabucal.com.br/sistema",
 }
 
-INDICADORES_SISTEMA = {
+
+INDICADORES = {
     "ortodontia": ["Ortodontia"],
     "clinico_geral": ["Clínico Geral", "Clinico Geral"],
+    "avaliacoes_google": ["Avaliações Google", "Avaliacoes Google"],
     "meta_avaliacao": ["Meta de Avaliação", "Meta de Avaliacao"],
     "meta_profilaxia": ["Meta de Profilaxia"],
     "meta_restauracao": ["Meta de Restauração", "Meta de Restauracao"],
 }
-
-ORDEM_INDICADORES = [
-    "ortodontia",
-    "clinico_geral",
-    "avaliacoes_google",
-    "meta_avaliacao",
-    "meta_profilaxia",
-    "meta_restauracao",
-]
 
 
 def garantir_pasta_logs():
@@ -102,66 +114,6 @@ def normalizar_texto(texto):
     return " ".join((texto or "").replace("\xa0", " ").split()).strip()
 
 
-def carregar_json_opcional(caminho):
-    if os.path.exists(caminho):
-        with open(caminho, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
-
-
-def carregar_google_inicial():
-    return carregar_json_opcional("data/google_inicial.json")
-
-
-def carregar_google_meta():
-    return carregar_json_opcional("data/google_meta.json")
-
-
-def carregar_google_atual():
-    return carregar_json_opcional("data/google_atual.json")
-
-
-def inteiro_seguro(valor):
-    try:
-        texto = str(valor).strip()
-        if not texto:
-            return 0
-        texto = texto.replace(".", "").replace(",", "")
-        return int(texto)
-    except Exception:
-        return 0
-
-
-def formatar_percentual_google(valor):
-    return f"{valor:.1f}%".replace(".", ",")
-
-
-def calcular_indicador_google(cidade, mes_referencia, google_atual, google_inicial, google_meta):
-    atual_total = inteiro_seguro(google_atual.get(cidade, 0))
-    inicial_mes = inteiro_seguro(google_inicial.get(mes_referencia, {}).get(cidade, 0))
-    meta_mes = inteiro_seguro(google_meta.get(mes_referencia, {}).get(cidade, 0))
-
-    ate_o_momento = max(atual_total - inicial_mes, 0)
-
-    if meta_mes > 0:
-        falta = max(meta_mes - ate_o_momento, 0)
-        progresso = (ate_o_momento / meta_mes) * 100
-        progresso_txt = formatar_percentual_google(progresso)
-        meta_txt = str(meta_mes)
-        falta_txt = str(falta)
-    else:
-        progresso_txt = ""
-        meta_txt = ""
-        falta_txt = ""
-
-    return {
-        "meta": meta_txt,
-        "ate_o_momento": str(ate_o_momento),
-        "falta": falta_txt,
-        "progresso": progresso_txt,
-    }
-
-
 def fazer_login(driver, url, cidade):
     try:
         print(f"Abrindo URL: {url}")
@@ -175,7 +127,9 @@ def fazer_login(driver, url, cidade):
             )
         )
         password = wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='password']"))
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "input[type='password']")
+            )
         )
 
         driver.execute_script("arguments[0].value = '';", username)
@@ -219,6 +173,7 @@ def abrir_tela_metas(driver, cidade):
 
         print(f"Navegando até FINANÇAS > Metas em {cidade}...")
 
+        # Clica em FINANÇAS
         btn_financas = wait.until(
             EC.presence_of_element_located(
                 (By.XPATH, "//*[normalize-space(text())='FINANÇAS' or normalize-space(text())='Finanças']")
@@ -229,6 +184,7 @@ def abrir_tela_metas(driver, cidade):
 
         salvar_screenshot(driver, f"menu_financas_{cidade}.png")
 
+        # Clica em Metas do submenu
         candidatos = [
             (By.LINK_TEXT, "Metas"),
             (By.PARTIAL_LINK_TEXT, "Metas"),
@@ -237,6 +193,7 @@ def abrir_tela_metas(driver, cidade):
         ]
 
         clicou = False
+
         for by, value in candidatos:
             try:
                 elem = wait.until(EC.presence_of_element_located((by, value)))
@@ -267,6 +224,18 @@ def obter_texto_tela(driver):
 
 
 def extrair_por_titulos(texto_completo, titulos):
+    """
+    Extrai blocos no formato que o Selenium está lendo hoje, por exemplo:
+
+    Meta de Avaliação Até o momento Falta Progresso
+    Meta 205 37 -168 18,049%
+
+    ou
+
+    Ortodontia Até o momento Falta Progresso
+    Meta desafio 30.000,00 23.246,13 -6.753,87 77,487%
+    """
+
     texto = normalizar_texto(texto_completo)
 
     for titulo in titulos:
@@ -301,17 +270,10 @@ def extrair_todas_metas(driver, cidade):
     print(f"======== FIM DO TEXTO EM {cidade} ========")
 
     dados = {}
-    for chave, titulos in INDICADORES_SISTEMA.items():
+    for chave, titulos in INDICADORES.items():
         dados[chave] = extrair_por_titulos(texto, titulos)
 
-    dados["avaliacoes_google"] = {
-        "meta": "",
-        "ate_o_momento": "",
-        "falta": "",
-        "progresso": "",
-    }
-
-    print(f"Metas extraídas do sistema em {cidade}: {json.dumps(dados, ensure_ascii=False)}")
+    print(f"Metas extraídas em {cidade}: {json.dumps(dados, ensure_ascii=False)}")
     salvar_screenshot(driver, f"metas_extraidas_{cidade}.png")
     return dados
 
@@ -319,10 +281,6 @@ def extrair_todas_metas(driver, cidade):
 def coletar_dados_todas_cidades():
     dados = {}
     driver = setup_driver()
-
-    google_inicial = carregar_google_inicial()
-    google_meta = carregar_google_meta()
-    google_atual = carregar_google_atual()
 
     try:
         for cidade, url in CIDADES.items():
@@ -339,16 +297,6 @@ def coletar_dados_todas_cidades():
                     continue
 
                 metas = extrair_todas_metas(driver, cidade)
-
-                metas["avaliacoes_google"] = calcular_indicador_google(
-                    cidade=cidade,
-                    mes_referencia=MES_REFERENCIA,
-                    google_atual=google_atual,
-                    google_inicial=google_inicial,
-                    google_meta=google_meta,
-                )
-
-                print(f"Indicador Google em {cidade}: {json.dumps(metas['avaliacoes_google'], ensure_ascii=False)}")
 
                 dados[cidade] = {
                     "mes_referencia": MES_REFERENCIA,
@@ -386,8 +334,7 @@ def salvar_csv(dados):
     rows = []
 
     for cidade, info in dados.items():
-        for indicador in ORDEM_INDICADORES:
-            valores = info.get("indicadores", {}).get(indicador, {})
+        for indicador, valores in info.get("indicadores", {}).items():
             rows.append({
                 "cidade": cidade,
                 "mes_referencia": info.get("mes_referencia", ""),
@@ -414,8 +361,7 @@ def gerar_excel(dados):
     rows = []
 
     for cidade, info in dados.items():
-        for indicador in ORDEM_INDICADORES:
-            valores = info.get("indicadores", {}).get(indicador, {})
+        for indicador, valores in info.get("indicadores", {}).items():
             rows.append({
                 "Cidade": cidade,
                 "Mês Referência": info.get("mes_referencia", ""),
@@ -457,5 +403,5 @@ def main():
         raise SystemExit(1)
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
