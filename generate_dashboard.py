@@ -826,4 +826,4 @@ def main():
 
 
 if __name__ == "__main__":
-    gerar_dashboard()
+    pass
