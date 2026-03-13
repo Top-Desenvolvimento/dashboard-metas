@@ -825,5 +825,5 @@ def main():
     print(f"✓ Dashboard gerado com sucesso em {ARQUIVO_HTML}")
 
 
-if _name_ == "_main_":
-    main()
+if __name__ == "__main__":
+    gerar_dashboard()
