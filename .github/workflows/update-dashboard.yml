@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -42,13 +44,17 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+
           git add data/ docs/
 
           if git diff --cached --quiet; then
             echo "Nenhuma alteração para commit."
           else
             git commit -m "Atualização automática $(date +'%d/%m/%Y %H:%M')"
-            git pull --rebase origin main
             git push origin main
           fi
 
