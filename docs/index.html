@@ -1,1040 +1,2315 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard de Metas</title>
-
 <style>
+:root {
+    --bg: #06111c;
+    --bg2: #081827;
+    --panel: rgba(10, 24, 40, 0.96);
+    --panel-2: rgba(13, 31, 49, 0.98);
+    --line: rgba(255,255,255,0.06);
+    --border: rgba(0, 232, 255, 0.12);
+    --text: #eef8ff;
+    --muted: #7b90a6;
+    --cyan: #00e8ff;
+    --green: #12d99f;
+    --yellow: #f5b301;
+    --red: #ff4d7a;
+    --shadow: 0 0 0 1px rgba(0,232,255,.05), 0 14px 28px rgba(0,0,0,.28);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-background:#06111c;
-color:white;
-font-family:Arial;
-padding:30px;
+    font-family: Inter, Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(0,232,255,.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(18,217,159,.06), transparent 24%),
+        linear-gradient(180deg, #030912, #06111c 45%, #030912 100%);
+    color: var(--text);
+    min-height: 100vh;
 }
 
-.tab {
-background:#0d1e31;
-border:none;
-padding:10px 18px;
-margin:5px;
-cursor:pointer;
-color:#7f93a8;
+.wrap {
+    max-width: 1550px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
-.tab.active {
-color:#00e8ff;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.header-left h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+}
+
+.header-left p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.pill {
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(8, 20, 33, 0.92);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    font-weight: 700;
+}
+
+.pill.btn {
+    color: #04111d;
+    text-decoration: none;
+    background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0 16px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 22px;
+}
+
+.tab-btn {
+    background: rgba(10, 24, 40, 0.7);
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 700;
+    transition: .2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text);
+}
+
+.tab-btn.active {
+    color: var(--cyan);
+    border-color: rgba(0,232,255,.26);
+    background: rgba(0,232,255,.08);
 }
 
 .tab-content {
-display:none;
+    display: none;
 }
 
 .tab-content.active {
-display:block;
+    display: block;
 }
 
-.grid {
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
+.top-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
 }
 
+.info-card,
+.beats-card,
+.rank-card,
+.summary-card,
+.city-card,
 .panel {
-background:#0d1e31;
-padding:15px;
-border-radius:10px;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
 }
 
+.info-card,
+.beats-card {
+    padding: 18px;
+}
+
+.info-title,
+.beats-title,
 .panel-title {
-font-weight:bold;
-margin-bottom:10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .82rem;
+    margin-bottom: 12px;
+}
+
+.info-number {
+    font-size: 3rem;
+    color: var(--cyan);
+    font-weight: 900;
+}
+
+.info-text {
+    margin-top: 8px;
+    color: var(--muted);
+}
+
+.beats-list {
+    display: grid;
+    gap: 10px;
+}
+
+.beat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.04);
+}
+
+.beat-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.beat-city {
+    font-weight: 800;
+}
+
+.beat-meta {
+    color: var(--muted);
+    font-size: .88rem;
+}
+
+.beat-item strong {
+    color: var(--green);
+}
+
+.empty-message {
+    color: var(--muted);
+}
+
+.rankings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.rank-card {
+    overflow: hidden;
+}
+
+.rank-card-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.rank-card-title {
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.rank-card-body {
+    padding: 8px 18px 16px;
 }
 
 .rank-row {
-display:flex;
-justify-content:space-between;
-padding:5px 0;
+    display: grid;
+    grid-template-columns: 290px 1fr 90px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.rank-row:first-child {
+    border-top: none;
+}
+
+.rank-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rank-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .rank-pos {
-width:30px;
+    min-width: 50px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    background: rgba(255,255,255,.08);
 }
 
-.big {
-font-size:40px;
+.pos-1 { background: rgba(245,179,1,.22); color: #ffd45c; }
+.pos-2 { background: rgba(180,196,210,.22); color: #dbe6ef; }
+.pos-3 { background: rgba(165,102,38,.22); color: #ffb56d; }
+.pos-other { color: #fff; }
+
+.rank-city {
+    font-weight: 800;
+    font-size: 1rem;
 }
 
-.tabela {
-width:100%;
-border-collapse:collapse;
+.rank-sub {
+    color: var(--muted);
+    font-size: .88rem;
 }
 
-.tabela th,
-.tabela td {
-padding:10px;
-border-bottom:1px solid #223;
+.rank-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+}
+
+.rank-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.rank-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.rank-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.rank-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.rank-fill.empty { background: #25374a; }
+
+.rank-right {
+    text-align: right;
+    font-weight: 900;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.summary-card {
+    padding: 18px;
+}
+
+.summary-label {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .8rem;
+    margin-bottom: 12px;
+}
+
+.summary-value {
+    color: var(--cyan);
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+.panel {
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.panel-header {
+    margin-bottom: 14px;
+}
+
+.evolution-chart {
+    display: grid;
+    gap: 12px;
+}
+
+.evo-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 90px;
+    gap: 14px;
+    align-items: center;
+}
+
+.evo-label {
+    font-weight: 700;
+}
+
+.evo-bar {
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+}
+
+.evo-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.evo-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.evo-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.evo-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.evo-fill.empty { background: #25374a; }
+
+.evo-value {
+    text-align: right;
+    font-weight: 900;
+}
+
+.city-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.city-card {
+    padding: 18px;
+}
+
+.city-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.city-card-title {
+    font-size: 1.02rem;
+    font-weight: 900;
+}
+
+.city-card-progress {
+    font-weight: 900;
+}
+
+.city-bar {
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.city-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.city-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.city-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.city-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.city-fill.empty { background: #25374a; }
+
+.city-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.metric-box {
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.04);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.metric-box span {
+    display: block;
+    color: var(--muted);
+    font-size: .82rem;
+    margin-bottom: 6px;
+}
+
+.metric-box strong {
+    font-size: 1rem;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dash-table th,
+.dash-table td {
+    text-align: left;
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.dash-table th {
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: .82rem;
+    letter-spacing: .05em;
+}
+
+.td-title {
+    font-weight: 800;
 }
 
 .ok {
-color:#12d99f;
+    color: var(--green);
 }
 
 .warn {
-color:#f5b301;
+    color: var(--yellow);
 }
 
 .bad {
-color:#ff4d7a;
+    color: var(--red);
 }
 
+.empty {
+    color: var(--muted);
+}
+
+@keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .45; transform: scale(1.03); }
+}
+
+.blink {
+    animation: pulse 1.2s infinite;
+}
+
+@media (max-width: 1280px) {
+    .top-grid,
+    .rankings-grid,
+    .summary-grid,
+    .city-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 960px) {
+    .header {
+        flex-direction: column;
+    }
+
+    .header-left h1 {
+        font-size: 2.1rem;
+    }
+
+    .rank-row,
+    .evo-row {
+        grid-template-columns: 1fr;
+    }
+
+    .rank-right,
+    .evo-value {
+        text-align: left;
+    }
+
+    .city-metrics {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
-
 </head>
-
 <body>
+<div class="wrap">
 
-<h1>Dashboard de Metas</h1>
+    <header class="header">
+        <div class="header-left">
+            <h1>Dashboard de Metas</h1>
+            <p>Top Estética Bucal — 9 Unidades</p>
+        </div>
 
-<div>13/03/2026 17:15</div>
+        <div class="header-right">
+            <div class="pill">Março/2026</div>
+            <div class="pill">14/03/2026 03:04</div>
+            <div class="pill">● Online</div>
+            <a class="pill btn" href="../data/metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
+        </div>
+    </header>
 
-<div>
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button><button class="tab-btn" data-tab="bento">📍 Bento</button><button class="tab-btn" data-tab="veranopolis">📍 Veranópolis</button><button class="tab-btn" data-tab="garibaldi">📍 Garibaldi</button><button class="tab-btn" data-tab="farroupilha">📍 Farroupilha</button><button class="tab-btn" data-tab="flores">📍 Flores</button><button class="tab-btn" data-tab="soledade">📍 Soledade</button><button class="tab-btn" data-tab="encantado">📍 Encantado</button><button class="tab-btn" data-tab="caxias">📍 Caxias</button><button class="tab-btn" data-tab="ss-do-cai">📍 SS do Caí</button>
+    </nav>
 
-<button class="tab active" data-tab="ranking">Ranking</button><button class="tab" data-tab="Bento">Bento</button><button class="tab" data-tab="Caxias">Caxias</button><button class="tab" data-tab="Encantado">Encantado</button><button class="tab" data-tab="Farroupilha">Farroupilha</button><button class="tab" data-tab="Flores">Flores</button><button class="tab" data-tab="Garibaldi">Garibaldi</button><button class="tab" data-tab="SS do Caí">SS do Caí</button><button class="tab" data-tab="Soledade">Soledade</button><button class="tab" data-tab="Veranópolis">Veranópolis</button>
+    <div id="ranking-geral" class="tab-content active">
+        <section class="top-grid">
+            <div class="info-card">
+                <div class="info-title">Unidades</div>
+                <div class="info-number">9</div>
+                <div class="info-text">cidades monitoradas</div>
+            </div>
 
-</div>
+            <div class="beats-card">
+                <div class="beats-title">Metas Batidas</div>
+                <div class="beats-list">
+                    <div class="empty-message">Nenhuma meta acima de 100% no momento.</div>
+                </div>
+            </div>
+        </section>
 
+        <section class="rankings-grid">
+            
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Ortodontia</div>
+        </div>
+        <div class="rank-card-body">
+            
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: 37.500,00 | Realizado: 23.685,00</div>
+                </div>
+            </div>
 
-    <div id="ranking" class="tab-content active">
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill warn" style="width:63.16%"></div>
+                </div>
+            </div>
 
-    <div class="top">
+            <div class="rank-right">
+                <div class="rank-progress warn">63,160%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: 26.000,00 | Realizado: 12.747,00</div>
+                </div>
+            </div>
 
-    <div class="box">
-    <h3>Unidades</h3>
-    <div class="big">9</div>
-    </div>
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:49.027%"></div>
+                </div>
+            </div>
 
-    <div class="box">
-    <h3>Metas Batidas</h3>
-    Nenhuma meta acima de 100%
-    </div>
+            <div class="rank-right">
+                <div class="rank-progress bad">49,027%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: 25.000,00 | Realizado: 10.459,00</div>
+                </div>
+            </div>
 
-    </div>
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:41.836%"></div>
+                </div>
+            </div>
 
-    <div class="grid">
+            <div class="rank-right">
+                <div class="rank-progress bad">41,836%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: 39.000,00 | Realizado: 16.081,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:41.233%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">41,233%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: 34.000,00 | Realizado: 13.143,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:38.656%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">38,656%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: 29.000,00 | Realizado: 10.778,55</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:37.167%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">37,167%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: 29.000,00 | Realizado: 10.133,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:34.941%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">34,941%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: 58.000,00 | Realizado: 19.071,99</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:32.883%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">32,883%</div>
+            </div>
+        </div>
+        
+        <div class="rank-row">
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: 51.000,00 | Realizado: 13.579,45</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:26.626%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">26,626%</div>
+            </div>
+        </div>
+        
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Ortodontia</div>
-        
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Clínico Geral</div>
+        </div>
+        <div class="rank-card-body">
+            
         <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress warn">63,160%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: 17.700,00 | Realizado: 9.760,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill warn" style="width:55.141%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress warn">55,141%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress bad">45,423%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: 41.000,00 | Realizado: 21.516,50</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill warn" style="width:52.479%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress warn">52,479%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress bad">41,064%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: 25.000,00 | Realizado: 12.182,79</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:48.731%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">48,731%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress bad">37,269%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: 31.000,00 | Realizado: 10.519,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:33.932%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">33,932%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress bad">37,167%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: 28.000,00 | Realizado: 9.313,30</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:33.262%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">33,262%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress bad">36,591%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: 16.000,00 | Realizado: 5.150,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:32.188%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">32,188%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress bad">33,066%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: 40.000,00 | Realizado: 8.805,80</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:22.015%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">22,015%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress bad">31,402%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: 34.000,00 | Realizado: 7.404,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:21.776%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">21,776%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress bad">20,046%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: 91.000,00 | Realizado: 14.421,00</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:15.847%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">15,847%</div>
+            </div>
         </div>
         
-    </div>
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Clínico Geral</div>
-        
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Avaliações Google</div>
+        </div>
+        <div class="rank-card-body">
+            
         <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress warn">55,141%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress bad">49,840%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress bad">39,551%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress bad">33,268%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress bad">33,262%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress bad">32,188%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress bad">21,527%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress bad">20,779%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress bad">14,076%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: — | Realizado: —</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress empty">—</div>
+            </div>
         </div>
         
-    </div>
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Avaliações Google</div>
-        
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Meta de Avaliação</div>
+        </div>
+        <div class="rank-card-body">
+            
         <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: 76 | Realizado: 36</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:47.368%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">47,368%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: 65 | Realizado: 30</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:46.154%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">46,154%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: 52 | Realizado: 22</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:42.308%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">42,308%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: 205 | Realizado: 78</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:38.049%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">38,049%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: 320 | Realizado: 119</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:37.188%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">37,188%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: 134 | Realizado: 48</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:35.821%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">35,821%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: 99 | Realizado: 31</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:31.313%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">31,313%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: 68 | Realizado: 18</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:26.471%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">26,471%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress empty"></div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: 109 | Realizado: 27</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:24.771%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">24,771%</div>
+            </div>
         </div>
         
-    </div>
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Meta de Avaliação</div>
-        
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Meta de Profilaxia</div>
+        </div>
+        <div class="rank-card-body">
+            
         <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress bad">47,368%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: 15 | Realizado: 9</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill warn" style="width:60.0%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress warn">60,000%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress bad">46,154%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: 42 | Realizado: 20</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:47.619%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">47,619%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress bad">42,308%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: 83 | Realizado: 36</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:43.373%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">43,373%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress bad">35,938%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: 40 | Realizado: 15</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:37.5%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">37,500%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress bad">35,075%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: 88 | Realizado: 27</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:30.682%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">30,682%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress bad">34,146%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: 37 | Realizado: 10</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:27.027%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">27,027%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress bad">29,293%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: 59 | Realizado: 15</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:25.424%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">25,424%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress bad">26,471%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: 19 | Realizado: 4</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:21.053%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">21,053%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress bad">23,853%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: 24 | Realizado: 5</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:20.833%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">20,833%</div>
+            </div>
         </div>
         
-    </div>
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Meta de Profilaxia</div>
-        
+    <section class="rank-card">
+        <div class="rank-card-header">
+            <div class="rank-card-title">Meta de Restauração</div>
+        </div>
+        <div class="rank-card-body">
+            
         <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress warn">60,000%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-1">01º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Bento</div>
+                    <div class="rank-sub">Meta: 15 | Realizado: 10</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill warn" style="width:66.667%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress warn">66,667%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress bad">42,857%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-2">02º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Farroupilha</div>
+                    <div class="rank-sub">Meta: 18 | Realizado: 7</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:38.889%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">38,889%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress bad">38,554%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-3">03º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Veranópolis</div>
+                    <div class="rank-sub">Meta: 22 | Realizado: 5</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:22.727%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">22,727%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress bad">37,500%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">04º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Soledade</div>
+                    <div class="rank-sub">Meta: 46 | Realizado: 10</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:21.739%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">21,739%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress bad">29,545%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">05º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Encantado</div>
+                    <div class="rank-sub">Meta: 24 | Realizado: 5</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:20.833%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">20,833%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress bad">27,027%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">06º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Garibaldi</div>
+                    <div class="rank-sub">Meta: 34 | Realizado: 6</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:17.647%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">17,647%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress bad">22,034%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">07º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Flores</div>
+                    <div class="rank-sub">Meta: 61 | Realizado: 10</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:16.393%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">16,393%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress bad">21,053%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">08º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">Caxias</div>
+                    <div class="rank-sub">Meta: 79 | Realizado: 11</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:13.924%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">13,924%</div>
+            </div>
         </div>
         
         <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress bad">20,833%</div>
+            <div class="rank-left">
+                <div class="rank-pos pos-other">09º</div>
+                <div class="rank-texts">
+                    <div class="rank-city">SS do Caí</div>
+                    <div class="rank-sub">Meta: 15 | Realizado: 1</div>
+                </div>
+            </div>
+
+            <div class="rank-center">
+                <div class="rank-bar">
+                    <div class="rank-fill bad" style="width:6.667%"></div>
+                </div>
+            </div>
+
+            <div class="rank-right">
+                <div class="rank-progress bad">6,667%</div>
+            </div>
         </div>
         
-    </div>
+        </div>
+    </section>
     
-    <div class="panel">
-        <div class="panel-title">Meta de Restauração</div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">1</div>
-            <div class="rank-city">Bento</div>
-            <div class="rank-progress warn">60,000%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">2</div>
-            <div class="rank-city">Farroupilha</div>
-            <div class="rank-progress bad">38,889%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">3</div>
-            <div class="rank-city">Veranópolis</div>
-            <div class="rank-progress bad">22,727%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">4</div>
-            <div class="rank-city">Encantado</div>
-            <div class="rank-progress bad">20,833%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">5</div>
-            <div class="rank-city">Soledade</div>
-            <div class="rank-progress bad">19,565%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">6</div>
-            <div class="rank-city">Garibaldi</div>
-            <div class="rank-progress bad">17,647%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">7</div>
-            <div class="rank-city">Flores</div>
-            <div class="rank-progress bad">16,393%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">8</div>
-            <div class="rank-city">Caxias</div>
-            <div class="rank-progress bad">13,924%</div>
-        </div>
-        
-        <div class="rank-row">
-            <div class="rank-pos">9</div>
-            <div class="rank-city">SS do Caí</div>
-            <div class="rank-progress bad">6,667%</div>
-        </div>
-        
-    </div>
-    
+        </section>
     </div>
 
-    </div>
     
-        <div id="Bento" class="tab-content">
-
-        <h2>Bento</h2>
-
+        <div id="bento" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Bento</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">48,7%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:49.027%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">49,027%</div>
+        </div>
         
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:48.731%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">48,731%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:31.313%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">31,313%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:47.619%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">47,619%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill warn" style="width:66.667%"></div>
+                </div>
+            </div>
+            <div class="evo-value warn">66,667%</div>
+        </div>
+        
+        </div>
+    </section>
     
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">49,027%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:49.027%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>26.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>12.747,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-13.253,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">48,731%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:48.731%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>25.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>12.182,79</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-12.817,21</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">31,313%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:31.313%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>99</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>31</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-68</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">47,619%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:47.619%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>42</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>20</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-22</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress warn">66,667%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill warn" style="width:66.667%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>15</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-5</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
         <tr>
-            <td>Ortodontia</td>
+            <td class="td-title">Ortodontia</td>
             <td>26.000,00</td>
-            <td>11.810,00</td>
-            <td>-14.190,00</td>
-            <td class="bad">45,423%</td>
+            <td>12.747,00</td>
+            <td>-13.253,00</td>
+            <td class="bad">49,027%</td>
         </tr>
         
         <tr>
-            <td>Clínico Geral</td>
+            <td class="td-title">Clínico Geral</td>
             <td>25.000,00</td>
-            <td>9.887,79</td>
-            <td>-15.112,21</td>
-            <td class="bad">39,551%</td>
+            <td>12.182,79</td>
+            <td>-12.817,21</td>
+            <td class="bad">48,731%</td>
         </tr>
         
         <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
         </tr>
         
         <tr>
-            <td>Meta de Avaliação</td>
+            <td class="td-title">Meta de Avaliação</td>
             <td>99</td>
-            <td>29</td>
-            <td>-70</td>
-            <td class="bad">29,293%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>42</td>
-            <td>18</td>
-            <td>-24</td>
-            <td class="bad">42,857%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>15</td>
-            <td>9</td>
-            <td>-6</td>
-            <td class="warn">60,000%</td>
-        </tr>
-        
-    </table>
-    
-
-        </div>
-        
-        <div id="Caxias" class="tab-content">
-
-        <h2>Caxias</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>51.000,00</td>
-            <td>10.223,45</td>
-            <td>-40.776,55</td>
-            <td class="bad">20,046%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>91.000,00</td>
-            <td>12.809,00</td>
-            <td>-78.191,00</td>
-            <td class="bad">14,076%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>205</td>
-            <td>70</td>
-            <td>-135</td>
-            <td class="bad">34,146%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>83</td>
-            <td>32</td>
-            <td>-51</td>
-            <td class="bad">38,554%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>79</td>
-            <td>11</td>
+            <td>31</td>
             <td>-68</td>
-            <td class="bad">13,924%</td>
-        </tr>
-        
-    </table>
-    
-
-        </div>
-        
-        <div id="Encantado" class="tab-content">
-
-        <h2>Encantado</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>39.000,00</td>
-            <td>14.535,00</td>
-            <td>-24.465,00</td>
-            <td class="bad">37,269%</td>
+            <td class="bad">31,313%</td>
         </tr>
         
         <tr>
-            <td>Clínico Geral</td>
-            <td>31.000,00</td>
-            <td>10.313,00</td>
-            <td>-20.687,00</td>
-            <td class="bad">33,268%</td>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>42</td>
+            <td>20</td>
+            <td>-22</td>
+            <td class="bad">47,619%</td>
         </tr>
         
         <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>109</td>
-            <td>26</td>
-            <td>-83</td>
-            <td class="bad">23,853%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>19</td>
-            <td>4</td>
-            <td>-15</td>
-            <td class="bad">21,053%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>24</td>
-            <td>5</td>
-            <td>-19</td>
-            <td class="bad">20,833%</td>
-        </tr>
-        
-    </table>
-    
-
-        </div>
-        
-        <div id="Farroupilha" class="tab-content">
-
-        <h2>Farroupilha</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>34.000,00</td>
-            <td>12.441,00</td>
-            <td>-21.559,00</td>
-            <td class="bad">36,591%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>34.000,00</td>
-            <td>7.065,00</td>
-            <td>-26.935,00</td>
-            <td class="bad">20,779%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>65</td>
-            <td>30</td>
-            <td>-35</td>
-            <td class="bad">46,154%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>37</td>
-            <td>10</td>
-            <td>-27</td>
-            <td class="bad">27,027%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>18</td>
-            <td>7</td>
-            <td>-11</td>
-            <td class="bad">38,889%</td>
-        </tr>
-        
-    </table>
-    
-
-        </div>
-        
-        <div id="Flores" class="tab-content">
-
-        <h2>Flores</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>29.000,00</td>
-            <td>9.589,00</td>
-            <td>-19.411,00</td>
-            <td class="bad">33,066%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>41.000,00</td>
-            <td>20.434,50</td>
-            <td>-20.565,50</td>
-            <td class="bad">49,840%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>134</td>
-            <td>47</td>
-            <td>-87</td>
-            <td class="bad">35,075%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>59</td>
-            <td>13</td>
-            <td>-46</td>
-            <td class="bad">22,034%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>61</td>
-            <td>10</td>
-            <td>-51</td>
-            <td class="bad">16,393%</td>
-        </tr>
-        
-    </table>
-    
-
-        </div>
-        
-        <div id="Garibaldi" class="tab-content">
-
-        <h2>Garibaldi</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>37.500,00</td>
-            <td>23.685,00</td>
-            <td>-13.815,00</td>
-            <td class="warn">63,160%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>28.000,00</td>
-            <td>9.313,30</td>
-            <td>-18.686,70</td>
-            <td class="bad">33,262%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>76</td>
-            <td>36</td>
-            <td>-40</td>
-            <td class="bad">47,368%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>40</td>
+            <td class="td-title">Meta de Restauração</td>
             <td>15</td>
-            <td>-25</td>
-            <td class="bad">37,500%</td>
+            <td>10</td>
+            <td>-5</td>
+            <td class="warn">66,667%</td>
         </tr>
         
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>34</td>
-            <td>6</td>
-            <td>-28</td>
-            <td class="bad">17,647%</td>
-        </tr>
-        
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </section>
     
-
         </div>
         
-        <div id="SS do Caí" class="tab-content">
-
-        <h2>SS do Caí</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
+        <div id="veranopolis" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Veranópolis</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">43,5%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
     
-        <tr>
-            <td>Ortodontia</td>
-            <td>25.000,00</td>
-            <td>10.266,00</td>
-            <td>-14.734,00</td>
-            <td class="bad">41,064%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>16.000,00</td>
-            <td>5.150,00</td>
-            <td>-10.850,00</td>
-            <td class="bad">32,188%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>68</td>
-            <td>18</td>
-            <td>-50</td>
-            <td class="bad">26,471%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>24</td>
-            <td>5</td>
-            <td>-19</td>
-            <td class="bad">20,833%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>15</td>
-            <td>1</td>
-            <td>-14</td>
-            <td class="bad">6,667%</td>
-        </tr>
-        
-    </table>
-    
-
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:37.167%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">37,167%</div>
         </div>
         
-        <div id="Soledade" class="tab-content">
-
-        <h2>Soledade</h2>
-
-        
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
-    
-        <tr>
-            <td>Ortodontia</td>
-            <td>58.000,00</td>
-            <td>18.212,99</td>
-            <td>-39.787,01</td>
-            <td class="bad">31,402%</td>
-        </tr>
-        
-        <tr>
-            <td>Clínico Geral</td>
-            <td>40.000,00</td>
-            <td>8.610,80</td>
-            <td>-31.389,20</td>
-            <td class="bad">21,527%</td>
-        </tr>
-        
-        <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Avaliação</td>
-            <td>320</td>
-            <td>115</td>
-            <td>-205</td>
-            <td class="bad">35,938%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Profilaxia</td>
-            <td>88</td>
-            <td>26</td>
-            <td>-62</td>
-            <td class="bad">29,545%</td>
-        </tr>
-        
-        <tr>
-            <td>Meta de Restauração</td>
-            <td>46</td>
-            <td>9</td>
-            <td>-37</td>
-            <td class="bad">19,565%</td>
-        </tr>
-        
-    </table>
-    
-
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill warn" style="width:55.141%"></div>
+                </div>
+            </div>
+            <div class="evo-value warn">55,141%</div>
         </div>
         
-        <div id="Veranópolis" class="tab-content">
-
-        <h2>Veranópolis</h2>
-
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
         
-    <table class="tabela">
-    <tr>
-    <th>Indicador</th>
-    <th>Meta</th>
-    <th>Até o momento</th>
-    <th>Falta</th>
-    <th>Progresso</th>
-    </tr>
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:42.308%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">42,308%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill warn" style="width:60.0%"></div>
+                </div>
+            </div>
+            <div class="evo-value warn">60,000%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:22.727%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">22,727%</div>
+        </div>
+        
+        </div>
+    </section>
     
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">37,167%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:37.167%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>29.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10.778,55</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-18.221,45</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress warn">55,141%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill warn" style="width:55.141%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>17.700,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>9.760,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-7.940,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">42,308%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:42.308%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>52</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>22</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-30</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress warn">60,000%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill warn" style="width:60.0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>15</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>9</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-6</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">22,727%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:22.727%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>22</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>5</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-17</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
         <tr>
-            <td>Ortodontia</td>
+            <td class="td-title">Ortodontia</td>
             <td>29.000,00</td>
             <td>10.778,55</td>
             <td>-18.221,45</td>
@@ -1042,7 +2317,7 @@ color:#ff4d7a;
         </tr>
         
         <tr>
-            <td>Clínico Geral</td>
+            <td class="td-title">Clínico Geral</td>
             <td>17.700,00</td>
             <td>9.760,00</td>
             <td>-7.940,00</td>
@@ -1050,15 +2325,15 @@ color:#ff4d7a;
         </tr>
         
         <tr>
-            <td>Avaliações Google</td>
-            <td></td>
-            <td>0</td>
-            <td></td>
-            <td class="empty"></td>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
         </tr>
         
         <tr>
-            <td>Meta de Avaliação</td>
+            <td class="td-title">Meta de Avaliação</td>
             <td>52</td>
             <td>22</td>
             <td>-30</td>
@@ -1066,7 +2341,7 @@ color:#ff4d7a;
         </tr>
         
         <tr>
-            <td>Meta de Profilaxia</td>
+            <td class="td-title">Meta de Profilaxia</td>
             <td>15</td>
             <td>9</td>
             <td>-6</td>
@@ -1074,38 +2349,2316 @@ color:#ff4d7a;
         </tr>
         
         <tr>
-            <td>Meta de Restauração</td>
+            <td class="td-title">Meta de Restauração</td>
             <td>22</td>
             <td>5</td>
             <td>-17</td>
             <td class="bad">22,727%</td>
         </tr>
         
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="garibaldi" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Garibaldi</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">39,8%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill warn" style="width:63.16%"></div>
+                </div>
+            </div>
+            <div class="evo-value warn">63,160%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:33.262%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">33,262%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:47.368%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">47,368%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:37.5%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">37,500%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:17.647%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">17,647%</div>
+        </div>
+        
+        </div>
+    </section>
     
 
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress warn">63,160%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill warn" style="width:63.16%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>37.500,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>23.685,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-13.815,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">33,262%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:33.262%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>28.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>9.313,30</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-18.686,70</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">47,368%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:47.368%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>76</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>36</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-40</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">37,500%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:37.5%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>40</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>15</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-25</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">17,647%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:17.647%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>34</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>6</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-28</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>37.500,00</td>
+            <td>23.685,00</td>
+            <td>-13.815,00</td>
+            <td class="warn">63,160%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>28.000,00</td>
+            <td>9.313,30</td>
+            <td>-18.686,70</td>
+            <td class="bad">33,262%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>76</td>
+            <td>36</td>
+            <td>-40</td>
+            <td class="bad">47,368%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>40</td>
+            <td>15</td>
+            <td>-25</td>
+            <td class="bad">37,500%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>34</td>
+            <td>6</td>
+            <td>-28</td>
+            <td class="bad">17,647%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="farroupilha" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Farroupilha</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">34,5%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:38.656%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">38,656%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:21.776%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">21,776%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:46.154%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">46,154%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:27.027%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">27,027%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:38.889%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">38,889%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">38,656%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:38.656%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>34.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>13.143,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-20.857,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">21,776%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:21.776%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>34.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>7.404,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-26.596,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">46,154%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:46.154%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>65</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>30</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-35</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">27,027%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:27.027%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>37</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-27</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">38,889%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:38.889%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>18</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>7</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-11</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>34.000,00</td>
+            <td>13.143,00</td>
+            <td>-20.857,00</td>
+            <td class="bad">38,656%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>34.000,00</td>
+            <td>7.404,00</td>
+            <td>-26.596,00</td>
+            <td class="bad">21,776%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>65</td>
+            <td>30</td>
+            <td>-35</td>
+            <td class="bad">46,154%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>37</td>
+            <td>10</td>
+            <td>-27</td>
+            <td class="bad">27,027%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>18</td>
+            <td>7</td>
+            <td>-11</td>
+            <td class="bad">38,889%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="flores" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Flores</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">33,0%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:34.941%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">34,941%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill warn" style="width:52.479%"></div>
+                </div>
+            </div>
+            <div class="evo-value warn">52,479%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:35.821%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">35,821%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:25.424%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">25,424%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:16.393%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">16,393%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">34,941%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:34.941%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>29.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10.133,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-18.867,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress warn">52,479%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill warn" style="width:52.479%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>41.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>21.516,50</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-19.483,50</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">35,821%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:35.821%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>134</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>48</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-86</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">25,424%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:25.424%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>59</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>15</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-44</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">16,393%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:16.393%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>61</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-51</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>29.000,00</td>
+            <td>10.133,00</td>
+            <td>-18.867,00</td>
+            <td class="bad">34,941%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>41.000,00</td>
+            <td>21.516,50</td>
+            <td>-19.483,50</td>
+            <td class="warn">52,479%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>134</td>
+            <td>48</td>
+            <td>-86</td>
+            <td class="bad">35,821%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>59</td>
+            <td>15</td>
+            <td>-44</td>
+            <td class="bad">25,424%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>61</td>
+            <td>10</td>
+            <td>-51</td>
+            <td class="bad">16,393%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="soledade" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Soledade</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">28,9%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:32.883%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">32,883%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:22.015%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">22,015%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:37.188%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">37,188%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:30.682%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">30,682%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:21.739%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">21,739%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">32,883%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:32.883%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>58.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>19.071,99</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-38.928,01</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">22,015%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:22.015%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>40.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>8.805,80</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-31.194,20</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">37,188%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:37.188%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>320</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>119</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-201</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">30,682%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:30.682%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>88</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>27</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-61</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">21,739%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:21.739%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>46</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-36</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>58.000,00</td>
+            <td>19.071,99</td>
+            <td>-38.928,01</td>
+            <td class="bad">32,883%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>40.000,00</td>
+            <td>8.805,80</td>
+            <td>-31.194,20</td>
+            <td class="bad">22,015%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>320</td>
+            <td>119</td>
+            <td>-201</td>
+            <td class="bad">37,188%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>88</td>
+            <td>27</td>
+            <td>-61</td>
+            <td class="bad">30,682%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>46</td>
+            <td>10</td>
+            <td>-36</td>
+            <td class="bad">21,739%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="encantado" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Encantado</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">28,4%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:41.233%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">41,233%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:33.932%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">33,932%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:24.771%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">24,771%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:21.053%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">21,053%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:20.833%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">20,833%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">41,233%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:41.233%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>39.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>16.081,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-22.919,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">33,932%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:33.932%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>31.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10.519,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-20.481,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">24,771%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:24.771%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>109</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>27</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-82</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">21,053%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:21.053%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>19</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>4</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-15</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">20,833%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:20.833%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>24</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>5</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-19</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>39.000,00</td>
+            <td>16.081,00</td>
+            <td>-22.919,00</td>
+            <td class="bad">41,233%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>31.000,00</td>
+            <td>10.519,00</td>
+            <td>-20.481,00</td>
+            <td class="bad">33,932%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>109</td>
+            <td>27</td>
+            <td>-82</td>
+            <td class="bad">24,771%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>19</td>
+            <td>4</td>
+            <td>-15</td>
+            <td class="bad">21,053%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>24</td>
+            <td>5</td>
+            <td>-19</td>
+            <td class="bad">20,833%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="caxias" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">Caxias</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">27,6%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:26.626%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">26,626%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:15.847%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">15,847%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:38.049%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">38,049%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:43.373%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">43,373%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:13.924%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">13,924%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">26,626%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:26.626%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>51.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>13.579,45</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-37.420,55</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">15,847%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:15.847%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>91.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>14.421,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-76.579,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">38,049%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:38.049%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>205</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>78</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-127</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">43,373%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:43.373%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>83</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>36</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-47</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">13,924%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:13.924%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>79</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>11</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-68</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>51.000,00</td>
+            <td>13.579,45</td>
+            <td>-37.420,55</td>
+            <td class="bad">26,626%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>91.000,00</td>
+            <td>14.421,00</td>
+            <td>-76.579,00</td>
+            <td class="bad">15,847%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>205</td>
+            <td>78</td>
+            <td>-127</td>
+            <td class="bad">38,049%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>83</td>
+            <td>36</td>
+            <td>-47</td>
+            <td class="bad">43,373%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>79</td>
+            <td>11</td>
+            <td>-68</td>
+            <td class="bad">13,924%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+        </div>
+        
+        <div id="ss-do-cai" class="tab-content">
+            
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Cidade</div>
+            <div class="summary-value">SS do Caí</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mês de Referência</div>
+            <div class="summary-value">Março/2026</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Progresso Geral</div>
+            <div class="summary-value">25,6%</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Atualizado</div>
+            <div class="summary-value">14/03/2026 03:04</div>
+        </div>
+    </section>
+    
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Evolução das Metas na Cidade</div>
+        </div>
+        <div class="evolution-chart">
+            
+        <div class="evo-row">
+            <div class="evo-label">Ortodontia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:41.836%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">41,836%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Clínico Geral</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:32.188%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">32,188%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Avaliações Google</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill empty" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="evo-value empty">—</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Avaliação</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:26.471%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">26,471%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Profilaxia</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:20.833%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">20,833%</div>
+        </div>
+        
+        <div class="evo-row">
+            <div class="evo-label">Meta de Restauração</div>
+            <div class="evo-bar-wrap">
+                <div class="evo-bar">
+                    <div class="evo-fill bad" style="width:6.667%"></div>
+                </div>
+            </div>
+            <div class="evo-value bad">6,667%</div>
+        </div>
+        
+        </div>
+    </section>
+    
+
+            <section class="city-grid">
+                
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Ortodontia</div>
+                <div class="city-card-progress bad">41,836%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:41.836%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>25.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>10.459,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-14.541,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Clínico Geral</div>
+                <div class="city-card-progress bad">32,188%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:32.188%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>16.000,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>5.150,00</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-10.850,00</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Avaliações Google</div>
+                <div class="city-card-progress empty">—</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill empty" style="width:0%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>—</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>—</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Avaliação</div>
+                <div class="city-card-progress bad">26,471%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:26.471%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>68</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>18</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-50</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Profilaxia</div>
+                <div class="city-card-progress bad">20,833%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:20.833%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>24</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>5</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-19</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="city-card">
+            <div class="city-card-header">
+                <div class="city-card-title">Meta de Restauração</div>
+                <div class="city-card-progress bad">6,667%</div>
+            </div>
+
+            <div class="city-bar">
+                <div class="city-fill bad" style="width:6.667%"></div>
+            </div>
+
+            <div class="city-metrics">
+                <div class="metric-box">
+                    <span>Meta</span>
+                    <strong>15</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Até o momento</span>
+                    <strong>1</strong>
+                </div>
+                <div class="metric-box">
+                    <span>Falta</span>
+                    <strong>-14</strong>
+                </div>
+            </div>
+        </div>
+        
+            </section>
+
+            
+    <section class="panel">
+        <div class="panel-header">
+            <div class="panel-title">Tabela Completa da Cidade</div>
+        </div>
+        <div class="table-wrap">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Meta</th>
+                        <th>Até o momento</th>
+                        <th>Falta</th>
+                        <th>Progresso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="td-title">Ortodontia</td>
+            <td>25.000,00</td>
+            <td>10.459,00</td>
+            <td>-14.541,00</td>
+            <td class="bad">41,836%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Clínico Geral</td>
+            <td>16.000,00</td>
+            <td>5.150,00</td>
+            <td>-10.850,00</td>
+            <td class="bad">32,188%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Avaliações Google</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="empty">—</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Avaliação</td>
+            <td>68</td>
+            <td>18</td>
+            <td>-50</td>
+            <td class="bad">26,471%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Profilaxia</td>
+            <td>24</td>
+            <td>5</td>
+            <td>-19</td>
+            <td class="bad">20,833%</td>
+        </tr>
+        
+        <tr>
+            <td class="td-title">Meta de Restauração</td>
+            <td>15</td>
+            <td>1</td>
+            <td>-14</td>
+            <td class="bad">6,667%</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
         </div>
         
 
+</div>
+
 <script>
+const buttons = document.querySelectorAll('.tab-btn');
+const contents = document.querySelectorAll('.tab-content');
 
-document.querySelectorAll(".tab").forEach(btn=>{
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
 
-btn.onclick=()=>{
+        btn.classList.add('active');
 
-document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"))
-document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"))
-
-btn.classList.add("active")
-
-document.getElementById(btn.dataset.tab).classList.add("active")
-
-}
-
-})
-
+        const target = document.getElementById(btn.dataset.tab);
+        if (target) {
+            target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+});
 </script>
-
 </body>
-
 </html>
