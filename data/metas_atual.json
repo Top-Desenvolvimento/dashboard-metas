@@ -1,7 +1,7 @@
 {
   "Caxias": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T15:56:27.300613",
+    "timestamp": "2026-03-15T17:02:56.628493",
     "indicadores": {
       "ortodontia": {
         "meta": "51.000,00",
@@ -43,7 +43,7 @@
   },
   "Farroupilha": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T15:57:20.100150",
+    "timestamp": "2026-03-15T17:03:50.459045",
     "indicadores": {
       "ortodontia": {
         "meta": "34.000,00",
@@ -85,7 +85,7 @@
   },
   "Bento": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T15:58:12.901097",
+    "timestamp": "2026-03-15T17:04:44.528121",
     "indicadores": {
       "ortodontia": {
         "meta": "26.000,00",
@@ -127,7 +127,7 @@
   },
   "Encantado": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T15:59:05.863519",
+    "timestamp": "2026-03-15T17:05:38.554187",
     "indicadores": {
       "ortodontia": {
         "meta": "39.000,00",
@@ -169,7 +169,7 @@
   },
   "Soledade": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T15:59:58.260778",
+    "timestamp": "2026-03-15T17:06:32.469129",
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
@@ -211,7 +211,7 @@
   },
   "Garibaldi": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T16:00:51.057502",
+    "timestamp": "2026-03-15T17:07:26.418141",
     "indicadores": {
       "ortodontia": {
         "meta": "37.500,00",
@@ -253,7 +253,7 @@
   },
   "Veranópolis": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T16:01:43.788131",
+    "timestamp": "2026-03-15T17:08:20.165862",
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
@@ -295,7 +295,7 @@
   },
   "SS do Caí": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T16:02:36.502662",
+    "timestamp": "2026-03-15T17:09:13.595747",
     "indicadores": {
       "ortodontia": {
         "meta": "25.000,00",
@@ -337,7 +337,7 @@
   },
   "Flores": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-15T16:03:29.717868",
+    "timestamp": "2026-03-15T17:10:08.010789",
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
