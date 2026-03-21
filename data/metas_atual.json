@@ -1,7 +1,7 @@
 {
   "Caxias": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:52:41.692546",
+    "timestamp": "2026-03-21T17:00:02.544618",
     "indicadores": {
       "ortodontia": {
         "meta": "51.000,00",
@@ -43,7 +43,7 @@
   },
   "Farroupilha": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:53:34.156953",
+    "timestamp": "2026-03-21T17:00:57.227958",
     "indicadores": {
       "ortodontia": {
         "meta": "34.000,00",
@@ -53,9 +53,9 @@
       },
       "clinico_geral": {
         "meta": "34.000,00",
-        "ate_o_momento": "12.452,53",
-        "falta": "-21.547,47",
-        "progresso": "36,625%"
+        "ate_o_momento": "12.658,53",
+        "falta": "-21.341,47",
+        "progresso": "37,231%"
       },
       "avaliacoes_google": {
         "meta": "",
@@ -85,7 +85,7 @@
   },
   "Bento": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:54:27.188131",
+    "timestamp": "2026-03-21T17:01:51.359600",
     "indicadores": {
       "ortodontia": {
         "meta": "26.000,00",
@@ -127,7 +127,7 @@
   },
   "Encantado": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:55:19.202752",
+    "timestamp": "2026-03-21T17:02:45.353938",
     "indicadores": {
       "ortodontia": {
         "meta": "39.000,00",
@@ -169,7 +169,7 @@
   },
   "Soledade": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:56:11.567173",
+    "timestamp": "2026-03-21T17:03:38.918287",
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
@@ -211,7 +211,7 @@
   },
   "Garibaldi": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:57:04.299250",
+    "timestamp": "2026-03-21T17:04:32.585726",
     "indicadores": {
       "ortodontia": {
         "meta": "37.500,00",
@@ -253,7 +253,7 @@
   },
   "Veranópolis": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:57:56.763958",
+    "timestamp": "2026-03-21T17:05:26.581549",
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
@@ -263,9 +263,9 @@
       },
       "clinico_geral": {
         "meta": "17.700,00",
-        "ate_o_momento": "16.090,00",
-        "falta": "-1.610,00",
-        "progresso": "90,904%"
+        "ate_o_momento": "16.405,00",
+        "falta": "-1.295,00",
+        "progresso": "92,684%"
       },
       "avaliacoes_google": {
         "meta": "",
@@ -295,7 +295,7 @@
   },
   "SS do Caí": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:58:49.210674",
+    "timestamp": "2026-03-21T17:06:21.646670",
     "indicadores": {
       "ortodontia": {
         "meta": "25.000,00",
@@ -337,7 +337,7 @@
   },
   "Flores": {
     "mes_referencia": "2026-03",
-    "timestamp": "2026-03-21T15:59:42.711733",
+    "timestamp": "2026-03-21T17:07:16.459966",
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
