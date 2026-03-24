@@ -4,9 +4,9 @@ import os
 METAS_PATH = "data/metas_atual.json"
 GOOGLE_PATH = "data/google_reviews.json"
 
-def carregar_json(path):
+def carregar_json(path, default):
     if not os.path.exists(path):
-        return {}
+        return default
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -15,10 +15,9 @@ def salvar_json(path, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def main():
-    metas = carregar_json(METAS_PATH)
-    google = carregar_json(GOOGLE_PATH)
+    metas = carregar_json(METAS_PATH, {})
+    google = carregar_json(GOOGLE_PATH, [])
 
-    # transforma em dict por cidade
     google_map = {
         item["cidade"]: item
         for item in google
@@ -27,21 +26,25 @@ def main():
 
     for cidade, info in metas.items():
         indicadores = info.setdefault("indicadores", {})
-
         google_data = google_map.get(cidade)
 
         if google_data:
             total = google_data["avaliacoes"]
-
             indicadores["avaliacoes_google"] = {
-                "meta": "-",  # você pode ajustar depois
+                "meta": "-",
                 "ate_o_momento": str(total),
                 "falta": "-",
-                "progresso": "100%"  # ou calcular depois
+                "progresso": "100%"
             }
+        else:
+            indicadores.setdefault("avaliacoes_google", {
+                "meta": "-",
+                "ate_o_momento": "-",
+                "falta": "-",
+                "progresso": "-"
+            })
 
     salvar_json(METAS_PATH, metas)
-
     print("Google integrado ao metas_atual.json com sucesso.")
 
 if __name__ == "__main__":
