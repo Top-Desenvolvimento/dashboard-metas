@@ -1,0 +1,83 @@
+[
+  {
+    "data_hora": "2026-03-24 13:52:55",
+    "cidade": "Flores",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/3f8yPEfrb24AQYYOp",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/11bw5_7_qb%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BCaxias%2Bdo%2BSul%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D4af450972f8defc0%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DOJfCaca5BfPB0PEPlLjVyQo&q=EgQ0sH11GLiuis4GIjC8-FUiI3cF68g9Q0FonKuDrSELrs4JnKscxGcgE-Ra82Fnuh8whTZgTeAt7qEuK0EyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:03",
+    "cidade": "Caxias",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/ffSPadgdvp8WUEXq0",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/11fmf7h21c%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BFarroupilha%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D24c0bfc9169f1958%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DP5fCaZaYNaLJp84P5KW2-Qg&q=EgQ0sH11GMCuis4GIjArktJOG615n4SFSxjpLP4Vzcw1Zrk2vOVs_ODWWJlFJJDMnw1yZq4xtN3IlBM9JzAyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:11",
+    "cidade": "Farroupilha",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/g1snAopsGqM5I8sOl",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26biw%3D1536%26bih%3D695%26sxsrf%3DANbL-n5FVI-OVHfHh5qC0xvZfUhTcGrSIw:1771426116856%26kgmid%3D/g/11c4bfx7wg%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BFlores%2Bda%2BCunha%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3De84818e7a2fc2527%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DR5fCafXyKvbLp84PuIS76Qk&q=EgQ0sH11GMeuis4GIjB8RE9jAZbTZuxceUActa5yHgjwEPw9EoMrtAlOL-qQbK0QWqd5z5Kd91jV6LhiDMwyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:19",
+    "cidade": "Bento",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/sEdZu4jHIPYL77RA6",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/1tftgh53%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BBento%2BGon%25C3%25A7alves%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D78adea02496f7287%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DT5fCaeyuIKXm-LYPzI72kQ0&q=EgQ0sH11GM-uis4GIjAAIxJQ_52Q4Dm8xJXgFFy6CIE5rknoiIve6luXV5jW0fMaWOm4_YC0aQFr2B8nycUyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:27",
+    "cidade": "Encantado",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/5CUABlRksD1cPYWiK",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/11fmf896rp%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BEncantado%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D071ec626c791348c%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DV5fCaY6hHausp84Pq6a3wQI&q=EgQ0sH11GNeuis4GIjCNHaeki5-WnbB9LUkBsxiZxCIHqinL6k4dxtiX0taA4uUoZa6RV3ch0UgI8m93YaAyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:35",
+    "cidade": "Soledade",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/rOGEnBONHO2kTYVk3",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/11j0y86k18%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BSoledade%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D217a03166bab3225%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DX5fCaY_LFbqq6-AP95LUKA&q=EgQ0sH11GN-uis4GIjAstWVB_VeSgKNIYIQM8KGl6HOVuSXB0u3qapHBg4kDI0PthVSLe5E47t1009R8i_gyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:42",
+    "cidade": "Garibaldi",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/UlnGSp8MES2AnB7Yz",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26cs%3D0%26output%3Dsearch%26kgmid%3D/g/11hz90stnm%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BGaribaldi%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D24b07c2694053245%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DZ5fCabYTkrHr4A_QtreBCQ&q=EgQ0sH11GOeuis4GIjBlqCg4z0S_QM-eVhVPXP55Mwp6AZY-wQQfGROpzS8wtE-lrw6_o6n7k1Ogo6xyZ1wyAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:50",
+    "cidade": "Veranópolis",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/33XgmkKW7UnW8o8WB",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26biw%3D1536%26bih%3D695%26sxsrf%3DANbL-n6rCkAHtRCdRsJ95-8wHtwWfVQElw:1771426827223%26kgmid%3D/g/1ptvqthrx%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BVeran%25C3%25B3polis%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D6266b6a1f41e3d1d%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DbpfCab_YKLHKp84P2KDsaA&q=EgQ0sH11GO6uis4GIjCvDaS7btGTGOgoMxlT12ohGg3Zr6yfIkUjuSuZ-xmUtgrPmBXJb_vLRQQNSGeMXw0yAVJaAUM",
+    "status": "ok"
+  },
+  {
+    "data_hora": "2026-03-24 13:53:58",
+    "cidade": "SS do Caí",
+    "origem": "Google",
+    "avaliacoes": null,
+    "url_origem": "https://share.google/U2cO3MWeXsKQZUenB",
+    "url_final": "https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fsca_esv%3Da370d6b80d2c0c5a%26biw%3D1536%26bih%3D695%26sxsrf%3DANbL-n6fhHqNDmFPUhZBl5_-fyK5g1x3mA:1771426853924%26kgmid%3D/g/11qnbpcg6m%26q%3DTop%2BEst%25C3%25A9tica%2BBucal%2B-%2BDentista%2Bem%2BS%25C3%25A3o%2BSebasti%25C3%25A3o%2Bdo%2BCa%25C3%25AD%26shndl%3D30%26source%3Dsh/x/loc/uni/m1/1%26kgs%3D344c732d95cebb77%26shem%3Dshrtsdl%26utm_source%3Dshrtsdl,sh/x/loc/uni/m1/1%26sei%3DdpfCaYGwHr6yp84P7Pq0qAE&q=EgQ0sH11GPauis4GIjDqwxj2VODnXDa1Zq_prpptxpSev67kkgiSnIbthl-o7KU8SO2guEPOyYY4NZ4ibREyAVJaAUM",
+    "status": "ok"
+  }
+]
