@@ -85,7 +85,8 @@ def largura_barra(p):
 
 def mes_label(valor):
     if not valor:
-return datetime.now(TZ).strftime("%m/%Y")
+        return datetime.now(TZ).strftime("%m/%Y")
+
     mapa = {
         "01": "Janeiro", "02": "Fevereiro", "03": "Março", "04": "Abril",
         "05": "Maio", "06": "Junho", "07": "Julho", "08": "Agosto",
@@ -186,7 +187,7 @@ def render_ranking_card(titulo, ranking):
     """
 
 
-def render_city_summary(cidade, info_cidade, ):
+def render_city_summary(cidade, info_cidade, agora):
     pg = progresso_geral(info_cidade)
     pg_txt = f"{pg:.1f}%".replace(".", ",") if pg is not None else "—"
 
@@ -206,7 +207,7 @@ def render_city_summary(cidade, info_cidade, ):
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">{}</div>
+            <div class="summary-value">{agora}</div>
         </div>
     </section>
     """
@@ -330,7 +331,8 @@ def render_city_table(indicadores):
 
 def gerar_dashboard():
     base = carregar_dados()
-agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
+    agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
+
     cidades_ordenadas = sorted(
         base.items(),
         key=lambda item: (
@@ -940,7 +942,8 @@ body {{
             <div class="pill">{mes_ref}</div>
             <div class="pill">{agora}</div>
             <div class="pill">● Online</div>
-<a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>        </div>
+            <a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
+        </div>
     </header>
 
     <nav class="tabs">
@@ -994,6 +997,7 @@ buttons.forEach(btn => {{
 </body>
 </html>
 """
+
     os.makedirs("docs", exist_ok=True)
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
@@ -1005,6 +1009,7 @@ buttons.forEach(btn => {{
         print(f"Planilha não encontrada em: {EXCEL_SOURCE}")
 
     print("Dashboard gerado com sucesso.")
-    
+
+
 if __name__ == "__main__":
     gerar_dashboard()
