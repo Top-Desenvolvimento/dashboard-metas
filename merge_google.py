@@ -26,10 +26,10 @@ def main():
 
     for cidade, info in metas.items():
         indicadores = info.setdefault("indicadores", {})
-        google_data = google_map.get(cidade)
 
-        if google_data:
-            total = google_data["avaliacoes"]
+        item_google = google_map.get(cidade)
+        if item_google:
+            total = item_google["avaliacoes"]
             indicadores["avaliacoes_google"] = {
                 "meta": "-",
                 "ate_o_momento": str(total),
