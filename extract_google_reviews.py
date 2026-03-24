@@ -42,25 +42,6 @@ def extrair_de_texto(texto: str):
                 return numero
     return None
 
-def extrair_por_selectors(page):
-    candidatos = [
-        '[aria-label*="avalia"]',
-        '[aria-label*="review"]',
-        '[aria-label*="reseña"]',
-    ]
-
-    for selector in candidatos:
-        try:
-            textos = page.locator(selector).all_inner_texts()
-            for texto in textos:
-                numero = extrair_de_texto(texto)
-                if numero is not None:
-                    return numero
-        except Exception:
-            pass
-
-    return None
-
 def extrair_numero_avaliacoes(page):
     try:
         body_text = page.locator("body").inner_text(timeout=5000)
@@ -69,11 +50,6 @@ def extrair_numero_avaliacoes(page):
             return numero
     except Exception:
         pass
-
-    numero = extrair_por_selectors(page)
-    if numero is not None:
-        return numero
-
     return None
 
 def coletar_reviews(page, unidade):
@@ -83,19 +59,16 @@ def coletar_reviews(page, unidade):
 
     try:
         page.goto(url, timeout=60000, wait_until="domcontentloaded")
-        page.wait_for_timeout(6000)
-
-        final_url = page.url
-        total = extrair_numero_avaliacoes(page)
+        page.wait_for_timeout(7000)
 
         return {
             "data_hora": agora,
             "cidade": cidade,
             "origem": "Google",
-            "avaliacoes": total,
+            "avaliacoes": extrair_numero_avaliacoes(page),
             "url_origem": url,
-            "url_final": final_url,
-            "status": "ok" if total is not None else "nao_encontrado"
+            "url_final": page.url,
+            "status": "ok"
         }
 
     except PlaywrightTimeoutError:
@@ -139,10 +112,8 @@ def main():
         page = context.new_page()
 
         for unidade in UNIDADES:
-            print(f"Coletando Google Reviews: {unidade['cidade']}")
-            resultado = coletar_reviews(page, unidade)
-            print(f"Resultado {unidade['cidade']}: {resultado['status']} | avaliações={resultado['avaliacoes']}")
-            resultados.append(resultado)
+            print(f"Coletando Google: {unidade['cidade']}")
+            resultados.append(coletar_reviews(page, unidade))
 
         context.close()
         browser.close()
@@ -150,7 +121,7 @@ def main():
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(resultados, f, ensure_ascii=False, indent=2)
 
-    print(f"Arquivo salvo em: {OUTPUT_PATH}")
+    print(f"Arquivo gerado: {OUTPUT_PATH}")
 
 if __name__ == "__main__":
     main()
