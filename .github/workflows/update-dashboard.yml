@@ -38,18 +38,26 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Instalar dependências
+      - name: Instalar dependências Python
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Executar coleta de dados
+      - name: Instalar Chromium do Playwright
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Executar coleta de dados do sistema
         env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
+          SYSTEM_LOGIN: ${{ secrets.LOGIN_USER }}
+          SYSTEM_PASSWORD: ${{ secrets.LOGIN_PASS }}
           MES_REFERENCIA: 'AUTO'
         run: |
           python extract_metas.py
+
+      - name: Executar coleta de avaliações do Google
+        run: |
+          python extract_google_reviews.py
 
       - name: Atualizar dashboard HTML
         run: |
