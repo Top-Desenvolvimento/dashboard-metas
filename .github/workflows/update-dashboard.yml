@@ -61,10 +61,16 @@ jobs:
         run: |
           python extract_google_reviews.py
 
+      - name: Upload debug Google
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-debug
+          path: data/google_debug/
+
       - name: Mesclar dados do Google
         run: |
           python merge_google.py
-
       - name: Atualizar dashboard HTML
         run: |
           python generate_dashboard.py
