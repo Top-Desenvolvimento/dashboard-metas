@@ -994,13 +994,17 @@ buttons.forEach(btn => {{
 </body>
 </html>
 """
-
     os.makedirs("docs", exist_ok=True)
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
 
+    if os.path.exists(EXCEL_SOURCE):
+        shutil.copy2(EXCEL_SOURCE, EXCEL_PUBLIC)
+        print(f"Planilha copiada para: {EXCEL_PUBLIC}")
+    else:
+        print(f"Planilha não encontrada em: {EXCEL_SOURCE}")
+
     print("Dashboard gerado com sucesso.")
-
-
+    
 if __name__ == "__main__":
     gerar_dashboard()
