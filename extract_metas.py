@@ -34,8 +34,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
-LOGIN_USER = os.environ.get("LOGIN_USER", "")
-LOGIN_PASS = os.environ.get("LOGIN_PASS", "")
+USERNAME = os.getenv("SYSTEM_LOGIN") or os.getenv("LOGIN_USER")
+PASSWORD = os.getenv("SYSTEM_PASSWORD") or os.getenv("LOGIN_PASS")
 
 
 def calcular_mes_referencia():
