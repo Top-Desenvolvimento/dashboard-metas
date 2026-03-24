@@ -21,17 +21,10 @@ UNIDADES = [
 def normalizar_numero(texto: str):
     if not texto:
         return None
-
-    # remove separadores comuns
     texto_limpo = texto.replace(".", "").replace(",", "").strip()
-
     return int(texto_limpo) if texto_limpo.isdigit() else None
 
-
 def extrair_de_texto(texto: str):
-    """
-    Tenta localizar o número de avaliações em vários formatos.
-    """
     padroes = [
         r"(\d[\d\.\,]*)\s+avaliaç(?:ão|ões)",
         r"(\d[\d\.\,]*)\s+reviews",
@@ -47,21 +40,13 @@ def extrair_de_texto(texto: str):
             numero = normalizar_numero(match.group(1))
             if numero is not None:
                 return numero
-
     return None
 
-
 def extrair_por_selectors(page):
-    """
-    Tenta capturar elementos que normalmente aparecem em páginas Google Business.
-    """
     candidatos = [
         '[aria-label*="avalia"]',
         '[aria-label*="review"]',
         '[aria-label*="reseña"]',
-        'text=/avaliaç/i',
-        'text=/reviews/i',
-        'text=/reseñas/i',
     ]
 
     for selector in candidatos:
@@ -76,9 +61,7 @@ def extrair_por_selectors(page):
 
     return None
 
-
 def extrair_numero_avaliacoes(page):
-    # tentativa 1: texto completo da página
     try:
         body_text = page.locator("body").inner_text(timeout=5000)
         numero = extrair_de_texto(body_text)
@@ -87,13 +70,11 @@ def extrair_numero_avaliacoes(page):
     except Exception:
         pass
 
-    # tentativa 2: seletores mais específicos
     numero = extrair_por_selectors(page)
     if numero is not None:
         return numero
 
     return None
-
 
 def coletar_reviews(page, unidade):
     cidade = unidade["cidade"]
@@ -138,7 +119,6 @@ def coletar_reviews(page, unidade):
             "status": f"erro: {str(e)}"
         }
 
-
 def main():
     os.makedirs("data", exist_ok=True)
     resultados = []
@@ -171,7 +151,6 @@ def main():
         json.dump(resultados, f, ensure_ascii=False, indent=2)
 
     print(f"Arquivo salvo em: {OUTPUT_PATH}")
-
 
 if __name__ == "__main__":
     main()
