@@ -5,6 +5,7 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 OUTPUT_PATH = os.path.join("data", "google_reviews.json")
+DEBUG_DIR = os.path.join("data", "google_debug")
 
 UNIDADES = [
     {"cidade": "Flores", "url": "https://share.google/3f8yPEfrb24AQYYOp"},
@@ -18,11 +19,38 @@ UNIDADES = [
     {"cidade": "SS do Caí", "url": "https://share.google/U2cO3MWeXsKQZUenB"},
 ]
 
+def slug(texto: str) -> str:
+    texto = texto.lower().strip()
+    mapa = {
+        "ã": "a", "á": "a", "à": "a", "â": "a",
+        "é": "e", "ê": "e",
+        "í": "i",
+        "ó": "o", "ô": "o", "õ": "o",
+        "ú": "u",
+        "ç": "c",
+    }
+    for a, b in mapa.items():
+        texto = texto.replace(a, b)
+    return re.sub(r"[^a-z0-9]+", "-", texto).strip("-")
+
 def normalizar_numero(texto: str):
     if not texto:
         return None
     texto_limpo = texto.replace(".", "").replace(",", "").strip()
     return int(texto_limpo) if texto_limpo.isdigit() else None
+
+def salvar_debug(cidade, texto, html):
+    os.makedirs(DEBUG_DIR, exist_ok=True)
+
+    nome = slug(cidade)
+    txt_path = os.path.join(DEBUG_DIR, f"{nome}.txt")
+    html_path = os.path.join(DEBUG_DIR, f"{nome}.html")
+
+    with open(txt_path, "w", encoding="utf-8") as f:
+        f.write(texto or "")
+
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html or "")
 
 def extrair_de_texto(texto: str):
     padroes = [
@@ -32,6 +60,7 @@ def extrair_de_texto(texto: str):
         r"Com\s+base\s+em\s+(\d[\d\.\,]*)\s+avaliaç(?:ão|ões)",
         r"Based\s+on\s+(\d[\d\.\,]*)\s+reviews",
         r"(\d[\d\.\,]*)\s+opiniões",
+        r"(\d[\d\.\,]*)\s+Google reviews",
     ]
 
     for padrao in padroes:
@@ -39,18 +68,70 @@ def extrair_de_texto(texto: str):
         if match:
             numero = normalizar_numero(match.group(1))
             if numero is not None:
-                return numero
-    return None
+                return numero, f"regex:{padrao}"
+    return None, None
 
-def extrair_numero_avaliacoes(page):
+def extrair_por_selectors(page):
+    candidatos = [
+        '[aria-label*="avalia"]',
+        '[aria-label*="review"]',
+        '[aria-label*="reseña"]',
+        '[aria-label*="opini"]',
+        'span[aria-label*="avalia"]',
+        'span[aria-label*="review"]',
+        'div[aria-label*="review"]',
+    ]
+
+    for selector in candidatos:
+        try:
+            textos = page.locator(selector).all_inner_texts()
+            for texto in textos:
+                numero, origem = extrair_de_texto(texto)
+                if numero is not None:
+                    return numero, f"selector:{selector}|{origem}"
+        except Exception:
+            pass
+
+    return None, None
+
+def extrair_por_links(page):
     try:
-        body_text = page.locator("body").inner_text(timeout=5000)
-        numero = extrair_de_texto(body_text)
-        if numero is not None:
-            return numero
+        textos = page.locator("a").all_inner_texts()
+        for texto in textos:
+            numero, origem = extrair_de_texto(texto)
+            if numero is not None:
+                return numero, f"link|{origem}"
     except Exception:
         pass
-    return None
+    return None, None
+
+def extrair_numero_avaliacoes(page):
+    body_text = ""
+    html = ""
+
+    try:
+        body_text = page.locator("body").inner_text(timeout=8000)
+    except Exception:
+        pass
+
+    try:
+        html = page.content()
+    except Exception:
+        pass
+
+    numero, origem = extrair_de_texto(body_text)
+    if numero is not None:
+        return numero, origem, body_text, html
+
+    numero, origem = extrair_por_selectors(page)
+    if numero is not None:
+        return numero, origem, body_text, html
+
+    numero, origem = extrair_por_links(page)
+    if numero is not None:
+        return numero, origem, body_text, html
+
+    return None, None, body_text, html
 
 def coletar_reviews(page, unidade):
     cidade = unidade["cidade"]
@@ -59,19 +140,24 @@ def coletar_reviews(page, unidade):
 
     try:
         page.goto(url, timeout=60000, wait_until="domcontentloaded")
-        page.wait_for_timeout(7000)
+        page.wait_for_timeout(8000)
+
+        numero, origem_extracao, texto, html = extrair_numero_avaliacoes(page)
+        salvar_debug(cidade, texto, html)
 
         return {
             "data_hora": agora,
             "cidade": cidade,
             "origem": "Google",
-            "avaliacoes": extrair_numero_avaliacoes(page),
+            "avaliacoes": numero,
             "url_origem": url,
             "url_final": page.url,
-            "status": "ok"
+            "origem_extracao": origem_extracao,
+            "status": "ok" if numero is not None else "nao_encontrado"
         }
 
     except PlaywrightTimeoutError:
+        salvar_debug(cidade, "", "")
         return {
             "data_hora": agora,
             "cidade": cidade,
@@ -79,9 +165,11 @@ def coletar_reviews(page, unidade):
             "avaliacoes": None,
             "url_origem": url,
             "url_final": None,
+            "origem_extracao": None,
             "status": "timeout"
         }
     except Exception as e:
+        salvar_debug(cidade, "", "")
         return {
             "data_hora": agora,
             "cidade": cidade,
@@ -89,11 +177,14 @@ def coletar_reviews(page, unidade):
             "avaliacoes": None,
             "url_origem": url,
             "url_final": None,
+            "origem_extracao": None,
             "status": f"erro: {str(e)}"
         }
 
 def main():
     os.makedirs("data", exist_ok=True)
+    os.makedirs(DEBUG_DIR, exist_ok=True)
+
     resultados = []
 
     with sync_playwright() as p:
@@ -103,6 +194,7 @@ def main():
         )
         context = browser.new_context(
             locale="pt-BR",
+            viewport={"width": 1440, "height": 900},
             user_agent=(
                 "Mozilla/5.0 (X11; Linux x86_64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -113,7 +205,14 @@ def main():
 
         for unidade in UNIDADES:
             print(f"Coletando Google: {unidade['cidade']}")
-            resultados.append(coletar_reviews(page, unidade))
+            resultado = coletar_reviews(page, unidade)
+            print(
+                f"Resultado {unidade['cidade']}: "
+                f"status={resultado['status']} | "
+                f"avaliacoes={resultado['avaliacoes']} | "
+                f"origem={resultado['origem_extracao']}"
+            )
+            resultados.append(resultado)
 
         context.close()
         browser.close()
@@ -122,6 +221,7 @@ def main():
         json.dump(resultados, f, ensure_ascii=False, indent=2)
 
     print(f"Arquivo gerado: {OUTPUT_PATH}")
+    print(f"Arquivos de debug salvos em: {DEBUG_DIR}")
 
 if __name__ == "__main__":
     main()
