@@ -58,7 +58,10 @@ jobs:
       - name: Executar coleta de avaliações do Google
         run: |
           python extract_google_reviews.py
-
+      - name: Mesclar dados do Google
+        run: |
+          python merge_google.py
+          
       - name: Atualizar dashboard HTML
         run: |
           python generate_dashboard.py
