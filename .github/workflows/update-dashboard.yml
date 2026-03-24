@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
 
       - name: Instalar Chromium do Playwright
         run: |
-          python -m playwright install --with-deps chromium
+          python -m playwright install chromium
 
       - name: Executar coleta de dados do sistema
         env:
@@ -54,16 +54,17 @@ jobs:
           SYSTEM_LOGIN: ${{ secrets.LOGIN_USER }}
           SYSTEM_PASSWORD: ${{ secrets.LOGIN_PASS }}
           MES_REFERENCIA: 'AUTO'
-         run: |
+        run: |
           python extract_metas.py
 
       - name: Executar coleta de avaliações do Google
         run: |
           python extract_google_reviews.py
+
       - name: Mesclar dados do Google
         run: |
           python merge_google.py
-          
+
       - name: Atualizar dashboard HTML
         run: |
           python generate_dashboard.py
@@ -89,7 +90,7 @@ jobs:
 
   deploy:
     needs: update-dashboard
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     environment:
       name: github-pages
