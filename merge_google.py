@@ -40,7 +40,6 @@ def formatar_percentual(valor):
     return f"{valor:.1f}%".replace(".", ",")
 
 def descobrir_mes(base_metas):
-    # tenta descobrir pelo metas_atual.json
     for _, info in base_metas.items():
         mes = info.get("mes_referencia")
         if mes:
@@ -82,7 +81,6 @@ def main():
             google_ind["meta"] = formatar_int(meta_mes)
 
         if atual_total is None or inicial is None or meta_mes is None:
-            # mantém a meta, mas não consegue calcular progresso
             google_ind["ate_o_momento"] = "-"
             google_ind["falta"] = formatar_int(meta_mes) if meta_mes is not None else "-"
             google_ind["progresso"] = "-"
