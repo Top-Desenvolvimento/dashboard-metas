@@ -49,10 +49,12 @@ jobs:
 
       - name: Executar coleta de dados do sistema
         env:
+          LOGIN_USER: ${{ secrets.LOGIN_USER }}
+          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
           SYSTEM_LOGIN: ${{ secrets.LOGIN_USER }}
           SYSTEM_PASSWORD: ${{ secrets.LOGIN_PASS }}
           MES_REFERENCIA: 'AUTO'
-        run: |
+         run: |
           python extract_metas.py
 
       - name: Executar coleta de avaliações do Google
