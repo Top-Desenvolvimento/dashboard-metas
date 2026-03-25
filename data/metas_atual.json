@@ -3,16 +3,16 @@
     "mes_referencia": "2026-03",
     "indicadores": {
       "ortodontia": {
-        "meta": "29.000,00",
-        "ate_o_momento": "18.683,00",
-        "falta": "-10.317,00",
-        "progresso": "64,424%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "41.000,00",
-        "ate_o_momento": "41.738,50",
-        "falta": "738,50",
-        "progresso": "101,801%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "27",
@@ -21,25 +21,25 @@
         "progresso": "29,6%"
       },
       "meta_avaliacao": {
-        "meta": "134",
-        "ate_o_momento": "104",
-        "falta": "-30",
-        "progresso": "77,612%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "59",
-        "ate_o_momento": "37",
-        "falta": "-22",
-        "progresso": "62,712%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "61",
-        "ate_o_momento": "35",
-        "falta": "-26",
-        "progresso": "57,377%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Page.goto: net::ERR_NETWORK_CHANGED at http://flores.topesteticabucal.com.br/sistema\nCall log:\nnavigating to \"http://flores.topesteticabucal.com.br/sistema\", waiting until \"domcontentloaded\"\n"
   },
   "Caxias": {
     "mes_referencia": "2026-03",
@@ -220,9 +220,9 @@
       },
       "clinico_geral": {
         "meta": "40.000,00",
-        "ate_o_momento": "18.271,85",
-        "falta": "-21.728,15",
-        "progresso": "45,680%"
+        "ate_o_momento": "18.568,85",
+        "falta": "-21.431,15",
+        "progresso": "46,422%"
       },
       "avaliacoes_google": {
         "meta": "52",
