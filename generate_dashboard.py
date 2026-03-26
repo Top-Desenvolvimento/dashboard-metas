@@ -994,6 +994,7 @@ buttons.forEach(btn => {{
     }});
 }});
 </script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
 """
