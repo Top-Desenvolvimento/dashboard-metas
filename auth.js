@@ -1,19 +1,10 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// ===============================
-// 1. COLE AQUI OS DADOS DO SUPABASE
-// ===============================
-const SUPABASE_URL = "COLE_AQUI_SUA_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://iahdagpmejyjspkktriw.supabase.co";
+const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_ANON_KEY";
 
-// ===============================
-// 2. CLIENT
-// ===============================
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ===============================
-// 3. ESTILOS DO BLOQUEIO / LOGIN
-// ===============================
 const style = document.createElement("style");
 style.textContent = `
   html.auth-loading,
@@ -21,7 +12,7 @@ style.textContent = `
     overflow: hidden !important;
   }
 
-  body.auth-locked > *:not(#auth-overlay) {
+  body.auth-locked > *:not(#auth-overlay):not(#auth-userbar) {
     visibility: hidden !important;
     pointer-events: none !important;
     user-select: none !important;
@@ -166,7 +157,7 @@ style.textContent = `
     cursor: pointer;
   }
 
-  .auth-pill.hidden {
+  .hidden {
     display: none !important;
   }
 
@@ -185,15 +176,9 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ===============================
-// 4. BLOQUEAR A DASH ANTES DE MOSTRAR
-// ===============================
 document.documentElement.classList.add("auth-loading");
 document.body.classList.add("auth-loading", "auth-locked");
 
-// ===============================
-// 5. HTML DO LOGIN
-// ===============================
 const overlay = document.createElement("div");
 overlay.id = "auth-overlay";
 overlay.innerHTML = `
@@ -217,9 +202,6 @@ overlay.innerHTML = `
 `;
 document.body.appendChild(overlay);
 
-// ===============================
-// 6. BARRA DO USUÁRIO LOGADO
-// ===============================
 const userBar = document.createElement("div");
 userBar.className = "auth-userbar hidden";
 userBar.id = "auth-userbar";
@@ -229,9 +211,6 @@ userBar.innerHTML = `
 `;
 document.body.appendChild(userBar);
 
-// ===============================
-// 7. ELEMENTOS
-// ===============================
 const emailInput = document.getElementById("auth-email");
 const passwordInput = document.getElementById("auth-password");
 const loginBtn = document.getElementById("auth-login-btn");
@@ -240,9 +219,6 @@ const logoutBtn = document.getElementById("auth-logout-btn");
 const msgEl = document.getElementById("auth-msg");
 const userEmailEl = document.getElementById("auth-user-email");
 
-// ===============================
-// 8. HELPERS
-// ===============================
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
 }
@@ -300,9 +276,6 @@ function validateSupabaseConfig() {
   return true;
 }
 
-// ===============================
-// 9. LOGIN
-// ===============================
 loginBtn.addEventListener("click", async () => {
   setMsg("");
 
@@ -335,9 +308,6 @@ loginBtn.addEventListener("click", async () => {
   unlockDashboard(email);
 });
 
-// ===============================
-// 10. CRIAR ACESSO
-// ===============================
 signupBtn.addEventListener("click", async () => {
   setMsg("");
 
@@ -370,18 +340,12 @@ signupBtn.addEventListener("click", async () => {
   setMsg("Conta criada com sucesso. Agora faça login.", "success");
 });
 
-// ===============================
-// 11. LOGOUT
-// ===============================
 logoutBtn.addEventListener("click", async () => {
   await supabase.auth.signOut();
   lockDashboard();
   setMsg("");
 });
 
-// ===============================
-// 12. SESSÃO ATIVA
-// ===============================
 async function validateSession() {
   if (!validateSupabaseConfig()) {
     lockDashboard();
