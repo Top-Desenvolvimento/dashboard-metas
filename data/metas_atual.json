@@ -10,9 +10,9 @@
       },
       "clinico_geral": {
         "meta": "41.000,00",
-        "ate_o_momento": "43.804,50",
-        "falta": "2.804,50",
-        "progresso": "106,840%"
+        "ate_o_momento": "43.983,50",
+        "falta": "2.983,50",
+        "progresso": "107,277%"
       },
       "avaliacoes_google": {
         "meta": "27",
@@ -22,9 +22,9 @@
       },
       "meta_avaliacao": {
         "meta": "134",
-        "ate_o_momento": "121",
-        "falta": "-13",
-        "progresso": "90,299%"
+        "ate_o_momento": "122",
+        "falta": "-12",
+        "progresso": "91,045%"
       },
       "meta_profilaxia": {
         "meta": "59",
@@ -214,9 +214,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "35.580,99",
-        "falta": "-22.419,01",
-        "progresso": "61,347%"
+        "ate_o_momento": "35.680,99",
+        "falta": "-22.319,01",
+        "progresso": "61,519%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
@@ -298,9 +298,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
-        "ate_o_momento": "21.427,96",
-        "falta": "-7.572,04",
-        "progresso": "73,890%"
+        "ate_o_momento": "21.777,96",
+        "falta": "-7.222,04",
+        "progresso": "75,096%"
       },
       "clinico_geral": {
         "meta": "17.700,00",
@@ -340,9 +340,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "25.000,00",
-        "ate_o_momento": "15.064,00",
-        "falta": "-9.936,00",
-        "progresso": "60,256%"
+        "ate_o_momento": "15.184,00",
+        "falta": "-9.816,00",
+        "progresso": "60,736%"
       },
       "clinico_geral": {
         "meta": "16.000,00",
@@ -358,9 +358,9 @@
       },
       "meta_avaliacao": {
         "meta": "68",
-        "ate_o_momento": "38",
-        "falta": "-30",
-        "progresso": "55,882%"
+        "ate_o_momento": "39",
+        "falta": "-29",
+        "progresso": "57,353%"
       },
       "meta_profilaxia": {
         "meta": "24",
