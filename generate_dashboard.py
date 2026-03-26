@@ -1009,8 +1009,11 @@ buttons.forEach(btn => {{
     else:
         print(f"Planilha não encontrada em: {EXCEL_SOURCE}")
 
-    print("Dashboard gerado com sucesso.")
-
-
+        print("Dashboard gerado com sucesso.")
+    if os.path.exists("auth.js"):
+        shutil.copy2("auth.js", "docs/auth.js")
+        print("auth.js copiado para docs/auth.js")
+    else:
+        print("auth.js não encontrado na raiz do projeto")
 if __name__ == "__main__":
     gerar_dashboard()
