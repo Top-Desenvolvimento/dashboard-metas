@@ -1,5 +1,5 @@
+alert("auth carregou");
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
 const SUPABASE_URL = "https://iahdagpmejyjspkktriw.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhaGRhZ3BtZWp5aXNwa2t0cml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTExMzYsImV4cCI6MjA5MDA4NzEzNn0.gEe_4VhSEHTiK1eA_Q8UmfTYEZqH7IueT03qGLsWCCk";
 
