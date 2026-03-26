@@ -1,8 +1,7 @@
-alert("auth carregou");
-console.log("auth.js executando");
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
 const SUPABASE_URL = "https://iahdagpmejyjspkktriw.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhaGRhZ3BtZWp5aXNwa2t0cml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTExMzYsImV4cCI6MjA5MDA4NzEzNn0.gEe_4VhSEHTiK1eA_Q8UmfTYEZqH7IueT03qGLsWCCk";
+const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_ANON_KEY";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -253,15 +252,14 @@ async function isAllowed(email) {
     .from("allowed_users")
     .select("email, active")
     .eq("email", normalized)
-    .eq("active", true)
-    .maybeSingle();
+    .eq("active", true);
 
   if (error) {
     console.error("Erro ao verificar permissão:", error);
     return false;
   }
 
-  return !!data;
+  return Array.isArray(data) && data.length > 0;
 }
 
 function validateSupabaseConfig() {
@@ -290,12 +288,6 @@ loginBtn.addEventListener("click", async () => {
     return;
   }
 
-  const allowed = await isAllowed(email);
-  if (!allowed) {
-    setMsg("Este e-mail não está autorizado.");
-    return;
-  }
-
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -303,6 +295,15 @@ loginBtn.addEventListener("click", async () => {
 
   if (error) {
     setMsg("Erro no login: " + error.message);
+    return;
+  }
+
+  const allowed = await isAllowed(email);
+
+  if (!allowed) {
+    await supabase.auth.signOut();
+    setMsg("Este e-mail não tem permissão para acessar a dashboard.");
+    lockDashboard();
     return;
   }
 
@@ -322,12 +323,6 @@ signupBtn.addEventListener("click", async () => {
     return;
   }
 
-  const allowed = await isAllowed(email);
-  if (!allowed) {
-    setMsg("Este e-mail não está autorizado para criar acesso.");
-    return;
-  }
-
   const { error } = await supabase.auth.signUp({
     email,
     password
@@ -338,7 +333,7 @@ signupBtn.addEventListener("click", async () => {
     return;
   }
 
-  setMsg("Conta criada com sucesso. Agora faça login.", "success");
+  setMsg("Acesso criado com sucesso. Agora faça login.", "success");
 });
 
 logoutBtn.addEventListener("click", async () => {
