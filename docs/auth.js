@@ -9,7 +9,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   window.__TOP_AUTH_ALREADY_LOADED__ = true;
 
   const AUTH_VERSION = "AUTH_ESTAVEL_20260327_01";
-  const SUPABASE_URL = "https://iahdagpmejyjspkktriw.supabase.co";
+  const SUPABASE_URL = "https://iahdagpmejyispkktriw.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhaGRhZ3BtZWp5aXNwa2t0cml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTExMzYsImV4cCI6MjA5MDA4NzEzNn0.gEe_4VhSEHTiK1eA_Q8UmfTYEZqH7IueT03qGLsWCCk";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
