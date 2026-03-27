@@ -1,14 +1,11 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-/**
- * EVITA carregar o auth.js duas vezes.
- */
 if (window.__TOP_AUTH_ALREADY_LOADED__) {
   console.warn("auth.js já carregado; ignorando segunda inicialização.");
 } else {
   window.__TOP_AUTH_ALREADY_LOADED__ = true;
 
-  const AUTH_VERSION = "AUTH_ESTAVEL_20260327_01";
+  const AUTH_VERSION = "AUTH_ESTAVEL_20260327_02";
   const SUPABASE_URL = "https://iahdagpmejyispkktriw.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhaGRhZ3BtZWp5aXNwa2t0cml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTExMzYsImV4cCI6MjA5MDA4NzEzNn0.gEe_4VhSEHTiK1eA_Q8UmfTYEZqH7IueT03qGLsWCCk";
 
@@ -102,6 +99,24 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 18px;
+    }
+
+    .auth-extra {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .auth-link {
+      background: transparent;
+      border: none;
+      color: #7ddfff;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 4px 6px;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
     }
 
     .auth-btn {
@@ -225,6 +240,10 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
         <button class="auth-btn secondary" id="auth-signup-btn">Criar acesso</button>
       </div>
 
+      <div class="auth-extra">
+        <button class="auth-link" id="auth-forgot-btn">Esqueci minha senha</button>
+      </div>
+
       <div class="auth-msg" id="auth-msg"></div>
       <div class="auth-note" id="auth-note"></div>
     </div>
@@ -244,6 +263,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   const passwordInput = document.getElementById("auth-password");
   const loginBtn = document.getElementById("auth-login-btn");
   const signupBtn = document.getElementById("auth-signup-btn");
+  const forgotBtn = document.getElementById("auth-forgot-btn");
   const logoutBtn = document.getElementById("auth-logout-btn");
   const msgEl = document.getElementById("auth-msg");
   const noteEl = document.getElementById("auth-note");
@@ -255,6 +275,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   let isLoggingIn = false;
   let isSigningUp = false;
   let isLoggingOut = false;
+  let isResettingPassword = false;
   let ignoreNextAuthEvent = false;
 
   function normalizeEmail(email) {
@@ -269,6 +290,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   function setButtonsDisabled(disabled) {
     loginBtn.disabled = disabled;
     signupBtn.disabled = disabled;
+    forgotBtn.disabled = disabled;
     logoutBtn.disabled = disabled;
   }
 
@@ -298,11 +320,8 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
       .eq("email", normalized)
       .eq("active", true);
 
-    console.log("EMAIL TESTADO:", normalized);
-    console.log("RESULTADO allowed_users:", data);
-    console.log("ERRO allowed_users:", error);
-
     if (error) {
+      console.error("ERRO allowed_users:", error);
       return false;
     }
 
@@ -363,7 +382,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   }
 
   loginBtn.addEventListener("click", async () => {
-    if (isLoggingIn || isInitializing || isSigningUp || isLoggingOut) return;
+    if (isLoggingIn || isInitializing || isSigningUp || isLoggingOut || isResettingPassword) return;
 
     isLoggingIn = true;
     setButtonsDisabled(true);
@@ -380,10 +399,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
     }
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         setMsg("Erro ao fazer login: " + error.message);
@@ -411,7 +427,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
   });
 
   signupBtn.addEventListener("click", async () => {
-    if (isSigningUp || isInitializing || isLoggingIn || isLoggingOut) return;
+    if (isSigningUp || isInitializing || isLoggingIn || isLoggingOut || isResettingPassword) return;
 
     isSigningUp = true;
     setButtonsDisabled(true);
@@ -435,10 +451,7 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
           "apikey": SUPABASE_ANON_KEY,
           "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
         },
-        body: JSON.stringify({
-          email,
-          password
-        })
+        body: JSON.stringify({ email, password })
       });
 
       const text = await response.text();
@@ -448,9 +461,6 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
       } catch {
         result = { raw: text };
       }
-
-      console.log("SIGNUP STATUS:", response.status);
-      console.log("SIGNUP RESULT:", result);
 
       if (!response.ok) {
         setMsg("Erro ao criar acesso: " + (result.msg || result.message || `HTTP ${response.status}`));
@@ -467,8 +477,44 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
     }
   });
 
+  forgotBtn.addEventListener("click", async () => {
+    if (isResettingPassword || isInitializing || isLoggingIn || isSigningUp || isLoggingOut) return;
+
+    isResettingPassword = true;
+    setButtonsDisabled(true);
+    setMsg("");
+
+    const email = normalizeEmail(emailInput.value);
+
+    if (!email) {
+      setMsg("Digite seu e-mail para recuperar a senha.");
+      isResettingPassword = false;
+      setButtonsDisabled(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://top-desenvolvimento.github.io/dashboard-metas/reset-password.html"
+      });
+
+      if (error) {
+        setMsg("Erro ao enviar recuperação: " + error.message);
+        return;
+      }
+
+      setMsg("Enviamos o link de recuperação para seu e-mail.", "success");
+    } catch (err) {
+      console.error("RESET PASSWORD EXCEPTION:", err);
+      setMsg("Erro ao enviar recuperação: " + (err?.message || "falha de conexão"));
+    } finally {
+      isResettingPassword = false;
+      setButtonsDisabled(false);
+    }
+  });
+
   logoutBtn.addEventListener("click", async () => {
-    if (isLoggingOut || isInitializing || isLoggingIn || isSigningUp) return;
+    if (isLoggingOut || isInitializing || isLoggingIn || isSigningUp || isResettingPassword) return;
 
     isLoggingOut = true;
     setButtonsDisabled(true);
@@ -486,11 +532,9 @@ if (window.__TOP_AUTH_ALREADY_LOADED__) {
     }
   });
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log("AUTH EVENT:", event, session?.user?.email || null);
-
+  supabase.auth.onAuthStateChange(async (_event, session) => {
     if (ignoreNextAuthEvent) return;
-    if (isInitializing || isLoggingIn || isSigningUp || isLoggingOut) return;
+    if (isInitializing || isLoggingIn || isSigningUp || isLoggingOut || isResettingPassword) return;
 
     if (!session?.user?.email) {
       lockDashboard();
