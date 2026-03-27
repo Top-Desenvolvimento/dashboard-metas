@@ -106,9 +106,9 @@
       },
       "meta_avaliacao": {
         "meta": "65",
-        "ate_o_momento": "54",
-        "falta": "-11",
-        "progresso": "83,077%"
+        "ate_o_momento": "56",
+        "falta": "-9",
+        "progresso": "86,154%"
       },
       "meta_profilaxia": {
         "meta": "37",
@@ -118,9 +118,9 @@
       },
       "meta_restauracao": {
         "meta": "18",
-        "ate_o_momento": "8",
-        "falta": "-10",
-        "progresso": "44,444%"
+        "ate_o_momento": "9",
+        "falta": "-9",
+        "progresso": "50,000%"
       }
     },
     "_status": "ok"
