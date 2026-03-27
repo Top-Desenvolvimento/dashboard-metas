@@ -323,17 +323,25 @@ signupBtn.addEventListener("click", async () => {
     return;
   }
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password
-  });
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
 
-  if (error) {
-    setMsg("Erro ao criar acesso: " + error.message);
-    return;
+    console.log("SIGNUP DATA:", data);
+    console.log("SIGNUP ERROR:", error);
+
+    if (error) {
+      setMsg("Erro ao criar acesso: " + error.message);
+      return;
+    }
+
+    setMsg("Acesso criado com sucesso. Agora clique em Entrar.", "success");
+  } catch (err) {
+    console.error("SIGNUP EXCEPTION:", err);
+    setMsg("Erro ao criar acesso: " + (err?.message || "falha de conexão"));
   }
-
-  setMsg("Acesso criado com sucesso. Agora faça login.", "success");
 });
 
 logoutBtn.addEventListener("click", async () => {
