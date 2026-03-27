@@ -1,8 +1,8 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const RESET_VERSION = "RESET_20260327_01";
-const SUPABASE_URL = "https://iahdagpmejyjspkktriw.supabase.co";
-const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_CHAVE_ANON_OU_PUBLISHABLE";
+const RESET_VERSION = "RESET_20260327_02";
+const SUPABASE_URL = "https://iahdagpmejyispkktriw.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhaGRhZ3BtZWp5aXNwa2t0cml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTExMzYsImV4cCI6MjA5MDA4NzEzNn0.gEe_4VhSEHTiK1eA_Q8UmfTYEZqH7IueT03qGLsWCCk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
@@ -25,34 +25,48 @@ function setMsg(text, type = "error") {
   msgEl.textContent = text || "";
 }
 
-async function ensureRecoverySession() {
+function hasRecoveryParams() {
   const hash = window.location.hash || "";
-  const query = window.location.search || "";
+  const search = window.location.search || "";
 
-  if (!hash && !query) {
-    setMsg("Link de recuperação inválido ou incompleto.");
-    saveBtn.disabled = true;
-    return false;
-  }
+  return (
+    hash.includes("access_token") ||
+    hash.includes("refresh_token") ||
+    hash.includes("type=recovery") ||
+    search.includes("code=") ||
+    search.includes("type=recovery")
+  );
+}
 
-  const {
-    data: { session },
-    error
-  } = await supabase.auth.getSession();
-
-  if (error) {
-    setMsg("Erro ao validar sessão de recuperação: " + error.message);
-    saveBtn.disabled = true;
-    return false;
-  }
-
-  if (!session) {
+async function ensureRecoverySession() {
+  if (!hasRecoveryParams()) {
     setMsg("Sessão de recuperação não encontrada. Abra novamente o link enviado por e-mail.");
     saveBtn.disabled = true;
     return false;
   }
 
-  return true;
+  try {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+      setMsg("Erro ao validar sessão de recuperação: " + error.message);
+      saveBtn.disabled = true;
+      return false;
+    }
+
+    if (!data.session) {
+      setMsg("Sessão de recuperação não encontrada. Abra novamente o link enviado por e-mail.");
+      saveBtn.disabled = true;
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error("RECOVERY SESSION ERROR:", err);
+    setMsg("Erro ao validar recuperação.");
+    saveBtn.disabled = true;
+    return false;
+  }
 }
 
 saveBtn.addEventListener("click", async () => {
