@@ -4,9 +4,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
-        "ate_o_momento": "23.087,65",
-        "falta": "-5.912,35",
-        "progresso": "79,613%"
+        "ate_o_momento": "23.342,65",
+        "falta": "-5.657,35",
+        "progresso": "80,492%"
       },
       "clinico_geral": {
         "meta": "41.000,00",
@@ -46,9 +46,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "51.000,00",
-        "ate_o_momento": "35.700,05",
-        "falta": "-15.299,95",
-        "progresso": "70,000%"
+        "ate_o_momento": "35.918,05",
+        "falta": "-15.081,95",
+        "progresso": "70,428%"
       },
       "clinico_geral": {
         "meta": "91.000,00",
@@ -64,9 +64,9 @@
       },
       "meta_avaliacao": {
         "meta": "205",
-        "ate_o_momento": "179",
-        "falta": "-26",
-        "progresso": "87,317%"
+        "ate_o_momento": "180",
+        "falta": "-25",
+        "progresso": "87,805%"
       },
       "meta_profilaxia": {
         "meta": "83",
@@ -214,15 +214,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "41.186,89",
-        "falta": "-16.813,11",
-        "progresso": "71,012%"
+        "ate_o_momento": "41.174,89",
+        "falta": "-16.825,11",
+        "progresso": "70,991%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
-        "ate_o_momento": "22.410,85",
-        "falta": "-17.589,15",
-        "progresso": "56,027%"
+        "ate_o_momento": "22.605,85",
+        "falta": "-17.394,15",
+        "progresso": "56,515%"
       },
       "avaliacoes_google": {
         "meta": "52",
@@ -340,9 +340,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "25.000,00",
-        "ate_o_momento": "17.552,00",
-        "falta": "-7.448,00",
-        "progresso": "70,208%"
+        "ate_o_momento": "17.647,00",
+        "falta": "-7.353,00",
+        "progresso": "70,588%"
       },
       "clinico_geral": {
         "meta": "16.000,00",
