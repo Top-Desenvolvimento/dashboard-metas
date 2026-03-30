@@ -146,18 +146,15 @@ def obter_mes_tela():
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
 
-        # Já veio no formato da tela
         if " / " in texto:
             return texto
 
-        # Veio em MM/YYYY
         mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
         if mm_yyyy:
             mes_num = int(mm_yyyy.group(1))
             ano = mm_yyyy.group(2)
             return f"{MESES_PT[mes_num]} / {ano}"
 
-        # Veio em YYYY-MM
         yyyy_mm = re.match(r"^(\d{4})-(\d{2})$", texto)
         if yyyy_mm:
             ano = yyyy_mm.group(1)
@@ -177,16 +174,13 @@ def obter_mes_referencia_json():
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
 
-        # YYYY-MM
         if re.match(r"^\d{4}-\d{2}$", texto):
             return texto
 
-        # MM/YYYY
         mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
         if mm_yyyy:
             return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
 
-        # Nome do mês / ano
         mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
         if mes_nome:
             nome = normalizar_texto(mes_nome.group(1))
@@ -199,24 +193,18 @@ def obter_mes_referencia_json():
 
 
 def converter_mes_para_json(valor):
-    """
-    Converte o valor/texto selecionado no sistema para YYYY-MM.
-    """
     if not valor:
         return obter_mes_referencia_json()
 
     texto = str(valor).strip()
 
-    # Se for value em YYYY-MM
     if re.match(r"^\d{4}-\d{2}$", texto):
         return texto
 
-    # Se for value em MM/YYYY
     mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
     if mm_yyyy:
         return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
 
-    # Se vier como "Março / 2026"
     mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
     if mes_nome:
         nome = normalizar_texto(mes_nome.group(1))
@@ -268,7 +256,6 @@ def abrir_metas(page, base_url):
     page.goto(metas_url, timeout=60000, wait_until="domcontentloaded")
     page.wait_for_timeout(5000)
 
-    # tenta novamente se redirecionou
     if "index.php?redir=" in page.url:
         page.wait_for_timeout(2000)
         page.goto(metas_url, timeout=60000, wait_until="domcontentloaded")
@@ -289,11 +276,9 @@ def selecionar_mes_e_buscar(page):
 
     select_mes.wait_for(state="visible", timeout=15000)
 
-    # tenta selecionar pelo texto visível do option
     try:
         select_mes.select_option(label=mes_tela)
     except Exception:
-        # fallback: varre opções e tenta encontrar equivalente
         options = select_mes.locator("option").all_text_contents()
         alvo = None
         for op in options:
@@ -308,7 +293,6 @@ def selecionar_mes_e_buscar(page):
 
         select_mes.select_option(label=alvo)
 
-    # clica em Buscar
     botao_buscar = page.get_by_role("button", name="Buscar")
     if botao_buscar.count() == 0:
         botao_buscar = page.locator("text=Buscar").first
@@ -317,11 +301,8 @@ def selecionar_mes_e_buscar(page):
         raise RuntimeError("Não encontrei o botão Buscar na tela de metas.")
 
     botao_buscar.click()
-
-    # espera estabilizar
     page.wait_for_timeout(3000)
 
-    # pequena confirmação de que o select permaneceu no mês certo
     mes_confirmado = page.evaluate("""() => {
         const select = document.getElementById('mes_ano');
         if (!select) return null;
@@ -373,8 +354,8 @@ def processar_tabela_em_indicadores(tabela):
             continue
 
         primeira = normalizar_texto(linha[0])
-
         chave_detectada = inferir_chave_indicador(primeira)
+
         if chave_detectada:
             chave_atual = chave_detectada
             continue
@@ -402,65 +383,55 @@ def processar_tabela_em_indicadores(tabela):
 
     return indicadores
 
-def processar_tabela_em_indicadores(tabela):
-    indicadores = {}
-    chave_atual = None
 
-    for linha in tabela:
-        if not linha:
-            continue
+def extrair_cidade(page, cidade_info):
+    nome = cidade_info["nome"]
+    base_url = cidade_info["url"]
 
-        primeira = normalizar_texto(linha[0])
+    print(f"Coletando {nome}...")
 
-        # identifica o cabeçalho do bloco
-        chave_detectada = inferir_chave_indicador(primeira)
-        if chave_detectada:
-            chave_atual = chave_detectada
-            continue
+    try:
+        login(page, base_url)
+        abrir_metas(page, base_url)
+        selecionar_mes_e_buscar(page)
 
-        # linha com os dados
-        if chave_atual and len(linha) >= 4:
-            # alguns blocos vêm sem repetir o nome na linha de dados
-            # Ex.: ["Meta desafio", "51.000,00", "36.300,05", "-14.699,95", "71,177%"]
-            if len(linha) >= 5:
-                indicadores[chave_atual] = {
-                    "meta": linha[1].strip(),
-                    "ate_o_momento": linha[2].strip(),
-                    "falta": linha[3].strip(),
-                    "progresso": linha[4].strip(),
-                }
-                chave_atual = None
-                continue
-
-            # fallback: caso venha só com 4 colunas úteis
-            if len(linha) == 4:
-                indicadores[chave_atual] = {
-                    "meta": linha[0].strip(),
-                    "ate_o_momento": linha[1].strip(),
-                    "falta": linha[2].strip(),
-                    "progresso": linha[3].strip(),
-                }
-                chave_atual = None
-                continue
-
-    return indicadores
-
-
-        tabelas = extrair_tabelas(page)
+        page.wait_for_timeout(2000)
+        blocos = extrair_blocos_metas(page)
         mes_referencia = obter_mes_referencia(page)
 
         indicadores = garantir_indicadores_vazios()
 
-        if len(tabelas) > 0:
-            indicadores.update(processar_tabela_em_indicadores(tabelas[0]))
+        print(f"🔎 {nome}: blocos encontrados = {len(blocos)}")
 
-        if len(tabelas) > 1:
-            indicadores.update(processar_tabela_em_indicadores(tabelas[1]))
+        for bloco in blocos:
+            indicadores.update(processar_tabela_em_indicadores(bloco))
+
+        print(f"📊 {nome}: indicadores capturados = {json.dumps(indicadores, ensure_ascii=False)}")
+
+        return {
+            "mes_referencia": mes_referencia,
+            "indicadores": indicadores,
+            "_status": "ok"
+        }
+
+    except PlaywrightTimeoutError:
+        print(f"Timeout em {nome}")
+        return {
+            "mes_referencia": obter_mes_referencia_json(),
+            "indicadores": garantir_indicadores_vazios(),
+            "_status": "timeout"
+        }
+
+    except Exception as e:
+        print(f"Erro em {nome}: {e}")
+        return {
+            "mes_referencia": obter_mes_referencia_json(),
+            "indicadores": garantir_indicadores_vazios(),
+            "_status": f"erro: {str(e)}"
+        }
 
 
 def salvar_excel_placeholder():
-    # Mantém o botão de download da dashboard sem quebrar.
-    # Se você já tem uma geração Excel mais completa, dá para recolocar depois.
     if not os.path.exists(OUTPUT_XLSX):
         with open(OUTPUT_XLSX, "wb") as f:
             f.write(b"")
