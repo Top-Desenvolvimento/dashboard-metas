@@ -2,6 +2,12 @@ import os
 import json
 import re
 from datetime import datetime
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    ZoneInfo = None
+
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 LOGIN_USER = os.getenv("LOGIN_USER") or os.getenv("SYSTEM_LOGIN")
@@ -10,6 +16,8 @@ MES_REFERENCIA = os.getenv("MES_REFERENCIA", "AUTO")
 
 OUTPUT_JSON = "data/metas_atual.json"
 OUTPUT_XLSX = "data/metas_top_estetica.xlsx"
+
+TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
 CIDADES = [
     {"nome": "Flores", "url": "http://flores.topesteticabucal.com.br/sistema"},
@@ -49,6 +57,43 @@ INDICADORES_BASE = [
     "meta_profilaxia",
     "meta_restauracao",
 ]
+
+MESES_PT = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "Maio",
+    6: "Junho",
+    7: "Julho",
+    8: "Agosto",
+    9: "Setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro",
+}
+
+MESES_PT_REV = {
+    "janeiro": "01",
+    "fevereiro": "02",
+    "março": "03",
+    "marco": "03",
+    "abril": "04",
+    "maio": "05",
+    "junho": "06",
+    "julho": "07",
+    "agosto": "08",
+    "setembro": "09",
+    "outubro": "10",
+    "novembro": "11",
+    "dezembro": "12",
+}
+
+
+def agora():
+    if TZ:
+        return datetime.now(TZ)
+    return datetime.now()
 
 
 def normalizar_texto(texto: str) -> str:
@@ -91,6 +136,98 @@ def inferir_chave_indicador(nome_linha: str):
     return None
 
 
+def obter_mes_tela():
+    """
+    Retorna o mês no formato exibido no select do sistema.
+    Exemplos:
+    - Março / 2026
+    - Abril / 2026
+    """
+    if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
+        texto = MES_REFERENCIA.strip()
+
+        # Já veio no formato da tela
+        if " / " in texto:
+            return texto
+
+        # Veio em MM/YYYY
+        mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
+        if mm_yyyy:
+            mes_num = int(mm_yyyy.group(1))
+            ano = mm_yyyy.group(2)
+            return f"{MESES_PT[mes_num]} / {ano}"
+
+        # Veio em YYYY-MM
+        yyyy_mm = re.match(r"^(\d{4})-(\d{2})$", texto)
+        if yyyy_mm:
+            ano = yyyy_mm.group(1)
+            mes_num = int(yyyy_mm.group(2))
+            return f"{MESES_PT[mes_num]} / {ano}"
+
+        return texto
+
+    dt = agora()
+    return f"{MESES_PT[dt.month]} / {dt.year}"
+
+
+def obter_mes_referencia_json():
+    """
+    Retorna o mês em YYYY-MM para salvar no JSON.
+    """
+    if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
+        texto = MES_REFERENCIA.strip()
+
+        # YYYY-MM
+        if re.match(r"^\d{4}-\d{2}$", texto):
+            return texto
+
+        # MM/YYYY
+        mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
+        if mm_yyyy:
+            return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
+
+        # Nome do mês / ano
+        mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
+        if mes_nome:
+            nome = normalizar_texto(mes_nome.group(1))
+            ano = mes_nome.group(2)
+            mes = MESES_PT_REV.get(nome)
+            if mes:
+                return f"{ano}-{mes}"
+
+    return agora().strftime("%Y-%m")
+
+
+def converter_mes_para_json(valor):
+    """
+    Converte o valor/texto selecionado no sistema para YYYY-MM.
+    """
+    if not valor:
+        return obter_mes_referencia_json()
+
+    texto = str(valor).strip()
+
+    # Se for value em YYYY-MM
+    if re.match(r"^\d{4}-\d{2}$", texto):
+        return texto
+
+    # Se for value em MM/YYYY
+    mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
+    if mm_yyyy:
+        return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
+
+    # Se vier como "Março / 2026"
+    mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
+    if mes_nome:
+        nome = normalizar_texto(mes_nome.group(1))
+        ano = mes_nome.group(2)
+        mes = MESES_PT_REV.get(nome)
+        if mes:
+            return f"{ano}-{mes}"
+
+    return obter_mes_referencia_json()
+
+
 def obter_mes_referencia(page):
     try:
         valor = page.evaluate("""() => {
@@ -98,25 +235,19 @@ def obter_mes_referencia(page):
             if (!select) return null;
             const selected = select.options[select.selectedIndex];
             if (!selected) return null;
-            return selected.value || selected.text || null;
+
+            return {
+                value: selected.value || null,
+                text: selected.text || null
+            };
         }""")
+
         if not valor:
-            return datetime.now().strftime("%Y-%m")
-        valor = str(valor).strip()
+            return obter_mes_referencia_json()
 
-        # tenta converter MM/YYYY em YYYY-MM
-        m = re.match(r"^(\d{2})/(\d{4})$", valor)
-        if m:
-            return f"{m.group(2)}-{m.group(1)}"
-
-        # já está em YYYY-MM
-        m = re.match(r"^(\d{4})-(\d{2})$", valor)
-        if m:
-            return valor
-
-        return datetime.now().strftime("%Y-%m")
+        return converter_mes_para_json(valor.get("value") or valor.get("text"))
     except Exception:
-        return datetime.now().strftime("%Y-%m")
+        return obter_mes_referencia_json()
 
 
 def login(page, base_url):
@@ -142,6 +273,62 @@ def abrir_metas(page, base_url):
         page.wait_for_timeout(2000)
         page.goto(metas_url, timeout=60000, wait_until="domcontentloaded")
         page.wait_for_timeout(5000)
+
+
+def selecionar_mes_e_buscar(page):
+    """
+    Seleciona o Mês/Ano no select #mes_ano e clica em Buscar.
+    """
+    mes_tela = obter_mes_tela()
+    print(f"📅 Selecionando mês/ano: {mes_tela}")
+
+    select_mes = page.locator("#mes_ano")
+
+    if select_mes.count() == 0:
+        raise RuntimeError("Não encontrei o select #mes_ano na tela de metas.")
+
+    select_mes.wait_for(state="visible", timeout=15000)
+
+    # tenta selecionar pelo texto visível do option
+    try:
+        select_mes.select_option(label=mes_tela)
+    except Exception:
+        # fallback: varre opções e tenta encontrar equivalente
+        options = select_mes.locator("option").all_text_contents()
+        alvo = None
+        for op in options:
+            if normalizar_texto(op) == normalizar_texto(mes_tela):
+                alvo = op.strip()
+                break
+
+        if not alvo:
+            raise RuntimeError(
+                f"Não encontrei o mês '{mes_tela}' no select. Opções disponíveis: {options}"
+            )
+
+        select_mes.select_option(label=alvo)
+
+    # clica em Buscar
+    botao_buscar = page.get_by_role("button", name="Buscar")
+    if botao_buscar.count() == 0:
+        botao_buscar = page.locator("text=Buscar").first
+
+    if botao_buscar.count() == 0:
+        raise RuntimeError("Não encontrei o botão Buscar na tela de metas.")
+
+    botao_buscar.click()
+
+    # espera estabilizar
+    page.wait_for_timeout(3000)
+
+    # pequena confirmação de que o select permaneceu no mês certo
+    mes_confirmado = page.evaluate("""() => {
+        const select = document.getElementById('mes_ano');
+        if (!select) return null;
+        const selected = select.options[select.selectedIndex];
+        return selected ? (selected.text || selected.value || null) : null;
+    }""")
+    print(f"✅ Mês selecionado após busca: {mes_confirmado}")
 
 
 def extrair_tabelas(page):
@@ -196,6 +383,7 @@ def extrair_cidade(page, cidade_info):
     try:
         login(page, base_url)
         abrir_metas(page, base_url)
+        selecionar_mes_e_buscar(page)
 
         tabelas = extrair_tabelas(page)
         mes_referencia = obter_mes_referencia(page)
@@ -217,14 +405,14 @@ def extrair_cidade(page, cidade_info):
     except PlaywrightTimeoutError:
         print(f"Timeout em {nome}")
         return {
-            "mes_referencia": datetime.now().strftime("%Y-%m"),
+            "mes_referencia": obter_mes_referencia_json(),
             "indicadores": garantir_indicadores_vazios(),
             "_status": "timeout"
         }
     except Exception as e:
         print(f"Erro em {nome}: {e}")
         return {
-            "mes_referencia": datetime.now().strftime("%Y-%m"),
+            "mes_referencia": obter_mes_referencia_json(),
             "indicadores": garantir_indicadores_vazios(),
             "_status": f"erro: {str(e)}"
         }
@@ -241,8 +429,9 @@ def salvar_excel_placeholder():
 def main():
     print("=" * 55)
     print("Iniciando coleta de dados - Top Estética Bucal")
-    print(f"Data/Hora: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
-    print(f"Mês de referência: {datetime.now().strftime('%Y-%m') if MES_REFERENCIA == 'AUTO' else MES_REFERENCIA}")
+    print(f"Data/Hora: {agora().strftime('%d/%m/%Y %H:%M:%S')}")
+    print(f"Mês de referência (tela): {obter_mes_tela()}")
+    print(f"Mês de referência (json): {obter_mes_referencia_json()}")
     print("=" * 55)
 
     if not LOGIN_USER or not LOGIN_PASS:
