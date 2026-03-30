@@ -374,6 +374,44 @@ def processar_tabela_em_indicadores(tabela):
 
         primeira = normalizar_texto(linha[0])
 
+        chave_detectada = inferir_chave_indicador(primeira)
+        if chave_detectada:
+            chave_atual = chave_detectada
+            continue
+
+        if chave_atual and len(linha) >= 4:
+            if len(linha) >= 5:
+                indicadores[chave_atual] = {
+                    "meta": linha[1].strip(),
+                    "ate_o_momento": linha[2].strip(),
+                    "falta": linha[3].strip(),
+                    "progresso": linha[4].strip(),
+                }
+                chave_atual = None
+                continue
+
+            if len(linha) == 4:
+                indicadores[chave_atual] = {
+                    "meta": linha[0].strip(),
+                    "ate_o_momento": linha[1].strip(),
+                    "falta": linha[2].strip(),
+                    "progresso": linha[3].strip(),
+                }
+                chave_atual = None
+                continue
+
+    return indicadores
+
+def processar_tabela_em_indicadores(tabela):
+    indicadores = {}
+    chave_atual = None
+
+    for linha in tabela:
+        if not linha:
+            continue
+
+        primeira = normalizar_texto(linha[0])
+
         # identifica o cabeçalho do bloco
         chave_detectada = inferir_chave_indicador(primeira)
         if chave_detectada:
