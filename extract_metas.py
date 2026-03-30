@@ -331,59 +331,82 @@ def selecionar_mes_e_buscar(page):
     print(f"✅ Mês selecionado após busca: {mes_confirmado}")
 
 
-def extrair_tabelas(page):
+def extrair_blocos_metas(page):
     return page.evaluate("""() => {
-        const tables = Array.from(document.querySelectorAll('table'));
-        return tables.map(table => {
-            return Array.from(table.querySelectorAll('tr')).map(tr => {
-                return Array.from(tr.querySelectorAll('td, th')).map(td => td.innerText.trim());
+        const textoLimpo = (el) => (el?.innerText || "").replace(/\\s+/g, " ").trim();
+
+        const tabelas = Array.from(document.querySelectorAll("table"));
+        const blocos = [];
+
+        for (const table of tabelas) {
+            const textoTabela = textoLimpo(table).toLowerCase();
+
+            const ehTabelaMeta =
+                textoTabela.includes("ortodontia") ||
+                textoTabela.includes("clínico geral") ||
+                textoTabela.includes("clinico geral") ||
+                textoTabela.includes("meta de avaliação") ||
+                textoTabela.includes("meta de avaliacao") ||
+                textoTabela.includes("meta de profilaxia") ||
+                textoTabela.includes("meta de restauração") ||
+                textoTabela.includes("meta de restauracao");
+
+            if (!ehTabelaMeta) continue;
+
+            const linhas = Array.from(table.querySelectorAll("tr")).map(tr => {
+                return Array.from(tr.querySelectorAll("td, th")).map(td => textoLimpo(td));
             });
-        });
+
+            blocos.push(linhas);
+        }
+
+        return blocos;
     }""")
 
 
 def processar_tabela_em_indicadores(tabela):
     indicadores = {}
+    chave_atual = None
 
-    for i in range(0, len(tabela), 3):
-        if i + 2 >= len(tabela):
+    for linha in tabela:
+        if not linha:
             continue
 
-        cab = tabela[i]
-        dados = tabela[i + 2]
+        primeira = normalizar_texto(linha[0])
 
-        if not cab or not dados:
+        # identifica o cabeçalho do bloco
+        chave_detectada = inferir_chave_indicador(primeira)
+        if chave_detectada:
+            chave_atual = chave_detectada
             continue
 
-        nome = cab[0].strip() if cab else ""
-        chave = inferir_chave_indicador(nome)
+        # linha com os dados
+        if chave_atual and len(linha) >= 4:
+            # alguns blocos vêm sem repetir o nome na linha de dados
+            # Ex.: ["Meta desafio", "51.000,00", "36.300,05", "-14.699,95", "71,177%"]
+            if len(linha) >= 5:
+                indicadores[chave_atual] = {
+                    "meta": linha[1].strip(),
+                    "ate_o_momento": linha[2].strip(),
+                    "falta": linha[3].strip(),
+                    "progresso": linha[4].strip(),
+                }
+                chave_atual = None
+                continue
 
-        if not chave:
-            continue
-
-        if len(dados) < 5:
-            continue
-
-        indicadores[chave] = {
-            "meta": dados[1].strip() if len(dados) > 1 else "-",
-            "ate_o_momento": dados[2].strip() if len(dados) > 2 else "-",
-            "falta": dados[3].strip() if len(dados) > 3 else "-",
-            "progresso": dados[4].strip() if len(dados) > 4 else "-",
-        }
+            # fallback: caso venha só com 4 colunas úteis
+            if len(linha) == 4:
+                indicadores[chave_atual] = {
+                    "meta": linha[0].strip(),
+                    "ate_o_momento": linha[1].strip(),
+                    "falta": linha[2].strip(),
+                    "progresso": linha[3].strip(),
+                }
+                chave_atual = None
+                continue
 
     return indicadores
 
-
-def extrair_cidade(page, cidade_info):
-    nome = cidade_info["nome"]
-    base_url = cidade_info["url"]
-
-    print(f"Coletando {nome}...")
-
-    try:
-        login(page, base_url)
-        abrir_metas(page, base_url)
-        selecionar_mes_e_buscar(page)
 
         tabelas = extrair_tabelas(page)
         mes_referencia = obter_mes_referencia(page)
@@ -395,27 +418,6 @@ def extrair_cidade(page, cidade_info):
 
         if len(tabelas) > 1:
             indicadores.update(processar_tabela_em_indicadores(tabelas[1]))
-
-        return {
-            "mes_referencia": mes_referencia,
-            "indicadores": indicadores,
-            "_status": "ok"
-        }
-
-    except PlaywrightTimeoutError:
-        print(f"Timeout em {nome}")
-        return {
-            "mes_referencia": obter_mes_referencia_json(),
-            "indicadores": garantir_indicadores_vazios(),
-            "_status": "timeout"
-        }
-    except Exception as e:
-        print(f"Erro em {nome}: {e}")
-        return {
-            "mes_referencia": obter_mes_referencia_json(),
-            "indicadores": garantir_indicadores_vazios(),
-            "_status": f"erro: {str(e)}"
-        }
 
 
 def salvar_excel_placeholder():
