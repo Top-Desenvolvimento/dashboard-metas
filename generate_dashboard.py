@@ -99,6 +99,16 @@ def mes_label(valor):
         return valor
 
 
+def montar_filtro_mes(mes_ref):
+    return f"""
+    <div class="month-filter-wrap">
+        <select class="month-filter" id="monthFilter" aria-label="Filtro de mês">
+            <option value="{mes_ref}" selected>{mes_ref}</option>
+        </select>
+    </div>
+    """
+
+
 def progresso_geral(info_cidade):
     indicadores = info_cidade.get("indicadores", {})
     valores = []
@@ -462,6 +472,7 @@ body {{
     gap: 10px;
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
 }}
 
 .pill {{
@@ -477,6 +488,43 @@ body {{
     color: #04111d;
     text-decoration: none;
     background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
+}}
+
+.month-filter-wrap {{
+    position: relative;
+}}
+
+.month-filter {{
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 180px;
+    padding: 14px 42px 14px 16px;
+    border-radius: 14px;
+    background: rgba(8, 20, 33, 0.92);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+}}
+
+.month-filter:focus {{
+    outline: none;
+    border-color: rgba(0,232,255,.35);
+    box-shadow: 0 0 0 3px rgba(0,232,255,.08);
+}}
+
+.month-filter-wrap::after {{
+    content: "▾";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    font-size: 1rem;
 }}
 
 .tabs {{
@@ -926,6 +974,10 @@ body {{
     .city-metrics {{
         grid-template-columns: 1fr;
     }}
+
+    .month-filter {{
+        min-width: 100%;
+    }}
 }}
 </style>
 </head>
@@ -939,7 +991,7 @@ body {{
         </div>
 
         <div class="header-right">
-            <div class="pill">{mes_ref}</div>
+            {montar_filtro_mes(mes_ref)}
             <div class="pill">{agora}</div>
             <div class="pill">● Online</div>
             <a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
@@ -993,6 +1045,14 @@ buttons.forEach(btn => {{
         }}
     }});
 }});
+
+// visualmente mantém o filtro de mês estável por enquanto
+const monthFilter = document.getElementById('monthFilter');
+if (monthFilter) {{
+    monthFilter.addEventListener('change', (e) => {{
+        e.preventDefault();
+    }});
+}}
 </script>
 <script type="module" src="auth.js"></script>
 </body>
@@ -1009,11 +1069,14 @@ buttons.forEach(btn => {{
     else:
         print(f"Planilha não encontrada em: {EXCEL_SOURCE}")
 
-        print("Dashboard gerado com sucesso.")
+    print("Dashboard gerado com sucesso.")
+
     if os.path.exists("auth.js"):
         shutil.copy2("auth.js", "docs/auth.js")
         print("auth.js copiado para docs/auth.js")
     else:
         print("auth.js não encontrado na raiz do projeto")
+
+
 if __name__ == "__main__":
     gerar_dashboard()
