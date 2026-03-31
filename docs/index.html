@@ -69,6 +69,7 @@ body {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .pill {
@@ -84,6 +85,43 @@ body {
     color: #04111d;
     text-decoration: none;
     background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
+}
+
+.month-filter-wrap {
+    position: relative;
+}
+
+.month-filter {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 180px;
+    padding: 14px 42px 14px 16px;
+    border-radius: 14px;
+    background: rgba(8, 20, 33, 0.92);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.month-filter:focus {
+    outline: none;
+    border-color: rgba(0,232,255,.35);
+    box-shadow: 0 0 0 3px rgba(0,232,255,.08);
+}
+
+.month-filter-wrap::after {
+    content: "▾";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    font-size: 1rem;
 }
 
 .tabs {
@@ -533,6 +571,10 @@ body {
     .city-metrics {
         grid-template-columns: 1fr;
     }
+
+    .month-filter {
+        min-width: 100%;
+    }
 }
 </style>
 </head>
@@ -546,8 +588,14 @@ body {
         </div>
 
         <div class="header-right">
-            <div class="pill">Março/2026</div>
-            <div class="pill">31/03/2026 10:29</div>
+            
+    <div class="month-filter-wrap">
+        <select class="month-filter" id="monthFilter" aria-label="Filtro de mês">
+            <option value="Março/2026" selected>Março/2026</option>
+        </select>
+    </div>
+    
+            <div class="pill">31/03/2026 10:41</div>
             <div class="pill">● Online</div>
             <a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
         </div>
@@ -1241,18 +1289,18 @@ body {
                 <div class="rank-pos pos-3">03º</div>
                 <div class="rank-texts">
                     <div class="rank-city">Farroupilha</div>
-                    <div class="rank-sub">Meta: 65 | Realizado: 63</div>
+                    <div class="rank-sub">Meta: 65 | Realizado: 64</div>
                 </div>
             </div>
 
             <div class="rank-center">
                 <div class="rank-bar">
-                    <div class="rank-fill warn" style="width:96.923%"></div>
+                    <div class="rank-fill warn" style="width:98.462%"></div>
                 </div>
             </div>
 
             <div class="rank-right">
-                <div class="rank-progress warn">96,923%</div>
+                <div class="rank-progress warn">98,462%</div>
             </div>
         </div>
         
@@ -1778,7 +1826,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -2103,7 +2151,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -2428,7 +2476,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -2753,7 +2801,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -3074,11 +3122,11 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Progresso Geral</div>
-            <div class="summary-value">64,2%</div>
+            <div class="summary-value">64,5%</div>
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -3123,10 +3171,10 @@ body {
             <div class="evo-label">Meta de Avaliação</div>
             <div class="evo-bar-wrap">
                 <div class="evo-bar">
-                    <div class="evo-fill warn" style="width:96.923%"></div>
+                    <div class="evo-fill warn" style="width:98.462%"></div>
                 </div>
             </div>
-            <div class="evo-value warn">96,923%</div>
+            <div class="evo-value warn">98,462%</div>
         </div>
         
         <div class="evo-row">
@@ -3236,11 +3284,11 @@ body {
         <div class="city-card">
             <div class="city-card-header">
                 <div class="city-card-title">Meta de Avaliação</div>
-                <div class="city-card-progress warn">96,923%</div>
+                <div class="city-card-progress warn">98,462%</div>
             </div>
 
             <div class="city-bar">
-                <div class="city-fill warn" style="width:96.923%"></div>
+                <div class="city-fill warn" style="width:98.462%"></div>
             </div>
 
             <div class="city-metrics">
@@ -3250,11 +3298,11 @@ body {
                 </div>
                 <div class="metric-box">
                     <span>Até o momento</span>
-                    <strong>63</strong>
+                    <strong>64</strong>
                 </div>
                 <div class="metric-box">
                     <span>Falta</span>
-                    <strong>-2</strong>
+                    <strong>-1</strong>
                 </div>
             </div>
         </div>
@@ -3358,9 +3406,9 @@ body {
         <tr>
             <td class="td-title">Meta de Avaliação</td>
             <td>65</td>
-            <td>63</td>
-            <td>-2</td>
-            <td class="warn">96,923%</td>
+            <td>64</td>
+            <td>-1</td>
+            <td class="warn">98,462%</td>
         </tr>
         
         <tr>
@@ -3403,7 +3451,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -3728,7 +3776,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -4053,7 +4101,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -4378,7 +4426,7 @@ body {
         </div>
         <div class="summary-card">
             <div class="summary-label">Atualizado</div>
-            <div class="summary-value">31/03/2026 10:29</div>
+            <div class="summary-value">31/03/2026 10:41</div>
         </div>
     </section>
     
@@ -4707,6 +4755,14 @@ buttons.forEach(btn => {
         }
     });
 });
+
+// visualmente mantém o filtro de mês estável por enquanto
+const monthFilter = document.getElementById('monthFilter');
+if (monthFilter) {
+    monthFilter.addEventListener('change', (e) => {
+        e.preventDefault();
+    });
+}
 </script>
 <script type="module" src="auth.js"></script>
 </body>
