@@ -63,6 +63,14 @@ def mes_label(valor):
         return valor
 
 
+def montar_opcoes_mes(meses, mes_selecionado):
+    options = []
+    for mes in meses:
+        selected = " selected" if mes == mes_selecionado else ""
+        options.append(f'<option value="{mes}"{selected}>{mes_label(mes)}</option>')
+    return "".join(options)
+
+
 def carregar_historico():
     historico = {}
 
@@ -84,6 +92,7 @@ def carregar_historico():
 
             if mes_ref:
                 historico[mes_ref] = dados
+
         except Exception as e:
             print(f"Erro ao carregar histórico {path}: {e}")
 
@@ -105,14 +114,6 @@ def carregar_historico():
     return historico
 
 
-def montar_opcoes_mes(meses, mes_selecionado):
-    options = []
-    for mes in meses:
-        selected = " selected" if mes == mes_selecionado else ""
-        options.append(f'<option value="{mes}"{selected}>{mes_label(mes)}</option>')
-    return "".join(options)
-
-
 def gerar_dashboard():
     historico = carregar_historico()
     agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
@@ -130,14 +131,14 @@ def gerar_dashboard():
     for cidade in cidades_ordenadas:
         tabs.append(f'<button class="tab-btn" data-tab="{slug(cidade)}">📍 {cidade}</button>')
 
-    html = f"""<!DOCTYPE html>
+    html = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard de Metas</title>
 <style>
-:root {{
+:root {
     --bg: #06111c;
     --bg2: #081827;
     --panel: rgba(10, 24, 40, 0.96);
@@ -151,15 +152,15 @@ def gerar_dashboard():
     --yellow: #f5b301;
     --red: #ff4d7a;
     --shadow: 0 0 0 1px rgba(0,232,255,.05), 0 14px 28px rgba(0,0,0,.28);
-}}
+}
 
-* {{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}}
+}
 
-body {{
+body {
     font-family: Inter, Arial, sans-serif;
     background:
         radial-gradient(circle at top left, rgba(0,232,255,.08), transparent 30%),
@@ -167,62 +168,62 @@ body {{
         linear-gradient(180deg, #030912, #06111c 45%, #030912 100%);
     color: var(--text);
     min-height: 100vh;
-}}
+}
 
-.wrap {{
+.wrap {
     max-width: 1550px;
     margin: 0 auto;
     padding: 24px;
-}}
+}
 
-.header {{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 18px;
     margin-bottom: 18px;
-}}
+}
 
-.header-left h1 {{
+.header-left h1 {
     font-size: 2.8rem;
     font-weight: 900;
     letter-spacing: -0.03em;
-}}
+}
 
-.header-left p {{
+.header-left p {
     margin-top: 8px;
     color: var(--muted);
     font-size: 1rem;
-}}
+}
 
-.header-right {{
+.header-right {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
-}}
+}
 
-.pill {{
+.pill {
     padding: 14px 16px;
     border-radius: 14px;
     background: rgba(8, 20, 33, 0.92);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
     font-weight: 700;
-}}
+}
 
-.pill.btn {{
+.pill.btn {
     color: #04111d;
     text-decoration: none;
     background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
-}}
+}
 
-.month-filter-wrap {{
+.month-filter-wrap {
     position: relative;
-}}
+}
 
-.month-filter {{
+.month-filter {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -236,15 +237,15 @@ body {{
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-}}
+}
 
-.month-filter:focus {{
+.month-filter:focus {
     outline: none;
     border-color: rgba(0,232,255,.35);
     box-shadow: 0 0 0 3px rgba(0,232,255,.08);
-}}
+}
 
-.month-filter-wrap::after {{
+.month-filter-wrap::after {
     content: "▾";
     position: absolute;
     right: 14px;
@@ -253,9 +254,9 @@ body {{
     color: var(--muted);
     pointer-events: none;
     font-size: 1rem;
-}}
+}
 
-.tabs {{
+.tabs {
     display: flex;
     gap: 10px;
     overflow-x: auto;
@@ -263,9 +264,9 @@ body {{
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     margin-bottom: 22px;
-}}
+}
 
-.tab-btn {{
+.tab-btn {
     background: rgba(10, 24, 40, 0.7);
     color: var(--muted);
     border: 1px solid transparent;
@@ -275,77 +276,77 @@ body {{
     white-space: nowrap;
     font-weight: 700;
     transition: .2s ease;
-}}
+}
 
-.tab-btn:hover {{
+.tab-btn:hover {
     color: var(--text);
-}}
+}
 
-.tab-btn.active {{
+.tab-btn.active {
     color: var(--cyan);
     border-color: rgba(0,232,255,.26);
     background: rgba(0,232,255,.08);
-}}
+}
 
-.tab-content {{
+.tab-content {
     display: none;
-}}
+}
 
-.tab-content.active {{
+.tab-content.active {
     display: block;
-}}
+}
 
-.top-grid {{
+.top-grid {
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 16px;
     margin-bottom: 22px;
-}}
+}
 
 .info-card,
 .beats-card,
 .rank-card,
 .summary-card,
 .city-card,
-.panel {{
+.panel {
     background: linear-gradient(180deg, var(--panel-2), var(--panel));
     border: 1px solid var(--border);
     border-radius: 18px;
     box-shadow: var(--shadow);
-}}
+}
 
 .info-card,
-.beats-card {{
+.beats-card {
     padding: 18px;
-}}
+}
 
 .info-title,
 .beats-title,
-.panel-title {{
+.panel-title {
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: .08em;
     font-size: .82rem;
     margin-bottom: 12px;
-}}
+}
 
-.info-number {{
+.info-number {
     font-size: 3rem;
     color: var(--cyan);
     font-weight: 900;
-}}
+}
 
-.info-text {{
+.info-text {
     margin-top: 8px;
     color: var(--muted);
-}}
+}
 
-.beats-list {{
+.beats-list {
     display: grid;
     gap: 10px;
-}}
+}
 
-.beat-item {{
+.beat-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -354,81 +355,81 @@ body {{
     border-radius: 12px;
     background: rgba(255,255,255,.025);
     border: 1px solid rgba(255,255,255,.04);
-}}
+}
 
-.beat-left {{
+.beat-left {
     display: flex;
     flex-direction: column;
     gap: 4px;
-}}
+}
 
-.beat-city {{
+.beat-city {
     font-weight: 800;
-}}
+}
 
-.beat-meta {{
+.beat-meta {
     color: var(--muted);
     font-size: .88rem;
-}}
+}
 
-.beat-item strong {{
+.beat-item strong {
     color: var(--green);
-}}
+}
 
-.empty-message {{
+.empty-message {
     color: var(--muted);
-}}
+}
 
-.rankings-grid {{
+.rankings-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-}}
+}
 
-.rank-card {{
+.rank-card {
     overflow: hidden;
-}}
+}
 
-.rank-card-header {{
+.rank-card-header {
     padding: 16px 18px;
     border-bottom: 1px solid var(--line);
-}}
+}
 
-.rank-card-title {{
+.rank-card-title {
     font-size: 1.05rem;
     font-weight: 900;
-}}
+}
 
-.rank-card-body {{
+.rank-card-body {
     padding: 8px 18px 16px;
-}}
+}
 
-.rank-row {{
+.rank-row {
     display: grid;
     grid-template-columns: 290px 1fr 90px;
     gap: 14px;
     align-items: center;
     padding: 14px 0;
     border-top: 1px solid rgba(255,255,255,.05);
-}}
+}
 
-.rank-row:first-child {{
+.rank-row:first-child {
     border-top: none;
-}}
+}
 
-.rank-left {{
+.rank-left {
     display: flex;
     align-items: center;
     gap: 12px;
-}}
+}
 
-.rank-texts {{
+.rank-texts {
     display: flex;
     flex-direction: column;
     gap: 4px;
-}}
+}
 
-.rank-pos {{
+.rank-pos {
     min-width: 50px;
     height: 34px;
     padding: 0 10px;
@@ -438,275 +439,275 @@ body {{
     justify-content: center;
     font-weight: 900;
     background: rgba(255,255,255,.08);
-}}
+}
 
-.pos-1 {{ background: rgba(245,179,1,.22); color: #ffd45c; }}
-.pos-2 {{ background: rgba(180,196,210,.22); color: #dbe6ef; }}
-.pos-3 {{ background: rgba(165,102,38,.22); color: #ffb56d; }}
-.pos-other {{ color: #fff; }}
+.pos-1 { background: rgba(245,179,1,.22); color: #ffd45c; }
+.pos-2 { background: rgba(180,196,210,.22); color: #dbe6ef; }
+.pos-3 { background: rgba(165,102,38,.22); color: #ffb56d; }
+.pos-other { color: #fff; }
 
-.rank-city {{
+.rank-city {
     font-weight: 800;
     font-size: 1rem;
-}}
+}
 
-.rank-sub {{
+.rank-sub {
     color: var(--muted);
     font-size: .88rem;
-}}
+}
 
-.rank-bar {{
+.rank-bar {
     height: 10px;
     border-radius: 999px;
     background: rgba(255,255,255,.05);
     overflow: hidden;
-}}
+}
 
-.rank-fill {{
+.rank-fill {
     height: 100%;
     border-radius: 999px;
-}}
+}
 
-.rank-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
-.rank-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
-.rank-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
-.rank-fill.empty {{ background: #25374a; }}
+.rank-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.rank-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.rank-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.rank-fill.empty { background: #25374a; }
 
-.rank-right {{
+.rank-right {
     text-align: right;
     font-weight: 900;
-}}
+}
 
-.summary-grid {{
+.summary-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-bottom: 18px;
-}}
+}
 
-.summary-card {{
+.summary-card {
     padding: 18px;
-}}
+}
 
-.summary-label {{
+.summary-label {
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: .08em;
     font-size: .8rem;
     margin-bottom: 12px;
-}}
+}
 
-.summary-value {{
+.summary-value {
     color: var(--cyan);
     font-size: 1.8rem;
     font-weight: 900;
-}}
+}
 
-.panel {{
+.panel {
     padding: 18px;
     margin-bottom: 18px;
-}}
+}
 
-.panel-header {{
+.panel-header {
     margin-bottom: 14px;
-}}
+}
 
-.evolution-chart {{
+.evolution-chart {
     display: grid;
     gap: 12px;
-}}
+}
 
-.evo-row {{
+.evo-row {
     display: grid;
     grid-template-columns: 220px 1fr 90px;
     gap: 14px;
     align-items: center;
-}}
+}
 
-.evo-label {{
+.evo-label {
     font-weight: 700;
-}}
+}
 
-.evo-bar {{
+.evo-bar {
     height: 12px;
     border-radius: 999px;
     background: rgba(255,255,255,.05);
     overflow: hidden;
-}}
+}
 
-.evo-fill {{
+.evo-fill {
     height: 100%;
     border-radius: 999px;
-}}
+}
 
-.evo-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
-.evo-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
-.evo-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
-.evo-fill.empty {{ background: #25374a; }}
+.evo-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.evo-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.evo-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.evo-fill.empty { background: #25374a; }
 
-.evo-value {{
+.evo-value {
     text-align: right;
     font-weight: 900;
-}}
+}
 
-.city-grid {{
+.city-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 18px;
-}}
+}
 
-.city-card {{
+.city-card {
     padding: 18px;
-}}
+}
 
-.city-card-header {{
+.city-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
-}}
+}
 
-.city-card-title {{
+.city-card-title {
     font-size: 1.02rem;
     font-weight: 900;
-}}
+}
 
-.city-card-progress {{
+.city-card-progress {
     font-weight: 900;
-}}
+}
 
-.city-bar {{
+.city-bar {
     height: 12px;
     border-radius: 999px;
     background: rgba(255,255,255,.05);
     overflow: hidden;
     margin-bottom: 14px;
-}}
+}
 
-.city-fill {{
+.city-fill {
     height: 100%;
     border-radius: 999px;
-}}
+}
 
-.city-fill.ok {{ background: linear-gradient(90deg, #12d99f, #08f0c2); }}
-.city-fill.warn {{ background: linear-gradient(90deg, #f0a500, #f7c52b); }}
-.city-fill.bad {{ background: linear-gradient(90deg, #ff4d7a, #ff6a91); }}
-.city-fill.empty {{ background: #25374a; }}
+.city-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
+.city-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
+.city-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
+.city-fill.empty { background: #25374a; }
 
-.city-metrics {{
+.city-metrics {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-}}
+}
 
-.metric-box {{
+.metric-box {
     background: rgba(255,255,255,.02);
     border: 1px solid rgba(255,255,255,.04);
     border-radius: 12px;
     padding: 12px;
-}}
+}
 
-.metric-box span {{
+.metric-box span {
     display: block;
     color: var(--muted);
     font-size: .82rem;
     margin-bottom: 6px;
-}}
+}
 
-.metric-box strong {{
+.metric-box strong {
     font-size: 1rem;
-}}
+}
 
-.table-wrap {{
+.table-wrap {
     overflow-x: auto;
-}}
+}
 
-.dash-table {{
+.dash-table {
     width: 100%;
     border-collapse: collapse;
-}}
+}
 
 .dash-table th,
-.dash-table td {{
+.dash-table td {
     text-align: left;
     padding: 14px 12px;
     border-top: 1px solid rgba(255,255,255,.05);
-}}
+}
 
-.dash-table th {{
+.dash-table th {
     color: var(--muted);
     text-transform: uppercase;
     font-size: .82rem;
     letter-spacing: .05em;
-}}
+}
 
-.td-title {{
+.td-title {
     font-weight: 800;
-}}
+}
 
-.ok {{
+.ok {
     color: var(--green);
-}}
+}
 
-.warn {{
+.warn {
     color: var(--yellow);
-}}
+}
 
-.bad {{
+.bad {
     color: var(--red);
-}}
+}
 
-.empty {{
+.empty {
     color: var(--muted);
-}}
+}
 
-@keyframes pulse {{
-    0%,100% {{ opacity: 1; transform: scale(1); }}
-    50% {{ opacity: .45; transform: scale(1.03); }}
-}}
+@keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .45; transform: scale(1.03); }
+}
 
-.blink {{
+.blink {
     animation: pulse 1.2s infinite;
-}}
+}
 
-@media (max-width: 1280px) {{
+@media (max-width: 1280px) {
     .top-grid,
     .rankings-grid,
     .summary-grid,
-    .city-grid {{
+    .city-grid {
         grid-template-columns: 1fr;
-    }}
-}}
+    }
+}
 
-@media (max-width: 960px) {{
-    .header {{
+@media (max-width: 960px) {
+    .header {
         flex-direction: column;
-    }}
+    }
 
-    .header-left h1 {{
+    .header-left h1 {
         font-size: 2.1rem;
-    }}
+    }
 
     .rank-row,
-    .evo-row {{
+    .evo-row {
         grid-template-columns: 1fr;
-    }}
+    }
 
     .rank-right,
-    .evo-value {{
+    .evo-value {
         text-align: left;
-    }}
+    }
 
-    .city-metrics {{
+    .city-metrics {
         grid-template-columns: 1fr;
-    }}
+    }
 
-    .month-filter {{
+    .month-filter {
         min-width: 100%;
-    }}
-}}
+    }
+}
 </style>
 </head>
 <body>
@@ -715,23 +716,23 @@ body {{
     <header class="header">
         <div class="header-left">
             <h1>Dashboard de Metas</h1>
-            <p>Top Estética Bucal — {len(cidades_ordenadas)} Unidades</p>
+            <p>Top Estética Bucal — __TOTAL_UNIDADES__ Unidades</p>
         </div>
 
         <div class="header-right">
             <div class="month-filter-wrap">
                 <select class="month-filter" id="monthFilter">
-                    {montar_opcoes_mes(meses_disponiveis, mes_atual)}
+                    __MONTH_OPTIONS__
                 </select>
             </div>
-            <div class="pill" id="atualizadoPill">{agora}</div>
+            <div class="pill" id="atualizadoPill">__AGORA_TEXTO__</div>
             <div class="pill">● Online</div>
             <a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
         </div>
     </header>
 
     <nav class="tabs">
-        {''.join(tabs)}
+        __TABS__
     </nav>
 
     <div id="dashboardContent"></div>
@@ -739,119 +740,120 @@ body {{
 </div>
 
 <script>
-const HISTORICO = {json.dumps(historico, ensure_ascii=False)};
-const MAPA_INDICADORES = {json.dumps(MAPA_INDICADORES, ensure_ascii=False)};
-const INDICADORES = {json.dumps(INDICADORES, ensure_ascii=False)};
-const AGORA = {json.dumps(agora, ensure_ascii=False)};
+const HISTORICO = __HISTORICO__;
+const MAPA_INDICADORES = __MAPA__;
+const INDICADORES = __INDICADORES__;
+const AGORA = __AGORA__;
+const MES_ATUAL = __MES_ATUAL__;
 
-function textoSeguro(valor, padrao = "—") {{
+function textoSeguro(valor, padrao = "—") {
   if (valor === null || valor === undefined) return padrao;
   const texto = String(valor).trim();
   return texto ? texto : padrao;
-}}
+}
 
-function percentual(valor) {{
+function percentual(valor) {
   if (!valor) return null;
   const texto = String(valor).replace("%", "").replace(",", ".").trim();
   const num = parseFloat(texto);
   return Number.isNaN(num) ? null : num;
-}}
+}
 
-function classePercentual(p) {{
+function classePercentual(p) {
   if (p === null || p === undefined) return "empty";
   if (p >= 100) return "ok";
   if (p >= 50) return "warn";
   return "bad";
-}}
+}
 
-function larguraBarra(p) {{
+function larguraBarra(p) {
   if (p === null || p === undefined) return 0;
   return Math.max(0, Math.min(p, 100));
-}}
+}
 
-function mesLabel(valor) {{
+function mesLabel(valor) {
   if (!valor) return "—";
-  const mapa = {{
+  const mapa = {
     "01": "Janeiro", "02": "Fevereiro", "03": "Março", "04": "Abril",
     "05": "Maio", "06": "Junho", "07": "Julho", "08": "Agosto",
-    "09": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro",
-  }};
-  try {{
+    "09": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro"
+  };
+  try {
     const partes = valor.split("-");
     const ano = partes[0];
     const mes = partes[1];
     return (mapa[mes] || mes) + "/" + ano;
-  }} catch (e) {{
+  } catch (e) {
     return valor;
-  }}
-}}
+  }
+}
 
-function progressoGeral(infoCidade) {{
-  const indicadores = (infoCidade && infoCidade.indicadores) || {{}};
+function progressoGeral(infoCidade) {
+  const indicadores = (infoCidade && infoCidade.indicadores) || {};
   const valores = [];
-  for (const chave of INDICADORES) {{
+  for (const chave of INDICADORES) {
     const p = percentual(indicadores[chave] && indicadores[chave].progresso);
     if (p !== null) valores.push(p);
-  }}
+  }
   if (!valores.length) return null;
   return valores.reduce((a, b) => a + b, 0) / valores.length;
-}}
+}
 
-function metasBatidas(base) {{
+function metasBatidas(base) {
   const resultado = [];
-  for (const cidade of Object.keys(base)) {{
-    const infoCidade = base[cidade] || {{}};
-    const indicadores = infoCidade.indicadores || {{}};
-    for (const chave of Object.keys(indicadores)) {{
-      const ind = indicadores[chave] || {{}};
+  for (const cidade of Object.keys(base)) {
+    const infoCidade = base[cidade] || {};
+    const indicadores = infoCidade.indicadores || {};
+    for (const chave of Object.keys(indicadores)) {
+      const ind = indicadores[chave] || {};
       const p = percentual(ind.progresso);
-      if (p !== null && p >= 100) {{
-        resultado.push({{
+      if (p !== null && p >= 100) {
+        resultado.push({
           cidade: cidade,
           indicador: MAPA_INDICADORES[chave] || chave,
           progresso: textoSeguro(ind.progresso),
           percentual_num: p
-        }});
-      }}
-    }}
-  }}
+        });
+      }
+    }
+  }
 
-  resultado.sort(function(a, b) {{
+  resultado.sort(function(a, b) {
     if (b.percentual_num !== a.percentual_num) return b.percentual_num - a.percentual_num;
     if (a.cidade !== b.cidade) return a.cidade.localeCompare(b.cidade);
     return a.indicador.localeCompare(b.indicador);
-  }});
+  });
 
   return resultado;
-}}
+}
 
-function gerarRanking(base, indicador) {{
+function gerarRanking(base, indicador) {
   const ranking = [];
 
-  for (const cidade of Object.keys(base)) {{
-    const infoCidade = base[cidade] || {{}};
-    const ind = (infoCidade.indicadores && infoCidade.indicadores[indicador]) || {{}};
+  for (const cidade of Object.keys(base)) {
+    const infoCidade = base[cidade] || {};
+    const ind = (infoCidade.indicadores && infoCidade.indicadores[indicador]) || {};
     const p = percentual(ind.progresso);
     ranking.push([cidade, p, ind]);
-  }}
+  }
 
-  ranking.sort(function(a, b) {{
+  ranking.sort(function(a, b) {
     const aNull = a[1] === null;
     const bNull = b[1] === null;
     if (aNull !== bNull) return aNull ? 1 : -1;
     if ((b[1] || 0) !== (a[1] || 0)) return (b[1] || 0) - (a[1] || 0);
     return a[0].localeCompare(b[0]);
-  }});
+  });
 
   return ranking;
-}}
+}
 
-function renderRankingCard(titulo, ranking) {{
-  const linhas = ranking.map(function(item, idx) {{
+function renderRankingCard(titulo, ranking) {
+  const linhas = ranking.map(function(item, idx) {
     const pos = idx + 1;
     const cidade = item[0];
     const p = item[1];
-    const dados = item[2] || {{}};
+    const dados = item[2] || {};
     const status = classePercentual(p);
     const largura = larguraBarra(p);
 
@@ -881,7 +883,7 @@ function renderRankingCard(titulo, ranking) {{
         </div>
       </div>
     `;
-  }}).join("");
+  }).join("");
 
   return `
     <section class="rank-card">
@@ -893,9 +895,9 @@ function renderRankingCard(titulo, ranking) {{
       </div>
     </section>
   `;
-}}
+}
 
-function renderCitySummary(cidade, infoCidade) {{
+function renderCitySummary(cidade, infoCidade) {
   const pg = progressoGeral(infoCidade);
   const pgTxt = pg !== null ? String(pg.toFixed(1)).replace(".", ",") + "%" : "—";
 
@@ -907,7 +909,7 @@ function renderCitySummary(cidade, infoCidade) {{
       </div>
       <div class="summary-card">
         <div class="summary-label">Mês de Referência</div>
-        <div class="summary-value">${mesLabel(infoCidade && infoCidade.mes_referencia || "")}</div>
+        <div class="summary-value">${mesLabel((infoCidade && infoCidade.mes_referencia) || "")}</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">Progresso Geral</div>
@@ -919,11 +921,11 @@ function renderCitySummary(cidade, infoCidade) {{
       </div>
     </section>
   `;
-}}
+}
 
-function renderCityChart(indicadores) {{
-  const linhas = INDICADORES.map(function(chave) {{
-    const ind = indicadores && indicadores[chave] || {{}};
+function renderCityChart(indicadores) {
+  const linhas = INDICADORES.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
     const largura = larguraBarra(p);
@@ -939,7 +941,7 @@ function renderCityChart(indicadores) {{
         <div class="evo-value ${status}">${textoSeguro(ind.progresso)}</div>
       </div>
     `;
-  }}).join("");
+  }).join("");
 
   return `
     <section class="panel">
@@ -951,11 +953,11 @@ function renderCityChart(indicadores) {{
       </div>
     </section>
   `;
-}}
+}
 
-function renderCityCards(indicadores) {{
-  return INDICADORES.map(function(chave) {{
-    const ind = indicadores && indicadores[chave] || {{}};
+function renderCityCards(indicadores) {
+  return INDICADORES.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
     const largura = larguraBarra(p);
@@ -987,12 +989,12 @@ function renderCityCards(indicadores) {{
         </div>
       </div>
     `;
-  }}).join("");
-}}
+  }).join("");
+}
 
-function renderCityTable(indicadores) {{
-  const linhas = INDICADORES.map(function(chave) {{
-    const ind = indicadores && indicadores[chave] || {{}};
+function renderCityTable(indicadores) {
+  const linhas = INDICADORES.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
 
@@ -1005,7 +1007,7 @@ function renderCityTable(indicadores) {{
         <td class="${status}">${textoSeguro(ind.progresso)}</td>
       </tr>
     `;
-  }}).join("");
+  }).join("");
 
   return `
     <section class="panel">
@@ -1030,44 +1032,44 @@ function renderCityTable(indicadores) {{
       </div>
     </section>
   `;
-}}
+}
 
-function slugify(texto) {{
+function slugify(texto) {
   return texto
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\\u0300-\\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}}
+}
 
-function bindTabs() {{
-  const buttons = document.querySelectorAll('.tab-btn');
-  const contents = document.querySelectorAll('.tab-content');
+function bindTabs() {
+  const buttons = document.querySelectorAll(".tab-btn");
+  const contents = document.querySelectorAll(".tab-content");
 
-  buttons.forEach(function(btn) {{
-    btn.addEventListener('click', function() {{
-      buttons.forEach(function(b) {{ b.classList.remove('active'); }});
-      contents.forEach(function(c) {{ c.classList.remove('active'); }});
+  buttons.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      buttons.forEach(function(b) { b.classList.remove("active"); });
+      contents.forEach(function(c) { c.classList.remove("active"); });
 
-      btn.classList.add('active');
+      btn.classList.add("active");
 
       const target = document.getElementById(btn.dataset.tab);
-      if (target) {{
-        target.classList.add('active');
-        window.scrollTo({{ top: 0, behavior: 'smooth' }});
-      }}
-    }});
-  }});
-}}
+      if (target) {
+        target.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  });
+}
 
-function renderDashboard(mesSelecionado) {{
-  const base = HISTORICO[mesSelecionado] || {{}};
-  const cidades = Object.keys(base).sort(function(a, b) {{ return a.localeCompare(b); }});
+function renderDashboard(mesSelecionado) {
+  const base = HISTORICO[mesSelecionado] || {};
+  const cidades = Object.keys(base).sort(function(a, b) { return a.localeCompare(b); });
 
   const batidas = metasBatidas(base);
   const blocoBatidas = batidas.length
-    ? batidas.map(function(item) {{
+    ? batidas.map(function(item) {
         return `
           <div class="beat-item">
             <div class="beat-left">
@@ -1077,16 +1079,16 @@ function renderDashboard(mesSelecionado) {{
             <strong class="blink">${item.progresso}</strong>
           </div>
         `;
-      }}).join("")
+      }).join("")
     : '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>';
 
-  const rankingCards = INDICADORES.map(function(chave) {{
+  const rankingCards = INDICADORES.map(function(chave) {
     return renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave));
-  }}).join("");
+  }).join("");
 
-  const cidadesHtml = cidades.map(function(cidade) {{
-    const infoCidade = base[cidade] || {{}};
-    const indicadores = infoCidade.indicadores || {{}};
+  const cidadesHtml = cidades.map(function(cidade) {
+    const infoCidade = base[cidade] || {};
+    const indicadores = infoCidade.indicadores || {};
 
     return `
       <div id="${slugify(cidade)}" class="tab-content">
@@ -1098,7 +1100,7 @@ function renderDashboard(mesSelecionado) {{
         ${renderCityTable(indicadores)}
       </div>
     `;
-  }}).join("");
+  }).join("");
 
   const htmlContent = `
     <div id="ranking-geral" class="tab-content active">
@@ -1128,21 +1130,31 @@ function renderDashboard(mesSelecionado) {{
   document.getElementById("dashboardContent").innerHTML = htmlContent;
   document.getElementById("monthFilter").value = mesSelecionado;
   bindTabs();
-}}
+}
 
-const monthFilter = document.getElementById('monthFilter');
-if (monthFilter) {{
-  monthFilter.addEventListener('change', function(e) {{
+const monthFilter = document.getElementById("monthFilter");
+if (monthFilter) {
+  monthFilter.addEventListener("change", function(e) {
     renderDashboard(e.target.value);
-  }});
-}}
+  });
+}
 
-renderDashboard({json.dumps(mes_atual, ensure_ascii=False)});
+renderDashboard(MES_ATUAL);
 </script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>
 """
+
+    html = html.replace("__TOTAL_UNIDADES__", str(len(cidades_ordenadas)))
+    html = html.replace("__MONTH_OPTIONS__", montar_opcoes_mes(meses_disponiveis, mes_atual))
+    html = html.replace("__TABS__", "".join(tabs))
+    html = html.replace("__HISTORICO__", json.dumps(historico, ensure_ascii=False))
+    html = html.replace("__MAPA__", json.dumps(MAPA_INDICADORES, ensure_ascii=False))
+    html = html.replace("__INDICADORES__", json.dumps(INDICADORES, ensure_ascii=False))
+    html = html.replace("__AGORA__", json.dumps(agora, ensure_ascii=False))
+    html = html.replace("__AGORA_TEXTO__", agora)
+    html = html.replace("__MES_ATUAL__", json.dumps(mes_atual, ensure_ascii=False))
 
     os.makedirs("docs", exist_ok=True)
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
