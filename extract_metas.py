@@ -16,6 +16,7 @@ MES_REFERENCIA = os.getenv("MES_REFERENCIA", "AUTO")
 
 OUTPUT_JSON = "data/metas_atual.json"
 OUTPUT_XLSX = "data/metas_top_estetica.xlsx"
+HISTORICO_DIR = "data/historico"
 
 TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
@@ -137,12 +138,6 @@ def inferir_chave_indicador(nome_linha: str):
 
 
 def obter_mes_tela():
-    """
-    Retorna o mês no formato exibido no select do sistema.
-    Exemplos:
-    - Março / 2026
-    - Abril / 2026
-    """
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
 
@@ -168,9 +163,6 @@ def obter_mes_tela():
 
 
 def obter_mes_referencia_json():
-    """
-    Retorna o mês em YYYY-MM para salvar no JSON.
-    """
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
 
@@ -223,7 +215,6 @@ def obter_mes_referencia(page):
             if (!select) return null;
             const selected = select.options[select.selectedIndex];
             if (!selected) return null;
-
             return {
                 value: selected.value || null,
                 text: selected.text || null
@@ -263,14 +254,10 @@ def abrir_metas(page, base_url):
 
 
 def selecionar_mes_e_buscar(page):
-    """
-    Seleciona o Mês/Ano no select #mes_ano e clica em Buscar.
-    """
     mes_tela = obter_mes_tela()
     print(f"📅 Selecionando mês/ano: {mes_tela}")
 
     select_mes = page.locator("#mes_ano")
-
     if select_mes.count() == 0:
         raise RuntimeError("Não encontrei o select #mes_ano na tela de metas.")
 
@@ -312,74 +299,45 @@ def selecionar_mes_e_buscar(page):
     print(f"✅ Mês selecionado após busca: {mes_confirmado}")
 
 
-def extrair_blocos_metas(page):
+def extrair_tabelas(page):
     return page.evaluate("""() => {
-        const textoLimpo = (el) => (el?.innerText || "").replace(/\\s+/g, " ").trim();
-
-        const tabelas = Array.from(document.querySelectorAll("table"));
-        const blocos = [];
-
-        for (const table of tabelas) {
-            const textoTabela = textoLimpo(table).toLowerCase();
-
-            const ehTabelaMeta =
-                textoTabela.includes("ortodontia") ||
-                textoTabela.includes("clínico geral") ||
-                textoTabela.includes("clinico geral") ||
-                textoTabela.includes("meta de avaliação") ||
-                textoTabela.includes("meta de avaliacao") ||
-                textoTabela.includes("meta de profilaxia") ||
-                textoTabela.includes("meta de restauração") ||
-                textoTabela.includes("meta de restauracao");
-
-            if (!ehTabelaMeta) continue;
-
-            const linhas = Array.from(table.querySelectorAll("tr")).map(tr => {
-                return Array.from(tr.querySelectorAll("td, th")).map(td => textoLimpo(td));
+        const tables = Array.from(document.querySelectorAll('table'));
+        return tables.map(table => {
+            return Array.from(table.querySelectorAll('tr')).map(tr => {
+                return Array.from(tr.querySelectorAll('td, th')).map(td => td.innerText.trim());
             });
-
-            blocos.push(linhas);
-        }
-
-        return blocos;
+        });
     }""")
 
 
 def processar_tabela_em_indicadores(tabela):
     indicadores = {}
-    chave_atual = None
 
-    for linha in tabela:
-        if not linha:
+    for i in range(0, len(tabela), 3):
+        if i + 2 >= len(tabela):
             continue
 
-        primeira = normalizar_texto(linha[0])
-        chave_detectada = inferir_chave_indicador(primeira)
+        cab = tabela[i]
+        dados = tabela[i + 2]
 
-        if chave_detectada:
-            chave_atual = chave_detectada
+        if not cab or not dados:
             continue
 
-        if chave_atual and len(linha) >= 4:
-            if len(linha) >= 5:
-                indicadores[chave_atual] = {
-                    "meta": linha[1].strip(),
-                    "ate_o_momento": linha[2].strip(),
-                    "falta": linha[3].strip(),
-                    "progresso": linha[4].strip(),
-                }
-                chave_atual = None
-                continue
+        nome = cab[0].strip() if cab else ""
+        chave = inferir_chave_indicador(nome)
 
-            if len(linha) == 4:
-                indicadores[chave_atual] = {
-                    "meta": linha[0].strip(),
-                    "ate_o_momento": linha[1].strip(),
-                    "falta": linha[2].strip(),
-                    "progresso": linha[3].strip(),
-                }
-                chave_atual = None
-                continue
+        if not chave:
+            continue
+
+        if len(dados) < 5:
+            continue
+
+        indicadores[chave] = {
+            "meta": dados[1].strip() if len(dados) > 1 else "-",
+            "ate_o_momento": dados[2].strip() if len(dados) > 2 else "-",
+            "falta": dados[3].strip() if len(dados) > 3 else "-",
+            "progresso": dados[4].strip() if len(dados) > 4 else "-",
+        }
 
     return indicadores
 
@@ -395,18 +353,16 @@ def extrair_cidade(page, cidade_info):
         abrir_metas(page, base_url)
         selecionar_mes_e_buscar(page)
 
-        page.wait_for_timeout(2000)
-        blocos = extrair_blocos_metas(page)
+        tabelas = extrair_tabelas(page)
         mes_referencia = obter_mes_referencia(page)
 
         indicadores = garantir_indicadores_vazios()
 
-        print(f"🔎 {nome}: blocos encontrados = {len(blocos)}")
+        if len(tabelas) > 0:
+            indicadores.update(processar_tabela_em_indicadores(tabelas[0]))
 
-        for bloco in blocos:
-            indicadores.update(processar_tabela_em_indicadores(bloco))
-
-        print(f"📊 {nome}: indicadores capturados = {json.dumps(indicadores, ensure_ascii=False)}")
+        if len(tabelas) > 1:
+            indicadores.update(processar_tabela_em_indicadores(tabelas[1]))
 
         return {
             "mes_referencia": mes_referencia,
@@ -421,7 +377,6 @@ def extrair_cidade(page, cidade_info):
             "indicadores": garantir_indicadores_vazios(),
             "_status": "timeout"
         }
-
     except Exception as e:
         print(f"Erro em {nome}: {e}")
         return {
@@ -437,6 +392,27 @@ def salvar_excel_placeholder():
             f.write(b"")
 
 
+def salvar_historico(resultado):
+    os.makedirs(HISTORICO_DIR, exist_ok=True)
+
+    meses = sorted({
+        dados.get("mes_referencia")
+        for dados in resultado.values()
+        if dados.get("mes_referencia")
+    })
+
+    if not meses:
+        mes_ref = obter_mes_referencia_json()
+    else:
+        mes_ref = meses[0]
+
+    historico_path = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
+    with open(historico_path, "w", encoding="utf-8") as f:
+        json.dump(resultado, f, ensure_ascii=False, indent=2)
+
+    print(f"Histórico mensal salvo em: {historico_path}")
+
+
 def main():
     print("=" * 55)
     print("Iniciando coleta de dados - Top Estética Bucal")
@@ -449,6 +425,7 @@ def main():
         raise ValueError("LOGIN_USER ou LOGIN_PASS não configurados.")
 
     os.makedirs("data", exist_ok=True)
+    os.makedirs(HISTORICO_DIR, exist_ok=True)
 
     resultado = {}
 
@@ -472,9 +449,10 @@ def main():
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
 
+    salvar_historico(resultado)
     salvar_excel_placeholder()
 
-    print(f"Arquivo gerado: {OUTPUT_JSON}")
+    print(f"Arquivo atual gerado: {OUTPUT_JSON}")
     print("Coleta finalizada com sucesso.")
 
 
