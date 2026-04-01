@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import re
@@ -6,6 +7,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 INPUT_JSON = "data/metas_atual.json"
+HISTORICO_GLOB = "data/historico/metas_*.json"
 OUTPUT_HTML = "docs/index.html"
 EXCEL_SOURCE = "data/metas_top_estetica.xlsx"
 EXCEL_PUBLIC = "docs/metas_top_estetica.xlsx"
@@ -28,11 +30,6 @@ INDICADORES = [
     "meta_profilaxia",
     "meta_restauracao",
 ]
-
-
-def carregar_dados():
-    with open(INPUT_JSON, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def slug(texto):
@@ -99,307 +96,72 @@ def mes_label(valor):
         return valor
 
 
-def montar_filtro_mes(mes_ref):
-    return f"""
-    <div class="month-filter-wrap">
-        <select class="month-filter" id="monthFilter" aria-label="Filtro de mês">
-            <option value="{mes_ref}" selected>{mes_ref}</option>
-        </select>
-    </div>
-    """
+def carregar_historico():
+    historico = {}
+
+    for path in sorted(glob.glob(HISTORICO_GLOB)):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                dados = json.load(f)
+
+            mes_ref = None
+            for _, info in dados.items():
+                mes_ref = info.get("mes_referencia")
+                if mes_ref:
+                    break
+
+            if not mes_ref:
+                nome = os.path.basename(path)
+                m = re.search(r"metas_(\d{4}-\d{2})\.json$", nome)
+                mes_ref = m.group(1) if m else None
+
+            if mes_ref:
+                historico[mes_ref] = dados
+        except Exception as e:
+            print(f"Erro ao carregar histórico {path}: {e}")
+
+    if not historico and os.path.exists(INPUT_JSON):
+        with open(INPUT_JSON, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+
+        mes_ref = None
+        for _, info in dados.items():
+            mes_ref = info.get("mes_referencia")
+            if mes_ref:
+                break
+
+        if not mes_ref:
+            mes_ref = datetime.now(TZ).strftime("%Y-%m")
+
+        historico[mes_ref] = dados
+
+    return historico
 
 
-def progresso_geral(info_cidade):
-    indicadores = info_cidade.get("indicadores", {})
-    valores = []
-    for chave in INDICADORES:
-        p = percentual(indicadores.get(chave, {}).get("progresso"))
-        if p is not None:
-            valores.append(p)
-    if not valores:
-        return None
-    return sum(valores) / len(valores)
-
-
-def gerar_ranking(base, indicador):
-    ranking = []
-    for cidade, info_cidade in base.items():
-        ind = info_cidade.get("indicadores", {}).get(indicador, {})
-        p = percentual(ind.get("progresso"))
-        ranking.append((cidade, p, ind))
-    ranking.sort(key=lambda x: (x[1] is None, -(x[1] or 0), x[0]))
-    return ranking
-
-
-def metas_batidas(base):
-    resultado = []
-    for cidade, info_cidade in base.items():
-        for chave, ind in info_cidade.get("indicadores", {}).items():
-            p = percentual(ind.get("progresso"))
-            if p is not None and p >= 100:
-                resultado.append({
-                    "cidade": cidade,
-                    "indicador": MAPA_INDICADORES.get(chave, chave),
-                    "progresso": texto_seguro(ind.get("progresso")),
-                    "percentual_num": p,
-                })
-    resultado.sort(key=lambda x: (-x["percentual_num"], x["cidade"], x["indicador"]))
-    return resultado
-
-
-def render_ranking_card(titulo, ranking):
-    linhas = []
-
-    for pos, item in enumerate(ranking, start=1):
-        cidade, p, dados = item
-        status = classe_percentual(p)
-        largura = largura_barra(p)
-
-        pos_class = "pos-other"
-        if pos == 1:
-            pos_class = "pos-1"
-        elif pos == 2:
-            pos_class = "pos-2"
-        elif pos == 3:
-            pos_class = "pos-3"
-
-        linhas.append(f"""
-        <div class="rank-row">
-            <div class="rank-left">
-                <div class="rank-pos {pos_class}">{pos:02d}º</div>
-                <div class="rank-texts">
-                    <div class="rank-city">{cidade}</div>
-                    <div class="rank-sub">Meta: {texto_seguro(dados.get("meta"))} | Realizado: {texto_seguro(dados.get("ate_o_momento"))}</div>
-                </div>
-            </div>
-
-            <div class="rank-center">
-                <div class="rank-bar">
-                    <div class="rank-fill {status}" style="width:{largura}%"></div>
-                </div>
-            </div>
-
-            <div class="rank-right">
-                <div class="rank-progress {status}">{texto_seguro(dados.get("progresso"))}</div>
-            </div>
-        </div>
-        """)
-
-    return f"""
-    <section class="rank-card">
-        <div class="rank-card-header">
-            <div class="rank-card-title">{titulo}</div>
-        </div>
-        <div class="rank-card-body">
-            {''.join(linhas)}
-        </div>
-    </section>
-    """
-
-
-def render_city_summary(cidade, info_cidade, agora):
-    pg = progresso_geral(info_cidade)
-    pg_txt = f"{pg:.1f}%".replace(".", ",") if pg is not None else "—"
-
-    return f"""
-    <section class="summary-grid">
-        <div class="summary-card">
-            <div class="summary-label">Cidade</div>
-            <div class="summary-value">{cidade}</div>
-        </div>
-        <div class="summary-card">
-            <div class="summary-label">Mês de Referência</div>
-            <div class="summary-value">{mes_label(info_cidade.get("mes_referencia", ""))}</div>
-        </div>
-        <div class="summary-card">
-            <div class="summary-label">Progresso Geral</div>
-            <div class="summary-value">{pg_txt}</div>
-        </div>
-        <div class="summary-card">
-            <div class="summary-label">Atualizado</div>
-            <div class="summary-value">{agora}</div>
-        </div>
-    </section>
-    """
-
-
-def render_city_chart(indicadores):
-    linhas = []
-
-    for chave in INDICADORES:
-        ind = indicadores.get(chave, {})
-        p = percentual(ind.get("progresso"))
-        status = classe_percentual(p)
-        largura = largura_barra(p)
-
-        linhas.append(f"""
-        <div class="evo-row">
-            <div class="evo-label">{MAPA_INDICADORES[chave]}</div>
-            <div class="evo-bar-wrap">
-                <div class="evo-bar">
-                    <div class="evo-fill {status}" style="width:{largura}%"></div>
-                </div>
-            </div>
-            <div class="evo-value {status}">{texto_seguro(ind.get("progresso"))}</div>
-        </div>
-        """)
-
-    return f"""
-    <section class="panel">
-        <div class="panel-header">
-            <div class="panel-title">Evolução das Metas na Cidade</div>
-        </div>
-        <div class="evolution-chart">
-            {''.join(linhas)}
-        </div>
-    </section>
-    """
-
-
-def render_city_cards(indicadores):
-    cards = []
-
-    for chave in INDICADORES:
-        ind = indicadores.get(chave, {})
-        p = percentual(ind.get("progresso"))
-        status = classe_percentual(p)
-        largura = largura_barra(p)
-
-        cards.append(f"""
-        <div class="city-card">
-            <div class="city-card-header">
-                <div class="city-card-title">{MAPA_INDICADORES[chave]}</div>
-                <div class="city-card-progress {status}">{texto_seguro(ind.get("progresso"))}</div>
-            </div>
-
-            <div class="city-bar">
-                <div class="city-fill {status}" style="width:{largura}%"></div>
-            </div>
-
-            <div class="city-metrics">
-                <div class="metric-box">
-                    <span>Meta</span>
-                    <strong>{texto_seguro(ind.get("meta"))}</strong>
-                </div>
-                <div class="metric-box">
-                    <span>Até o momento</span>
-                    <strong>{texto_seguro(ind.get("ate_o_momento"))}</strong>
-                </div>
-                <div class="metric-box">
-                    <span>Falta</span>
-                    <strong>{texto_seguro(ind.get("falta"))}</strong>
-                </div>
-            </div>
-        </div>
-        """)
-
-    return "".join(cards)
-
-
-def render_city_table(indicadores):
-    linhas = []
-
-    for chave in INDICADORES:
-        ind = indicadores.get(chave, {})
-        p = percentual(ind.get("progresso"))
-        status = classe_percentual(p)
-
-        linhas.append(f"""
-        <tr>
-            <td class="td-title">{MAPA_INDICADORES[chave]}</td>
-            <td>{texto_seguro(ind.get("meta"))}</td>
-            <td>{texto_seguro(ind.get("ate_o_momento"))}</td>
-            <td>{texto_seguro(ind.get("falta"))}</td>
-            <td class="{status}">{texto_seguro(ind.get("progresso"))}</td>
-        </tr>
-        """)
-
-    return f"""
-    <section class="panel">
-        <div class="panel-header">
-            <div class="panel-title">Tabela Completa da Cidade</div>
-        </div>
-        <div class="table-wrap">
-            <table class="dash-table">
-                <thead>
-                    <tr>
-                        <th>Indicador</th>
-                        <th>Meta</th>
-                        <th>Até o momento</th>
-                        <th>Falta</th>
-                        <th>Progresso</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(linhas)}
-                </tbody>
-            </table>
-        </div>
-    </section>
-    """
+def montar_opcoes_mes(meses, mes_selecionado):
+    options = []
+    for mes in meses:
+        selected = " selected" if mes == mes_selecionado else ""
+        options.append(f'<option value="{mes}"{selected}>{mes_label(mes)}</option>')
+    return "".join(options)
 
 
 def gerar_dashboard():
-    base = carregar_dados()
+    historico = carregar_historico()
     agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
 
-    cidades_ordenadas = sorted(
-        base.items(),
-        key=lambda item: (
-            progresso_geral(item[1]) is None,
-            -(progresso_geral(item[1]) or 0),
-            item[0]
-        )
-    )
+    if not historico:
+        raise RuntimeError("Nenhum arquivo de dados encontrado para gerar a dashboard.")
 
-    mes_ref = ""
-    if cidades_ordenadas:
-        mes_ref = mes_label(cidades_ordenadas[0][1].get("mes_referencia", ""))
+    meses_disponiveis = sorted(historico.keys())
+    mes_atual = meses_disponiveis[-1]
+    base = historico[mes_atual]
+
+    cidades_ordenadas = sorted(base.keys())
 
     tabs = ['<button class="tab-btn active" data-tab="ranking-geral">🏆 Ranking Geral</button>']
-    for cidade, _ in cidades_ordenadas:
+    for cidade in cidades_ordenadas:
         tabs.append(f'<button class="tab-btn" data-tab="{slug(cidade)}">📍 {cidade}</button>')
-
-    batidas = metas_batidas(base)
-
-    ranking_cards = []
-    for chave in INDICADORES:
-        ranking_cards.append(
-            render_ranking_card(MAPA_INDICADORES[chave], gerar_ranking(base, chave))
-        )
-
-    if batidas:
-        batidas_html = []
-        for item in batidas:
-            batidas_html.append(f"""
-            <div class="beat-item">
-                <div class="beat-left">
-                    <span class="beat-city">{item["cidade"]}</span>
-                    <span class="beat-meta">{item["indicador"]}</span>
-                </div>
-                <strong class="blink">{item["progresso"]}</strong>
-            </div>
-            """)
-        bloco_batidas = "".join(batidas_html)
-    else:
-        bloco_batidas = '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>'
-
-    cidades_html = []
-    for cidade, info_cidade in cidades_ordenadas:
-        indicadores = info_cidade.get("indicadores", {})
-
-        cidades_html.append(f"""
-        <div id="{slug(cidade)}" class="tab-content">
-            {render_city_summary(cidade, info_cidade, agora)}
-            {render_city_chart(indicadores)}
-
-            <section class="city-grid">
-                {render_city_cards(indicadores)}
-            </section>
-
-            {render_city_table(indicadores)}
-        </div>
-        """)
 
     html = f"""
 <!DOCTYPE html>
@@ -991,8 +753,12 @@ body {{
         </div>
 
         <div class="header-right">
-            {montar_filtro_mes(mes_ref)}
-            <div class="pill">{agora}</div>
+            <div class="month-filter-wrap">
+                <select class="month-filter" id="monthFilter">
+                    {montar_opcoes_mes(meses_disponiveis, mes_atual)}
+                </select>
+            </div>
+            <div class="pill" id="atualizadoPill">{agora}</div>
             <div class="pill">● Online</div>
             <a class="pill btn" href="metas_top_estetica.xlsx" download>⬇ Exportar Planilha</a>
         </div>
@@ -1002,57 +768,396 @@ body {{
         {''.join(tabs)}
     </nav>
 
-    <div id="ranking-geral" class="tab-content active">
-        <section class="top-grid">
-            <div class="info-card">
-                <div class="info-title">Unidades</div>
-                <div class="info-number">{len(cidades_ordenadas)}</div>
-                <div class="info-text">cidades monitoradas</div>
-            </div>
-
-            <div class="beats-card">
-                <div class="beats-title">Metas Batidas</div>
-                <div class="beats-list">
-                    {bloco_batidas}
-                </div>
-            </div>
-        </section>
-
-        <section class="rankings-grid">
-            {''.join(ranking_cards)}
-        </section>
-    </div>
-
-    {''.join(cidades_html)}
+    <div id="dashboardContent"></div>
 
 </div>
 
 <script>
-const buttons = document.querySelectorAll('.tab-btn');
-const contents = document.querySelectorAll('.tab-content');
+const HISTORICO = {json.dumps(historico, ensure_ascii=False)};
+const MAPA_INDICADORES = {json.dumps(MAPA_INDICADORES, ensure_ascii=False)};
+const INDICADORES = {json.dumps(INDICADORES, ensure_ascii=False)};
+const AGORA = {json.dumps(agora, ensure_ascii=False)};
 
-buttons.forEach(btn => {{
+function textoSeguro(valor, padrao = "—") {{
+  if (valor === null || valor === undefined) return padrao;
+  const texto = String(valor).trim();
+  return texto ? texto : padrao;
+}}
+
+function percentual(valor) {{
+  if (!valor) return null;
+  const texto = String(valor).replace("%", "").replace(",", ".").trim();
+  const num = parseFloat(texto);
+  return Number.isNaN(num) ? null : num;
+}}
+
+function classePercentual(p) {{
+  if (p === null || p === undefined) return "empty";
+  if (p >= 100) return "ok";
+  if (p >= 50) return "warn";
+  return "bad";
+}}
+
+function larguraBarra(p) {{
+  if (p === null || p === undefined) return 0;
+  return Math.max(0, Math.min(p, 100));
+}}
+
+function mesLabel(valor) {{
+  if (!valor) return "—";
+  const mapa = {{
+    "01": "Janeiro", "02": "Fevereiro", "03": "Março", "04": "Abril",
+    "05": "Maio", "06": "Junho", "07": "Julho", "08": "Agosto",
+    "09": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro",
+  }};
+  try {{
+    const [ano, mes] = valor.split("-");
+    return `${{mapa[mes] || mes}}/${{ano}}`;
+  }} catch {{
+    return valor;
+  }}
+}}
+
+function progressoGeral(infoCidade) {{
+  const indicadores = infoCidade?.indicadores || {{}};
+  const valores = [];
+  for (const chave of INDICADORES) {{
+    const p = percentual(indicadores?.[chave]?.progresso);
+    if (p !== null) valores.push(p);
+  }}
+  if (!valores.length) return null;
+  return valores.reduce((a, b) => a + b, 0) / valores.length;
+}}
+
+function metasBatidas(base) {{
+  const resultado = [];
+  for (const [cidade, infoCidade] of Object.entries(base)) {{
+    for (const [chave, ind] of Object.entries(infoCidade?.indicadores || {{}})) {{
+      const p = percentual(ind?.progresso);
+      if (p !== null && p >= 100) {{
+        resultado.push({{
+          cidade,
+          indicador: MAPA_INDICADORES[chave] || chave,
+          progresso: textoSeguro(ind?.progresso),
+          percentual_num: p
+        }});
+      }}
+    }}
+  }}
+  resultado.sort((a, b) => {
+    if (b.percentual_num !== a.percentual_num) return b.percentual_num - a.percentual_num;
+    if (a.cidade !== b.cidade) return a.cidade.localeCompare(b.cidade);
+    return a.indicador.localeCompare(b.indicador);
+  });
+  return resultado;
+}}
+
+function gerarRanking(base, indicador) {{
+  const ranking = [];
+  for (const [cidade, infoCidade] of Object.entries(base)) {{
+    const ind = infoCidade?.indicadores?.[indicador] || {{}};
+    const p = percentual(ind?.progresso);
+    ranking.push([cidade, p, ind]);
+  }}
+  ranking.sort((a, b) => {{
+    const aNull = a[1] === null;
+    const bNull = b[1] === null;
+    if (aNull !== bNull) return aNull ? 1 : -1;
+    if ((b[1] || 0) !== (a[1] || 0)) return (b[1] || 0) - (a[1] || 0);
+    return a[0].localeCompare(b[0]);
+  }});
+  return ranking;
+}}
+
+function renderRankingCard(titulo, ranking) {{
+  const linhas = ranking.map((item, idx) => {{
+    const pos = idx + 1;
+    const [cidade, p, dados] = item;
+    const status = classePercentual(p);
+    const largura = larguraBarra(p);
+
+    let posClass = "pos-other";
+    if (pos === 1) posClass = "pos-1";
+    else if (pos === 2) posClass = "pos-2";
+    else if (pos === 3) posClass = "pos-3";
+
+    return `
+      <div class="rank-row">
+        <div class="rank-left">
+          <div class="rank-pos ${{posClass}}">${{String(pos).padStart(2, "0")}}º</div>
+          <div class="rank-texts">
+            <div class="rank-city">${{cidade}}</div>
+            <div class="rank-sub">Meta: ${{textoSeguro(dados?.meta)}} | Realizado: ${{textoSeguro(dados?.ate_o_momento)}}</div>
+          </div>
+        </div>
+
+        <div class="rank-center">
+          <div class="rank-bar">
+            <div class="rank-fill ${{status}}" style="width:${{largura}}%"></div>
+          </div>
+        </div>
+
+        <div class="rank-right">
+          <div class="rank-progress ${{status}}">${{textoSeguro(dados?.progresso)}}</div>
+        </div>
+      </div>
+    `;
+  }}).join("");
+
+  return `
+    <section class="rank-card">
+      <div class="rank-card-header">
+        <div class="rank-card-title">${{titulo}}</div>
+      </div>
+      <div class="rank-card-body">
+        ${{linhas}}
+      </div>
+    </section>
+  `;
+}}
+
+function renderCitySummary(cidade, infoCidade) {{
+  const pg = progressoGeral(infoCidade);
+  const pgTxt = pg !== null ? `${{pg.toFixed(1).replace(".", ",")}}%` : "—";
+
+  return `
+    <section class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Cidade</div>
+        <div class="summary-value">${{cidade}}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Mês de Referência</div>
+        <div class="summary-value">${{mesLabel(infoCidade?.mes_referencia || "")}}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Progresso Geral</div>
+        <div class="summary-value">${{pgTxt}}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Atualizado</div>
+        <div class="summary-value">${{AGORA}}</div>
+      </div>
+    </section>
+  `;
+}}
+
+function renderCityChart(indicadores) {{
+  const linhas = INDICADORES.map((chave) => {{
+    const ind = indicadores?.[chave] || {{}};
+    const p = percentual(ind?.progresso);
+    const status = classePercentual(p);
+    const largura = larguraBarra(p);
+
+    return `
+      <div class="evo-row">
+        <div class="evo-label">${{MAPA_INDICADORES[chave]}}</div>
+        <div class="evo-bar-wrap">
+          <div class="evo-bar">
+            <div class="evo-fill ${{status}}" style="width:${{largura}}%"></div>
+          </div>
+        </div>
+        <div class="evo-value ${{status}}">${{textoSeguro(ind?.progresso)}}</div>
+      </div>
+    `;
+  }}).join("");
+
+  return `
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Evolução das Metas na Cidade</div>
+      </div>
+      <div class="evolution-chart">
+        ${{linhas}}
+      </div>
+    </section>
+  `;
+}}
+
+function renderCityCards(indicadores) {{
+  return INDICADORES.map((chave) => {{
+    const ind = indicadores?.[chave] || {{}};
+    const p = percentual(ind?.progresso);
+    const status = classePercentual(p);
+    const largura = larguraBarra(p);
+
+    return `
+      <div class="city-card">
+        <div class="city-card-header">
+          <div class="city-card-title">${{MAPA_INDICADORES[chave]}}</div>
+          <div class="city-card-progress ${{status}}">${{textoSeguro(ind?.progresso)}}</div>
+        </div>
+
+        <div class="city-bar">
+          <div class="city-fill ${{status}}" style="width:${{largura}}%"></div>
+        </div>
+
+        <div class="city-metrics">
+          <div class="metric-box">
+            <span>Meta</span>
+            <strong>${{textoSeguro(ind?.meta)}}</strong>
+          </div>
+          <div class="metric-box">
+            <span>Até o momento</span>
+            <strong>${{textoSeguro(ind?.ate_o_momento)}}</strong>
+          </div>
+          <div class="metric-box">
+            <span>Falta</span>
+            <strong>${{textoSeguro(ind?.falta)}}</strong>
+          </div>
+        </div>
+      </div>
+    `;
+  }}).join("");
+}}
+
+function renderCityTable(indicadores) {{
+  const linhas = INDICADORES.map((chave) => {{
+    const ind = indicadores?.[chave] || {{}};
+    const p = percentual(ind?.progresso);
+    const status = classePercentual(p);
+
+    return `
+      <tr>
+        <td class="td-title">${{MAPA_INDICADORES[chave]}}</td>
+        <td>${{textoSeguro(ind?.meta)}}</td>
+        <td>${{textoSeguro(ind?.ate_o_momento)}}</td>
+        <td>${{textoSeguro(ind?.falta)}}</td>
+        <td class="${{status}}">${{textoSeguro(ind?.progresso)}}</td>
+      </tr>
+    `;
+  }}).join("");
+
+  return `
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Tabela Completa da Cidade</div>
+      </div>
+      <div class="table-wrap">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Meta</th>
+              <th>Até o momento</th>
+              <th>Falta</th>
+              <th>Progresso</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${{linhas}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}}
+
+function renderDashboard(mesSelecionado) {{
+  const base = HISTORICO[mesSelecionado] || {{}};
+  const cidades = Object.keys(base).sort((a, b) => a.localeCompare(b));
+
+  const batidas = metasBatidas(base);
+  const blocoBatidas = batidas.length
+    ? batidas.map((item) => `
+        <div class="beat-item">
+          <div class="beat-left">
+            <span class="beat-city">${{item.cidade}}</span>
+            <span class="beat-meta">${{item.indicador}}</span>
+          </div>
+          <strong class="blink">${{item.progresso}}</strong>
+        </div>
+      `).join("")
+    : '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>';
+
+  const rankingCards = INDICADORES.map((chave) =>
+    renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave))
+  ).join("");
+
+  const cidadesHtml = cidades.map((cidade) => {{
+    const infoCidade = base[cidade] || {{}};
+    const indicadores = infoCidade?.indicadores || {{}};
+
+    return `
+      <div id="${{slugify(cidade)}}" class="tab-content">
+        ${{renderCitySummary(cidade, infoCidade)}}
+        ${{renderCityChart(indicadores)}}
+        <section class="city-grid">
+          ${{renderCityCards(indicadores)}}
+        </section>
+        ${{renderCityTable(indicadores)}}
+      </div>
+    `;
+  }}).join("");
+
+  const html = `
+    <div id="ranking-geral" class="tab-content active">
+      <section class="top-grid">
+        <div class="info-card">
+          <div class="info-title">Unidades</div>
+          <div class="info-number">${{cidades.length}}</div>
+          <div class="info-text">cidades monitoradas</div>
+        </div>
+
+        <div class="beats-card">
+          <div class="beats-title">Metas Batidas</div>
+          <div class="beats-list">
+            ${{blocoBatidas}}
+          </div>
+        </div>
+      </section>
+
+      <section class="rankings-grid">
+        ${{rankingCards}}
+      </section>
+    </div>
+
+    ${{cidadesHtml}}
+  `;
+
+  document.getElementById("dashboardContent").innerHTML = html;
+  document.getElementById("monthFilter").value = mesSelecionado;
+
+  bindTabs();
+}}
+
+function slugify(texto) {{
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}}
+
+function bindTabs() {{
+  const buttons = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  buttons.forEach(btn => {{
     btn.addEventListener('click', () => {{
-        buttons.forEach(b => b.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
+      buttons.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
 
-        btn.classList.add('active');
+      btn.classList.add('active');
 
-        const target = document.getElementById(btn.dataset.tab);
-        if (target) {{
-            target.classList.add('active');
-            window.scrollTo({{ top: 0, behavior: 'smooth' }});
-        }}
+      const target = document.getElementById(btn.dataset.tab);
+      if (target) {{
+        target.classList.add('active');
+        window.scrollTo({{ top: 0, behavior: 'smooth' }});
+      }}
     }});
-}});
+  }});
+}}
 
-// visualmente mantém o filtro de mês estável por enquanto
 const monthFilter = document.getElementById('monthFilter');
 if (monthFilter) {{
-    monthFilter.addEventListener('change', (e) => {{
-        e.preventDefault();
-    }});
+  monthFilter.addEventListener('change', (e) => {{
+    renderDashboard(e.target.value);
+  }});
 }}
+
+renderDashboard({json.dumps(mes_atual, ensure_ascii=False)});
 </script>
 <script type="module" src="auth.js"></script>
 </body>
