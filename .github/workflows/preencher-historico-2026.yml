@@ -3,6 +3,9 @@ name: Preencher histórico 2026
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   historico-2026:
     runs-on: ubuntu-latest
@@ -22,96 +25,25 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          python -m playwright install chromium
+          python -m playwright install --with-deps chromium
 
       - name: Garantir pasta histórico
         run: mkdir -p data/historico
 
-      - name: Rodar janeiro/2026
+      - name: Rodar histórico de janeiro a dezembro de 2026
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-01"
-        run: python extract_metas.py
+        run: |
+          for MES in 2026-01 2026-02 2026-03 2026-04 2026-05 2026-06 2026-07 2026-08 2026-09 2026-10 2026-11 2026-12
+          do
+            echo "========================================"
+            echo "Rodando mês: $MES"
+            echo "========================================"
+            MES_REFERENCIA="$MES" python extract_metas.py
+          done
 
-      - name: Rodar fevereiro/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-02"
-        run: python extract_metas.py
-
-      - name: Rodar março/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-03"
-        run: python extract_metas.py
-
-      - name: Rodar abril/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-04"
-        run: python extract_metas.py
-
-      - name: Rodar maio/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-05"
-        run: python extract_metas.py
-
-      - name: Rodar junho/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-06"
-        run: python extract_metas.py
-
-      - name: Rodar julho/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-07"
-        run: python extract_metas.py
-
-      - name: Rodar agosto/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-08"
-        run: python extract_metas.py
-
-      - name: Rodar setembro/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-09"
-        run: python extract_metas.py
-
-      - name: Rodar outubro/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-10"
-        run: python extract_metas.py
-
-      - name: Rodar novembro/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-11"
-        run: python extract_metas.py
-
-      - name: Rodar dezembro/2026
-        env:
-          LOGIN_USER: ${{ secrets.LOGIN_USER }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "2026-12"
-        run: python extract_metas.py
-
-      - name: Gerar dashboard
+      - name: Gerar dashboard HTML
         run: python generate_dashboard.py
 
       - name: Commit e push
@@ -120,4 +52,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/historico data/metas_atual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
           git commit -m "Preenchimento histórico 2026" || echo "Sem mudanças para commit"
-          git push
+          git pull --rebase origin main
+          git push origin main
