@@ -47,39 +47,6 @@ def slug(texto):
     return re.sub(r"[^a-z0-9]+", "-", texto).strip("-")
 
 
-def percentual(valor):
-    if not valor:
-        return None
-    texto = str(valor).replace("%", "").replace(",", ".").strip()
-    try:
-        return float(texto)
-    except Exception:
-        return None
-
-
-def texto_seguro(valor, padrao="—"):
-    if valor is None:
-        return padrao
-    texto = str(valor).strip()
-    return texto if texto else padrao
-
-
-def classe_percentual(p):
-    if p is None:
-        return "empty"
-    if p >= 100:
-        return "ok"
-    if p >= 50:
-        return "warn"
-    return "bad"
-
-
-def largura_barra(p):
-    if p is None:
-        return 0
-    return max(0, min(p, 100))
-
-
 def mes_label(valor):
     if not valor:
         return datetime.now(TZ).strftime("%m/%Y")
@@ -163,8 +130,7 @@ def gerar_dashboard():
     for cidade in cidades_ordenadas:
         tabs.append(f'<button class="tab-btn" data-tab="{slug(cidade)}">📍 {cidade}</button>')
 
-    html = f"""
-<!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -811,18 +777,20 @@ function mesLabel(valor) {{
     "09": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro",
   }};
   try {{
-    const [ano, mes] = valor.split("-");
-    return `${{mapa[mes] || mes}}/${{ano}}`;
-  }} catch {{
+    const partes = valor.split("-");
+    const ano = partes[0];
+    const mes = partes[1];
+    return (mapa[mes] || mes) + "/" + ano;
+  }} catch (e) {{
     return valor;
   }}
 }}
 
 function progressoGeral(infoCidade) {{
-  const indicadores = infoCidade?.indicadores || {{}};
+  const indicadores = (infoCidade && infoCidade.indicadores) || {{}};
   const valores = [];
   for (const chave of INDICADORES) {{
-    const p = percentual(indicadores?.[chave]?.progresso);
+    const p = percentual(indicadores[chave] && indicadores[chave].progresso);
     if (p !== null) valores.push(p);
   }}
   if (!valores.length) return null;
@@ -831,48 +799,59 @@ function progressoGeral(infoCidade) {{
 
 function metasBatidas(base) {{
   const resultado = [];
-  for (const [cidade, infoCidade] of Object.entries(base)) {{
-    for (const [chave, ind] of Object.entries(infoCidade?.indicadores || {{}})) {{
-      const p = percentual(ind?.progresso);
+  for (const cidade of Object.keys(base)) {{
+    const infoCidade = base[cidade] || {{}};
+    const indicadores = infoCidade.indicadores || {{}};
+    for (const chave of Object.keys(indicadores)) {{
+      const ind = indicadores[chave] || {{}};
+      const p = percentual(ind.progresso);
       if (p !== null && p >= 100) {{
         resultado.push({{
-          cidade,
+          cidade: cidade,
           indicador: MAPA_INDICADORES[chave] || chave,
-          progresso: textoSeguro(ind?.progresso),
+          progresso: textoSeguro(ind.progresso),
           percentual_num: p
         }});
       }}
     }}
   }}
-  resultado.sort((a, b) => {
+
+  resultado.sort(function(a, b) {{
     if (b.percentual_num !== a.percentual_num) return b.percentual_num - a.percentual_num;
     if (a.cidade !== b.cidade) return a.cidade.localeCompare(b.cidade);
     return a.indicador.localeCompare(b.indicador);
-  });
+  }});
+
   return resultado;
 }}
 
 function gerarRanking(base, indicador) {{
   const ranking = [];
-  for (const [cidade, infoCidade] of Object.entries(base)) {{
-    const ind = infoCidade?.indicadores?.[indicador] || {{}};
-    const p = percentual(ind?.progresso);
+
+  for (const cidade of Object.keys(base)) {{
+    const infoCidade = base[cidade] || {{}};
+    const ind = (infoCidade.indicadores && infoCidade.indicadores[indicador]) || {{}};
+    const p = percentual(ind.progresso);
     ranking.push([cidade, p, ind]);
   }}
-  ranking.sort((a, b) => {{
+
+  ranking.sort(function(a, b) {{
     const aNull = a[1] === null;
     const bNull = b[1] === null;
     if (aNull !== bNull) return aNull ? 1 : -1;
     if ((b[1] || 0) !== (a[1] || 0)) return (b[1] || 0) - (a[1] || 0);
     return a[0].localeCompare(b[0]);
   }});
+
   return ranking;
 }}
 
 function renderRankingCard(titulo, ranking) {{
-  const linhas = ranking.map((item, idx) => {{
+  const linhas = ranking.map(function(item, idx) {{
     const pos = idx + 1;
-    const [cidade, p, dados] = item;
+    const cidade = item[0];
+    const p = item[1];
+    const dados = item[2] || {{}};
     const status = classePercentual(p);
     const largura = larguraBarra(p);
 
@@ -884,21 +863,21 @@ function renderRankingCard(titulo, ranking) {{
     return `
       <div class="rank-row">
         <div class="rank-left">
-          <div class="rank-pos ${{posClass}}">${{String(pos).padStart(2, "0")}}º</div>
+          <div class="rank-pos ${posClass}">${String(pos).padStart(2, "0")}º</div>
           <div class="rank-texts">
-            <div class="rank-city">${{cidade}}</div>
-            <div class="rank-sub">Meta: ${{textoSeguro(dados?.meta)}} | Realizado: ${{textoSeguro(dados?.ate_o_momento)}}</div>
+            <div class="rank-city">${cidade}</div>
+            <div class="rank-sub">Meta: ${textoSeguro(dados.meta)} | Realizado: ${textoSeguro(dados.ate_o_momento)}</div>
           </div>
         </div>
 
         <div class="rank-center">
           <div class="rank-bar">
-            <div class="rank-fill ${{status}}" style="width:${{largura}}%"></div>
+            <div class="rank-fill ${status}" style="width:${largura}%"></div>
           </div>
         </div>
 
         <div class="rank-right">
-          <div class="rank-progress ${{status}}">${{textoSeguro(dados?.progresso)}}</div>
+          <div class="rank-progress ${status}">${textoSeguro(dados.progresso)}</div>
         </div>
       </div>
     `;
@@ -907,10 +886,10 @@ function renderRankingCard(titulo, ranking) {{
   return `
     <section class="rank-card">
       <div class="rank-card-header">
-        <div class="rank-card-title">${{titulo}}</div>
+        <div class="rank-card-title">${titulo}</div>
       </div>
       <div class="rank-card-body">
-        ${{linhas}}
+        ${linhas}
       </div>
     </section>
   `;
@@ -918,46 +897,46 @@ function renderRankingCard(titulo, ranking) {{
 
 function renderCitySummary(cidade, infoCidade) {{
   const pg = progressoGeral(infoCidade);
-  const pgTxt = pg !== null ? `${{pg.toFixed(1).replace(".", ",")}}%` : "—";
+  const pgTxt = pg !== null ? String(pg.toFixed(1)).replace(".", ",") + "%" : "—";
 
   return `
     <section class="summary-grid">
       <div class="summary-card">
         <div class="summary-label">Cidade</div>
-        <div class="summary-value">${{cidade}}</div>
+        <div class="summary-value">${cidade}</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">Mês de Referência</div>
-        <div class="summary-value">${{mesLabel(infoCidade?.mes_referencia || "")}}</div>
+        <div class="summary-value">${mesLabel(infoCidade && infoCidade.mes_referencia || "")}</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">Progresso Geral</div>
-        <div class="summary-value">${{pgTxt}}</div>
+        <div class="summary-value">${pgTxt}</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">Atualizado</div>
-        <div class="summary-value">${{AGORA}}</div>
+        <div class="summary-value">${AGORA}</div>
       </div>
     </section>
   `;
 }}
 
 function renderCityChart(indicadores) {{
-  const linhas = INDICADORES.map((chave) => {{
-    const ind = indicadores?.[chave] || {{}};
-    const p = percentual(ind?.progresso);
+  const linhas = INDICADORES.map(function(chave) {{
+    const ind = indicadores && indicadores[chave] || {{}};
+    const p = percentual(ind.progresso);
     const status = classePercentual(p);
     const largura = larguraBarra(p);
 
     return `
       <div class="evo-row">
-        <div class="evo-label">${{MAPA_INDICADORES[chave]}}</div>
+        <div class="evo-label">${MAPA_INDICADORES[chave]}</div>
         <div class="evo-bar-wrap">
           <div class="evo-bar">
-            <div class="evo-fill ${{status}}" style="width:${{largura}}%"></div>
+            <div class="evo-fill ${status}" style="width:${largura}%"></div>
           </div>
         </div>
-        <div class="evo-value ${{status}}">${{textoSeguro(ind?.progresso)}}</div>
+        <div class="evo-value ${status}">${textoSeguro(ind.progresso)}</div>
       </div>
     `;
   }}).join("");
@@ -968,42 +947,42 @@ function renderCityChart(indicadores) {{
         <div class="panel-title">Evolução das Metas na Cidade</div>
       </div>
       <div class="evolution-chart">
-        ${{linhas}}
+        ${linhas}
       </div>
     </section>
   `;
 }}
 
 function renderCityCards(indicadores) {{
-  return INDICADORES.map((chave) => {{
-    const ind = indicadores?.[chave] || {{}};
-    const p = percentual(ind?.progresso);
+  return INDICADORES.map(function(chave) {{
+    const ind = indicadores && indicadores[chave] || {{}};
+    const p = percentual(ind.progresso);
     const status = classePercentual(p);
     const largura = larguraBarra(p);
 
     return `
       <div class="city-card">
         <div class="city-card-header">
-          <div class="city-card-title">${{MAPA_INDICADORES[chave]}}</div>
-          <div class="city-card-progress ${{status}}">${{textoSeguro(ind?.progresso)}}</div>
+          <div class="city-card-title">${MAPA_INDICADORES[chave]}</div>
+          <div class="city-card-progress ${status}">${textoSeguro(ind.progresso)}</div>
         </div>
 
         <div class="city-bar">
-          <div class="city-fill ${{status}}" style="width:${{largura}}%"></div>
+          <div class="city-fill ${status}" style="width:${largura}%"></div>
         </div>
 
         <div class="city-metrics">
           <div class="metric-box">
             <span>Meta</span>
-            <strong>${{textoSeguro(ind?.meta)}}</strong>
+            <strong>${textoSeguro(ind.meta)}</strong>
           </div>
           <div class="metric-box">
             <span>Até o momento</span>
-            <strong>${{textoSeguro(ind?.ate_o_momento)}}</strong>
+            <strong>${textoSeguro(ind.ate_o_momento)}</strong>
           </div>
           <div class="metric-box">
             <span>Falta</span>
-            <strong>${{textoSeguro(ind?.falta)}}</strong>
+            <strong>${textoSeguro(ind.falta)}</strong>
           </div>
         </div>
       </div>
@@ -1012,18 +991,18 @@ function renderCityCards(indicadores) {{
 }}
 
 function renderCityTable(indicadores) {{
-  const linhas = INDICADORES.map((chave) => {{
-    const ind = indicadores?.[chave] || {{}};
-    const p = percentual(ind?.progresso);
+  const linhas = INDICADORES.map(function(chave) {{
+    const ind = indicadores && indicadores[chave] || {{}};
+    const p = percentual(ind.progresso);
     const status = classePercentual(p);
 
     return `
       <tr>
-        <td class="td-title">${{MAPA_INDICADORES[chave]}}</td>
-        <td>${{textoSeguro(ind?.meta)}}</td>
-        <td>${{textoSeguro(ind?.ate_o_momento)}}</td>
-        <td>${{textoSeguro(ind?.falta)}}</td>
-        <td class="${{status}}">${{textoSeguro(ind?.progresso)}}</td>
+        <td class="td-title">${MAPA_INDICADORES[chave]}</td>
+        <td>${textoSeguro(ind.meta)}</td>
+        <td>${textoSeguro(ind.ate_o_momento)}</td>
+        <td>${textoSeguro(ind.falta)}</td>
+        <td class="${status}">${textoSeguro(ind.progresso)}</td>
       </tr>
     `;
   }}).join("");
@@ -1045,80 +1024,12 @@ function renderCityTable(indicadores) {{
             </tr>
           </thead>
           <tbody>
-            ${{linhas}}
+            ${linhas}
           </tbody>
         </table>
       </div>
     </section>
   `;
-}}
-
-function renderDashboard(mesSelecionado) {{
-  const base = HISTORICO[mesSelecionado] || {{}};
-  const cidades = Object.keys(base).sort((a, b) => a.localeCompare(b));
-
-  const batidas = metasBatidas(base);
-  const blocoBatidas = batidas.length
-    ? batidas.map((item) => `
-        <div class="beat-item">
-          <div class="beat-left">
-            <span class="beat-city">${{item.cidade}}</span>
-            <span class="beat-meta">${{item.indicador}}</span>
-          </div>
-          <strong class="blink">${{item.progresso}}</strong>
-        </div>
-      `).join("")
-    : '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>';
-
-  const rankingCards = INDICADORES.map((chave) =>
-    renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave))
-  ).join("");
-
-  const cidadesHtml = cidades.map((cidade) => {{
-    const infoCidade = base[cidade] || {{}};
-    const indicadores = infoCidade?.indicadores || {{}};
-
-    return `
-      <div id="${{slugify(cidade)}}" class="tab-content">
-        ${{renderCitySummary(cidade, infoCidade)}}
-        ${{renderCityChart(indicadores)}}
-        <section class="city-grid">
-          ${{renderCityCards(indicadores)}}
-        </section>
-        ${{renderCityTable(indicadores)}}
-      </div>
-    `;
-  }}).join("");
-
-  const html = `
-    <div id="ranking-geral" class="tab-content active">
-      <section class="top-grid">
-        <div class="info-card">
-          <div class="info-title">Unidades</div>
-          <div class="info-number">${{cidades.length}}</div>
-          <div class="info-text">cidades monitoradas</div>
-        </div>
-
-        <div class="beats-card">
-          <div class="beats-title">Metas Batidas</div>
-          <div class="beats-list">
-            ${{blocoBatidas}}
-          </div>
-        </div>
-      </section>
-
-      <section class="rankings-grid">
-        ${{rankingCards}}
-      </section>
-    </div>
-
-    ${{cidadesHtml}}
-  `;
-
-  document.getElementById("dashboardContent").innerHTML = html;
-  document.getElementById("monthFilter").value = mesSelecionado;
-
-  bindTabs();
 }}
 
 function slugify(texto) {{
@@ -1134,10 +1045,10 @@ function bindTabs() {{
   const buttons = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
 
-  buttons.forEach(btn => {{
-    btn.addEventListener('click', () => {{
-      buttons.forEach(b => b.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
+  buttons.forEach(function(btn) {{
+    btn.addEventListener('click', function() {{
+      buttons.forEach(function(b) {{ b.classList.remove('active'); }});
+      contents.forEach(function(c) {{ c.classList.remove('active'); }});
 
       btn.classList.add('active');
 
@@ -1150,9 +1061,78 @@ function bindTabs() {{
   }});
 }}
 
+function renderDashboard(mesSelecionado) {{
+  const base = HISTORICO[mesSelecionado] || {{}};
+  const cidades = Object.keys(base).sort(function(a, b) {{ return a.localeCompare(b); }});
+
+  const batidas = metasBatidas(base);
+  const blocoBatidas = batidas.length
+    ? batidas.map(function(item) {{
+        return `
+          <div class="beat-item">
+            <div class="beat-left">
+              <span class="beat-city">${item.cidade}</span>
+              <span class="beat-meta">${item.indicador}</span>
+            </div>
+            <strong class="blink">${item.progresso}</strong>
+          </div>
+        `;
+      }}).join("")
+    : '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>';
+
+  const rankingCards = INDICADORES.map(function(chave) {{
+    return renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave));
+  }}).join("");
+
+  const cidadesHtml = cidades.map(function(cidade) {{
+    const infoCidade = base[cidade] || {{}};
+    const indicadores = infoCidade.indicadores || {{}};
+
+    return `
+      <div id="${slugify(cidade)}" class="tab-content">
+        ${renderCitySummary(cidade, infoCidade)}
+        ${renderCityChart(indicadores)}
+        <section class="city-grid">
+          ${renderCityCards(indicadores)}
+        </section>
+        ${renderCityTable(indicadores)}
+      </div>
+    `;
+  }}).join("");
+
+  const htmlContent = `
+    <div id="ranking-geral" class="tab-content active">
+      <section class="top-grid">
+        <div class="info-card">
+          <div class="info-title">Unidades</div>
+          <div class="info-number">${cidades.length}</div>
+          <div class="info-text">cidades monitoradas</div>
+        </div>
+
+        <div class="beats-card">
+          <div class="beats-title">Metas Batidas</div>
+          <div class="beats-list">
+            ${blocoBatidas}
+          </div>
+        </div>
+      </section>
+
+      <section class="rankings-grid">
+        ${rankingCards}
+      </section>
+    </div>
+
+    ${cidadesHtml}
+  `;
+
+  document.getElementById("dashboardContent").innerHTML = htmlContent;
+  document.getElementById("monthFilter").value = mesSelecionado;
+  bindTabs();
+}}
+
 const monthFilter = document.getElementById('monthFilter');
 if (monthFilter) {{
-  monthFilter.addEventListener('change', (e) => {{
+  monthFilter.addEventListener('change', function(e) {{
     renderDashboard(e.target.value);
   }});
 }}
