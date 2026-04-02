@@ -33,7 +33,26 @@ def carregar_google_existente(mes_ref):
 # =========================================
 # 🔥 ALTERAÇÃO NA FUNÇÃO salvar_historico
 # =========================================
+def carregar_google_existente(mes_ref):
+    caminho = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
 
+    if not os.path.exists(caminho):
+        return {}
+
+    try:
+        with open(caminho, "r", encoding="utf-8") as f:
+            dados_antigos = json.load(f)
+
+        google_manual = {}
+
+        for cidade, dados in dados_antigos.items():
+            indicadores = dados.get("indicadores", {})
+            if "avaliacoes_google" in indicadores:
+                google_manual[cidade] = indicadores["avaliacoes_google"]
+
+        return google_manual
+    except Exception:
+        return {}
 def salvar_historico(resultado):
     os.makedirs(HISTORICO_DIR, exist_ok=True)
 
@@ -48,12 +67,12 @@ def salvar_historico(resultado):
     else:
         mes_ref = meses[0]
 
-    # 🔴 IGNORA QUALQUER COISA ANTES DE 2026
+    # ignora qualquer histórico antes de janeiro/2026
     if mes_ref < "2026-01":
         print(f"⛔ Ignorando histórico anterior a 2026: {mes_ref}")
         return
 
-    # 🔴 PRESERVAR GOOGLE MANUAL
+    # preserva o Google manual já salvo naquele mês
     google_antigo = carregar_google_existente(mes_ref)
 
     for cidade, dados in resultado.items():
@@ -61,8 +80,7 @@ def salvar_historico(resultado):
             dados["indicadores"]["avaliacoes_google"] = google_antigo[cidade]
 
     historico_path = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
-
     with open(historico_path, "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
 
-    print(f"📦 Histórico salvo: {historico_path}")
+    print(f"Histórico mensal salvo em: {historico_path}")
