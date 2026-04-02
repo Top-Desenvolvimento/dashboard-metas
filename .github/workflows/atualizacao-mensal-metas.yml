@@ -1,15 +1,13 @@
-name: Atualização mensal metas
+name: Preencher histórico 2026
 
 on:
-  schedule:
-    - cron: "0 11 1 * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  atualizar-mes-atual:
+  historico-2026:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,12 +27,21 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install chromium
 
-      - name: Rodar coleta do mês atual
+      - name: Garantir pasta histórico
+        run: mkdir -p data/historico
+
+      - name: Rodar histórico de janeiro a dezembro de 2026
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-          MES_REFERENCIA: "AUTO"
-        run: python extract_metas.py
+        run: |
+          for MES in 2026-01 2026-02 2026-03 2026-04 2026-05 2026-06 2026-07 2026-08 2026-09 2026-10 2026-11 2026-12
+          do
+            echo "========================================"
+            echo "Rodando mês: $MES"
+            echo "========================================"
+            MES_REFERENCIA="$MES" python extract_metas.py
+          done
 
       - name: Gerar dashboard HTML
         run: python generate_dashboard.py
@@ -43,7 +50,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add data/historico data/metas_atual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
-          git commit -m "Atualização mensal automática das metas" || echo "Sem mudanças para commit"
-          git pull --rebase origin main
+          git commit -m "Preenchimento histórico 2026" || echo "Sem mudanças para commit"
+
+          git fetch origin main
+          git pull origin main --no-rebase -X ours || true
+
+          git add data/historico data/metas_atual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
+          git commit -m "Ajuste pós-merge histórico 2026" || echo "Sem mudanças após merge"
+
           git push origin main
