@@ -1,0 +1,380 @@
+{
+  "Flores": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Caxias": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Farroupilha": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Bento": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Encantado": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Soledade": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Garibaldi": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "Veranópolis": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  },
+  "SS do Caí": {
+    "mes_referencia": "2026-09",
+    "indicadores": {
+      "ortodontia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "clinico_geral": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "avaliacoes_google": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_avaliacao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_profilaxia": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "meta_restauracao": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      }
+    },
+    "_status": "erro: Não encontrei o mês 'Setembro / 2026' no select. Opções disponíveis: ['', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
+  }
+}
