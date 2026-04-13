@@ -17,6 +17,7 @@ MES_REFERENCIA = os.getenv("MES_REFERENCIA", "AUTO")
 OUTPUT_JSON = "data/metas_atual.json"
 OUTPUT_XLSX = "data/metas_top_estetica.xlsx"
 HISTORICO_DIR = "data/historico"
+GOOGLE_MANUAL_FILE = "data/google_manual.json"
 
 TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
@@ -232,7 +233,6 @@ def obter_mes_referencia(page):
 def login(page, base_url):
     page.goto(base_url, timeout=60000, wait_until="domcontentloaded")
     page.wait_for_timeout(2000)
-
     page.fill("#usuario", LOGIN_USER)
     page.fill("#senha", LOGIN_PASS)
     page.click("input[type='submit']")
@@ -342,6 +342,66 @@ def processar_tabela_em_indicadores(tabela):
     return indicadores
 
 
+def carregar_google_manual(mes_ref):
+    if not os.path.exists(GOOGLE_MANUAL_FILE):
+        return {}
+
+    try:
+        with open(GOOGLE_MANUAL_FILE, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+        return dados.get(mes_ref, {})
+    except Exception as e:
+        print(f"⚠️ Erro ao ler {GOOGLE_MANUAL_FILE}: {e}")
+        return {}
+
+
+def numero_texto_para_float(valor):
+    texto = str(valor).strip().replace(".", "").replace(",", ".")
+    try:
+        return float(texto)
+    except Exception:
+        try:
+            return float(str(valor).strip())
+        except Exception:
+            return 0.0
+
+
+def float_para_texto_br(valor, casas=0):
+    if casas == 0:
+        return str(int(round(valor)))
+    texto = f"{valor:.{casas}f}"
+    return texto.replace(".", ",")
+
+
+def montar_google_dashboard(bloco_google):
+    valor_meta = numero_texto_para_float(bloco_google.get("valor_meta", 0))
+    valor_atingido = numero_texto_para_float(bloco_google.get("valor_atingido_mes", 0))
+    valor_atual = bloco_google.get("valor_atual", "-")
+
+    falta = max(valor_meta - valor_atingido, 0)
+    progresso = 0.0
+    if valor_meta > 0:
+        progresso = (valor_atingido / valor_meta) * 100
+
+    return {
+        "meta": float_para_texto_br(valor_meta, 0),
+        "ate_o_momento": float_para_texto_br(valor_atingido, 0),
+        "falta": float_para_texto_br(falta, 0),
+        "progresso": f"{progresso:.2f}%".replace(".", ","),
+        "valor_atual": str(valor_atual)
+    }
+
+
+def aplicar_google_manual(resultado, mes_ref):
+    google_manual = carregar_google_manual(mes_ref)
+
+    for cidade, dados in resultado.items():
+        if cidade in google_manual:
+            dados["indicadores"]["avaliacoes_google"] = montar_google_dashboard(google_manual[cidade])
+
+    return resultado
+
+
 def extrair_cidade(page, cidade_info):
     nome = cidade_info["nome"]
     base_url = cidade_info["url"]
@@ -392,51 +452,12 @@ def salvar_excel_placeholder():
             f.write(b"")
 
 
-def carregar_google_existente(mes_ref):
-    caminho = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
-
-    if not os.path.exists(caminho):
-        return {}
-
-    try:
-        with open(caminho, "r", encoding="utf-8") as f:
-            dados_antigos = json.load(f)
-
-        google_manual = {}
-
-        for cidade, dados in dados_antigos.items():
-            indicadores = dados.get("indicadores", {})
-            if "avaliacoes_google" in indicadores:
-                google_manual[cidade] = indicadores["avaliacoes_google"]
-
-        return google_manual
-    except Exception:
-        return {}
-
-
-def salvar_historico(resultado):
+def salvar_historico(resultado, mes_ref):
     os.makedirs(HISTORICO_DIR, exist_ok=True)
-
-    meses = sorted({
-        dados.get("mes_referencia")
-        for dados in resultado.values()
-        if dados.get("mes_referencia")
-    })
-
-    if not meses:
-        mes_ref = obter_mes_referencia_json()
-    else:
-        mes_ref = meses[0]
 
     if mes_ref < "2026-01":
         print(f"⛔ Ignorando histórico anterior a 2026: {mes_ref}")
         return
-
-    google_antigo = carregar_google_existente(mes_ref)
-
-    for cidade, dados in resultado.items():
-        if cidade in google_antigo:
-            dados["indicadores"]["avaliacoes_google"] = google_antigo[cidade]
 
     historico_path = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
     with open(historico_path, "w", encoding="utf-8") as f:
@@ -484,23 +505,14 @@ def main():
         if dados.get("mes_referencia")
     })
 
-    if not meses:
-        mes_ref = obter_mes_referencia_json()
-    else:
-        mes_ref = meses[0]
+    mes_ref = meses[0] if meses else obter_mes_referencia_json()
 
-    google_antigo = {}
-    if mes_ref >= "2026-01":
-        google_antigo = carregar_google_existente(mes_ref)
-
-    for cidade, dados in resultado.items():
-        if cidade in google_antigo:
-            dados["indicadores"]["avaliacoes_google"] = google_antigo[cidade]
+    resultado = aplicar_google_manual(resultado, mes_ref)
 
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
 
-    salvar_historico(resultado)
+    salvar_historico(resultado, mes_ref)
     salvar_excel_placeholder()
 
     print(f"Arquivo atual gerado: {OUTPUT_JSON}")
