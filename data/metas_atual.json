@@ -46,15 +46,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "51.000,00",
-        "ate_o_momento": "12.070,33",
-        "falta": "-38.929,67",
-        "progresso": "23,667%"
+        "ate_o_momento": "12.330,33",
+        "falta": "-38.669,67",
+        "progresso": "24,177%"
       },
       "clinico_geral": {
         "meta": "91.000,00",
-        "ate_o_momento": "15.331,00",
-        "falta": "-75.669,00",
-        "progresso": "16,847%"
+        "ate_o_momento": "15.692,00",
+        "falta": "-75.308,00",
+        "progresso": "17,244%"
       },
       "avaliacoes_google": {
         "meta": "-",
@@ -70,9 +70,9 @@
       },
       "meta_profilaxia": {
         "meta": "90",
-        "ate_o_momento": "30",
-        "falta": "-60",
-        "progresso": "33,333%"
+        "ate_o_momento": "31",
+        "falta": "-59",
+        "progresso": "34,444%"
       },
       "meta_restauracao": {
         "meta": "58",
@@ -172,9 +172,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "39.000,00",
-        "ate_o_momento": "11.340,00",
-        "falta": "-27.660,00",
-        "progresso": "29,077%"
+        "ate_o_momento": "11.650,00",
+        "falta": "-27.350,00",
+        "progresso": "29,872%"
       },
       "clinico_geral": {
         "meta": "31.000,00",
@@ -256,9 +256,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "41.400,00",
-        "ate_o_momento": "16.399,00",
-        "falta": "-25.001,00",
-        "progresso": "39,611%"
+        "ate_o_momento": "16.594,00",
+        "falta": "-24.806,00",
+        "progresso": "40,082%"
       },
       "clinico_geral": {
         "meta": "28.000,00",
@@ -298,9 +298,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
-        "ate_o_momento": "8.327,74",
-        "falta": "-20.672,26",
-        "progresso": "28,716%"
+        "ate_o_momento": "8.892,74",
+        "falta": "-20.107,26",
+        "progresso": "30,665%"
       },
       "clinico_geral": {
         "meta": "17.700,00",
