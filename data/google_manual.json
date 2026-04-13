@@ -1,0 +1,49 @@
+{
+  "2026-03": {
+    "Bento": {
+      "valor_atual": "96",
+      "valor_meta": "21",
+      "valor_atingido_mes": "2"
+    },
+    "Caxias": {
+      "valor_atual": "317",
+      "valor_meta": "38",
+      "valor_atingido_mes": "15"
+    },
+    "Encantado": {
+      "valor_atual": "290",
+      "valor_meta": "24",
+      "valor_atingido_mes": "1"
+    },
+    "Farroupilha": {
+      "valor_atual": "187",
+      "valor_meta": "11",
+      "valor_atingido_mes": "14"
+    },
+    "Flores": {
+      "valor_atual": "135",
+      "valor_meta": "27",
+      "valor_atingido_mes": "29"
+    },
+    "Garibaldi": {
+      "valor_atual": "145",
+      "valor_meta": "17",
+      "valor_atingido_mes": "0"
+    },
+    "Soledade": {
+      "valor_atual": "481",
+      "valor_meta": "52",
+      "valor_atingido_mes": "45"
+    },
+    "SS do Caí": {
+      "valor_atual": "93",
+      "valor_meta": "13",
+      "valor_atingido_mes": "3"
+    },
+    "Veranópolis": {
+      "valor_atual": "137",
+      "valor_meta": "10",
+      "valor_atingido_mes": "0"
+    }
+  }
+}
