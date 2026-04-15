@@ -6,6 +6,6 @@ Nossos sistemas detectaram tráfego incomum na sua rede de computadores. Esta p�
 
 
 
-Endereço IP: 20.57.198.231
-Hora: 2026-04-15T07:54:56Z
-URL: https://www.google.com/search?q=top+est%C3%A9tica+bucal+encantado&biw=1536&bih=695&sca_esv=1b9fc756e6c3b46d&sxsrf=ANbL-n64kd16Vh2C9ij5J2_1SdcHEeF3wQ%3A1774363205850&ei=RaLCaajNM9mp1sQP4teJ0Aw&ved=0ahUKEwjog9mE4riTAxXZlJUCHeJrAsoQ4dUDCBE&uact=5&oq=top+est%C3%A9tica+bucal+encantado&gs_lp=Egxnd3Mtd2l6LXNlcnAiHXRvcCBlc3TDqXRpY2EgYnVjYWwgZW5jYW50YWRvMgsQLhiABBjHARivATIGEAAYFhgeMgYQABgWGB4yBRAAGO8FMggQABiABBiiBDIIEAAYgAQYogQyBRAAGO8FMhoQLhiABBjHARivARiXBRjcBBjeBBjgBNgBAUjlD1CxA1iDDHABeAGQAQCYAbQBoAGSC6oBAzAuObgBA8gBAPgBAZgCCqAC8gvCAgoQABiwAxjWBBhHwgICECaYAwCIBgGQBgi6BgYIARABGBSSBwMxLjmgB8ZUsgcDMC45uAfpC8IHBTItOC4yyAdOgAgA&sclient=gws-wiz-serp&sei=T0TfafvPLtizmLQPlqX9sAw
+Endereço IP: 20.112.122.52
+Hora: 2026-04-15T09:26:29Z
+URL: https://www.google.com/search?q=top+est%C3%A9tica+bucal+encantado&biw=1536&bih=695&sca_esv=1b9fc756e6c3b46d&sxsrf=ANbL-n64kd16Vh2C9ij5J2_1SdcHEeF3wQ%3A1774363205850&ei=RaLCaajNM9mp1sQP4teJ0Aw&ved=0ahUKEwjog9mE4riTAxXZlJUCHeJrAsoQ4dUDCBE&uact=5&oq=top+est%C3%A9tica+bucal+encantado&gs_lp=Egxnd3Mtd2l6LXNlcnAiHXRvcCBlc3TDqXRpY2EgYnVjYWwgZW5jYW50YWRvMgsQLhiABBjHARivATIGEAAYFhgeMgYQABgWGB4yBRAAGO8FMggQABiABBiiBDIIEAAYgAQYogQyBRAAGO8FMhoQLhiABBjHARivARiXBRjcBBjeBBjgBNgBAUjlD1CxA1iDDHABeAGQAQCYAbQBoAGSC6oBAzAuObgBA8gBAPgBAZgCCqAC8gvCAgoQABiwAxjWBBhHwgICECaYAwCIBgGQBgi6BgYIARABGBSSBwMxLjmgB8ZUsgcDMC45uAfpC8IHBTItOC4yyAdOgAgA&sclient=gws-wiz-serp&sei=xVnfaeenFdu80PEP_tby0A8
