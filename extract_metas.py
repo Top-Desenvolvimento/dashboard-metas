@@ -17,7 +17,7 @@ MES_REFERENCIA = os.getenv("MES_REFERENCIA", "AUTO")
 OUTPUT_JSON = "data/metas_atual.json"
 OUTPUT_XLSX = "data/metas_top_estetica.xlsx"
 HISTORICO_DIR = "data/historico"
-GOOGLE_MANUAL_FILE = "data/google_manual.json"
+GOOGLE_MANUAL_FILE = "data/google_atual.json"
 
 TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
@@ -342,43 +342,51 @@ def processar_tabela_em_indicadores(tabela):
     return indicadores
 
 
-def carregar_google_manual(mes_ref):
-    if not os.path.exists(GOOGLE_MANUAL_FILE):
-        return {}
-
-    try:
-        with open(GOOGLE_MANUAL_FILE, "r", encoding="utf-8") as f:
-            dados = json.load(f)
-        return dados.get(mes_ref, {})
-    except Exception as e:
-        print(f"⚠️ Erro ao ler {GOOGLE_MANUAL_FILE}: {e}")
-        return {}
-
-
 def numero_texto_para_float(valor):
-    texto = str(valor).strip().replace(".", "").replace(",", ".")
+    if valor is None:
+        return 0.0
+
+    texto = str(valor).strip()
+    if not texto:
+        return 0.0
+
+    texto = texto.replace(".", "").replace(",", ".")
     try:
         return float(texto)
     except Exception:
-        try:
-            return float(str(valor).strip())
-        except Exception:
-            return 0.0
+        return 0.0
 
 
 def float_para_texto_br(valor, casas=0):
     if casas == 0:
         return str(int(round(valor)))
-    texto = f"{valor:.{casas}f}"
-    return texto.replace(".", ",")
+    return f"{valor:.{casas}f}".replace(".", ",")
+
+
+def carregar_google_manual(mes_ref):
+    if not os.path.exists(GOOGLE_MANUAL_FILE):
+        print(f"⚠️ Arquivo não encontrado: {GOOGLE_MANUAL_FILE}")
+        return {}
+
+    try:
+        with open(GOOGLE_MANUAL_FILE, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+
+        bloco_mes = dados.get(mes_ref, {})
+        print(f"📘 Google manual carregado para {mes_ref}: {list(bloco_mes.keys())}")
+        return bloco_mes
+
+    except Exception as e:
+        print(f"⚠️ Erro ao ler {GOOGLE_MANUAL_FILE}: {e}")
+        return {}
 
 
 def montar_google_dashboard(bloco_google):
+    valor_atual = bloco_google.get("valor_atual", "-")
     valor_meta = numero_texto_para_float(bloco_google.get("valor_meta", 0))
     valor_atingido = numero_texto_para_float(bloco_google.get("valor_atingido_mes", 0))
-    valor_atual = bloco_google.get("valor_atual", "-")
 
-    falta = max(valor_meta - valor_atingido, 0)
+    falta = valor_meta - valor_atingido
     progresso = 0.0
     if valor_meta > 0:
         progresso = (valor_atingido / valor_meta) * 100
@@ -398,6 +406,9 @@ def aplicar_google_manual(resultado, mes_ref):
     for cidade, dados in resultado.items():
         if cidade in google_manual:
             dados["indicadores"]["avaliacoes_google"] = montar_google_dashboard(google_manual[cidade])
+            print(f"✅ Google manual aplicado em {cidade} ({mes_ref})")
+        else:
+            print(f"ℹ️ Sem Google manual para {cidade} ({mes_ref})")
 
     return resultado
 
