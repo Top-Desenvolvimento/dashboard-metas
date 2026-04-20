@@ -52,9 +52,9 @@
       },
       "clinico_geral": {
         "meta": "91.000,00",
-        "ate_o_momento": "53.821,96",
-        "falta": "-37.178,04",
-        "progresso": "59,145%"
+        "ate_o_momento": "55.815,96",
+        "falta": "-35.184,04",
+        "progresso": "61,336%"
       },
       "avaliacoes_google": {
         "meta": "-",
@@ -76,9 +76,9 @@
       },
       "meta_restauracao": {
         "meta": "58",
-        "ate_o_momento": "10",
-        "falta": "-48",
-        "progresso": "17,241%"
+        "ate_o_momento": "14",
+        "falta": "-44",
+        "progresso": "24,138%"
       }
     },
     "_status": "ok"
