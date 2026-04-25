@@ -6,6 +6,6 @@ Nossos sistemas detectaram tráfego incomum na sua rede de computadores. Esta p�
 
 
 
-Endereço IP: 172.182.213.4
-Hora: 2026-04-25T08:59:49Z
-URL: https://www.google.com/search?q=top+est%C3%A9tica+bucal+bento+gon%C3%A7alves&sca_esv=1b9fc756e6c3b46d&biw=1536&bih=695&sxsrf=ANbL-n5r9Q-1cNM7f93akW-g3XWTGWJnMA%3A1774363190203&ei=NqLCaciEDI7w1sQPtvq-2A4&oq=top+est%C3%A9tica+bucal+bento&gs_lp=Egxnd3Mtd2l6LXNlcnAiGXRvcCBlc3TDqXRpY2EgYnVjYWwgYmVudG8qAggAMgcQIxiwAxgnMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHSLYMUABYAHABeAGQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgyYAwCIBgGQBgmSBwExoAcAsgcAuAcAwgcDMy0xyAcKgAgA&sclient=gws-wiz-serp&sei=hILsadrIL4CzqtsP7eD02Qo
+Endereço IP: 57.151.138.242
+Hora: 2026-04-25T10:00:05Z
+URL: https://www.google.com/search?q=top+est%C3%A9tica+bucal+bento+gon%C3%A7alves&sca_esv=1b9fc756e6c3b46d&biw=1536&bih=695&sxsrf=ANbL-n5r9Q-1cNM7f93akW-g3XWTGWJnMA%3A1774363190203&ei=NqLCaciEDI7w1sQPtvq-2A4&oq=top+est%C3%A9tica+bucal+bento&gs_lp=Egxnd3Mtd2l6LXNlcnAiGXRvcCBlc3TDqXRpY2EgYnVjYWwgYmVudG8qAggAMgcQIxiwAxgnMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHMgoQABiwAxjWBBhHSLYMUABYAHABeAGQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgyYAwCIBgGQBgmSBwExoAcAsgcAuAcAwgcDMy0xyAcKgAgA&sclient=gws-wiz-serp&sei=pJDsaf3kH_qymtkPofzeqAU
