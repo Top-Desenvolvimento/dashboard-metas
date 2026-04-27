@@ -17,7 +17,7 @@ MES_REFERENCIA = os.getenv("MES_REFERENCIA", "AUTO")
 OUTPUT_JSON = "data/metas_atual.json"
 OUTPUT_XLSX = "data/metas_top_estetica.xlsx"
 HISTORICO_DIR = "data/historico"
-GOOGLE_MANUAL_FILE = "data/google_atual.json"
+GOOGLE_MANUAL_FILE = "data/google_manual.json"
 
 TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
@@ -345,7 +345,6 @@ def processar_tabela_em_indicadores(tabela):
 def numero_texto_para_float(valor):
     if valor is None:
         return 0.0
-
     texto = str(valor).strip()
     if not texto:
         return 0.0
@@ -375,7 +374,6 @@ def carregar_google_manual(mes_ref):
         bloco_mes = dados.get(mes_ref, {})
         print(f"📘 Google manual carregado para {mes_ref}: {list(bloco_mes.keys())}")
         return bloco_mes
-
     except Exception as e:
         print(f"⚠️ Erro ao ler {GOOGLE_MANUAL_FILE}: {e}")
         return {}
@@ -403,12 +401,15 @@ def montar_google_dashboard(bloco_google):
 def aplicar_google_manual(resultado, mes_ref):
     google_manual = carregar_google_manual(mes_ref)
 
+    print(f"📅 Mês lido para Google: {mes_ref}")
+    print(f"🏙️ Cidades no Google manual: {list(google_manual.keys())}")
+
     for cidade, dados in resultado.items():
         if cidade in google_manual:
             dados["indicadores"]["avaliacoes_google"] = montar_google_dashboard(google_manual[cidade])
-            print(f"✅ Google manual aplicado em {cidade} ({mes_ref})")
+            print(f"✅ Google manual aplicado em {cidade}")
         else:
-            print(f"ℹ️ Sem Google manual para {cidade} ({mes_ref})")
+            print(f"ℹ️ Sem Google manual para {cidade}")
 
     return resultado
 
