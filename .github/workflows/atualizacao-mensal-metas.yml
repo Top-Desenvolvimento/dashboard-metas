@@ -1,13 +1,20 @@
-name: Preencher histórico 2026
+name: Atualização mensal metas
 
 on:
   workflow_dispatch:
+    inputs:
+      mes_referencia:
+        description: "Mês referência no formato YYYY-MM. Ex: 2026-03. Use AUTO para mês atual."
+        required: true
+        default: "AUTO"
+  schedule:
+    - cron: "0 11 1 * *"
 
 permissions:
   contents: write
 
 jobs:
-  historico-2026:
+  atualizar-metas:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,21 +34,25 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install chromium
 
-      - name: Garantir pasta histórico
-        run: mkdir -p data/historico
+      - name: Definir mês de referência
+        run: |
+          if [ "${{ github.event.inputs.mes_referencia }}" = "" ]; then
+            echo "MES_REFERENCIA=AUTO" >> $GITHUB_ENV
+          else
+            echo "MES_REFERENCIA=${{ github.event.inputs.mes_referencia }}" >> $GITHUB_ENV
+          fi
 
-      - name: Rodar histórico de janeiro a dezembro de 2026
+      - name: Rodar coleta de dados do sistema
         env:
           LOGIN_USER: ${{ secrets.LOGIN_USER }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-        run: |
-          for MES in 2026-01 2026-02 2026-03 2026-04 2026-05 2026-06 2026-07 2026-08 2026-09 2026-10 2026-11 2026-12
-          do
-            echo "========================================"
-            echo "Rodando mês: $MES"
-            echo "========================================"
-            MES_REFERENCIA="$MES" python extract_metas.py
-          done
+          MES_REFERENCIA: ${{ env.MES_REFERENCIA }}
+        run: python extract_metas.py
+
+      - name: Aplicar Google manual
+        env:
+          MES_REFERENCIA: ${{ env.MES_REFERENCIA }}
+        run: python aplicar_google_manual.py
 
       - name: Gerar dashboard HTML
         run: python generate_dashboard.py
@@ -51,13 +62,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/historico data/metas_atual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
-          git commit -m "Preenchimento histórico 2026" || echo "Sem mudanças para commit"
+          git add data/metas_atual.json data/historico data/google_manual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
+
+          git commit -m "Atualização automática das metas" || echo "Sem mudanças para commit"
 
           git fetch origin main
           git pull origin main --no-rebase -X ours || true
 
-          git add data/historico data/metas_atual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
-          git commit -m "Ajuste pós-merge histórico 2026" || echo "Sem mudanças após merge"
+          git add data/metas_atual.json data/historico data/google_manual.json docs/index.html docs/auth.js docs/metas_top_estetica.xlsx
+          git commit -m "Ajuste pós-merge metas" || echo "Sem mudanças após merge"
 
           git push origin main
