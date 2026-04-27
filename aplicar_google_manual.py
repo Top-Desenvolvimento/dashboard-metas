@@ -92,27 +92,30 @@ def carregar_json(caminho):
 
 def salvar_json(caminho, dados):
     os.makedirs(os.path.dirname(caminho), exist_ok=True)
+
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=2)
 
 
 def montar_indicador_google(info):
-    valor_atual = str(info.get("valor_atual", "-"))
+    inicial = numero(info.get("inicial", 0))
     valor_meta = numero(info.get("valor_meta", 0))
-    valor_atingido = numero(info.get("valor_atingido_mes", 0))
+    valor_atual = numero(info.get("valor_atual", 0))
 
-    falta = valor_meta - valor_atingido
+    atingido_mes = valor_atual - inicial
+    falta = valor_meta - atingido_mes
 
     progresso = 0.0
     if valor_meta > 0:
-        progresso = (valor_atingido / valor_meta) * 100
+        progresso = (atingido_mes / valor_meta) * 100
 
     return {
         "meta": br(valor_meta, 0),
-        "ate_o_momento": br(valor_atingido, 0),
+        "ate_o_momento": br(atingido_mes, 0),
         "falta": br(falta, 0),
         "progresso": f"{progresso:.2f}%".replace(".", ","),
-        "valor_atual": valor_atual
+        "valor_inicial": br(inicial, 0),
+        "valor_atual": br(valor_atual, 0)
     }
 
 
