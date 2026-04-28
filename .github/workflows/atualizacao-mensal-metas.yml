@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       mes_referencia:
-        description: "Mês referência no formato YYYY-MM. Ex: 2026-03. Use AUTO para mês atual."
+        description: "Mês referência no formato YYYY-MM. Ex: 2026-04. Use AUTO para mês atual."
         required: true
         default: "AUTO"
   schedule:
