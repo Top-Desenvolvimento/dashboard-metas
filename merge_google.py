@@ -1,16 +1,17 @@
 import json
 import os
 import re
+import unicodedata
 from datetime import datetime
 
 METAS_PATH = "data/metas_atual.json"
 GOOGLE_INICIAL_PATH = "data/google_inicial"
-GOOGLE_META_PATH = "data/google_metamarço"
 GOOGLE_ATUAL_PATH = "data/google_atual.json"
 
 
 def carregar_json(path, default):
     if not os.path.exists(path):
+        print(f"Arquivo não encontrado: {path}")
         return default
 
     with open(path, "r", encoding="utf-8") as f:
@@ -22,53 +23,18 @@ def salvar_json(path, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def extrair_numero(valor):
-    if valor is None:
-        return None
-
-    texto = str(valor).strip()
-
-    if not texto or texto == "-":
-        return None
-
-    numeros = re.findall(r"\d+", texto.replace(".", "").replace(",", ""))
-
-    if not numeros:
-        return None
-
-    return int("".join(numeros))
-
-
-def formatar_int(valor):
-    if valor is None:
-        return "-"
-    return str(int(valor))
-
-
-def formatar_percentual(valor):
-    if valor is None:
-        return "-"
-    return f"{valor:.2f}%".replace(".", ",")
-
-
-def descobrir_mes(base_metas):
-    for _, info in base_metas.items():
-        mes = info.get("mes_referencia")
-        if mes:
-            return mes
-
-    return datetime.now().strftime("%Y-%m")
+def remover_acentos(texto):
+    texto = str(texto)
+    texto = unicodedata.normalize("NFD", texto)
+    texto = texto.encode("ascii", "ignore").decode("utf-8")
+    return texto
 
 
 def normalizar_nome(nome):
-    return str(nome).strip().lower()
+    return remover_acentos(nome).strip().lower()
 
 
 def buscar_por_cidade(base, cidade):
-    """
-    Busca a cidade ignorando diferença de maiúsculas/minúsculas e espaços.
-    Exemplo: 'SS do Cai' encontra 'SS do Caí' somente se estiver igual sem acento.
-    """
     cidade_norm = normalizar_nome(cidade)
 
     for chave, valor in base.items():
@@ -78,70 +44,89 @@ def buscar_por_cidade(base, cidade):
     return None
 
 
+def extrair_numero(valor):
+    if valor is None:
+        return None
+
+    texto = str(valor).strip()
+
+    if texto == "" or texto == "-":
+        return None
+
+    numeros = re.findall(r"\d+", texto)
+
+    if not numeros:
+        return None
+
+    return int("".join(numeros))
+
+
+def formatar_percentual(valor):
+    return f"{valor:.2f}%".replace(".", ",")
+
+
+def descobrir_mes(metas):
+    for _, info in metas.items():
+        mes = info.get("mes_referencia")
+        if mes:
+            return mes
+
+    return datetime.now().strftime("%Y-%m")
+
+
 def main():
     metas = carregar_json(METAS_PATH, {})
     google_inicial = carregar_json(GOOGLE_INICIAL_PATH, {})
-    google_meta = carregar_json(GOOGLE_META_PATH, {})
     google_atual = carregar_json(GOOGLE_ATUAL_PATH, {})
 
     mes_ref = descobrir_mes(metas)
+    base_inicial = google_inicial.get(mes_ref, {})
 
-    # Pega o mês correto. Se não existir, usa vazio.
-    base_inicial_mes = google_inicial.get(mes_ref, {})
-
-    # Pega meta do arquivo google_metamarço se existir.
-    # Se não existir, usa a meta que já está dentro do metas_atual.json.
-    base_meta_mes = google_meta.get(mes_ref, {})
+    print(f"Mês referência: {mes_ref}")
+    print(f"Meses disponíveis no google_inicial: {list(google_inicial.keys())}")
 
     for cidade, info in metas.items():
         indicadores = info.setdefault("indicadores", {})
 
-        google_ind = indicadores.setdefault("avaliacoes_google", {
+        google = indicadores.setdefault("avaliacoes_google", {
             "meta": "-",
-            "ate_o_momento": "-",
+            "ate_o_momento": "0",
             "falta": "-",
-            "progresso": "-"
+            "progresso": "0,00%"
         })
 
-        inicial = extrair_numero(buscar_por_cidade(base_inicial_mes, cidade))
-        atual_total = extrair_numero(buscar_por_cidade(google_atual, cidade))
+        meta = extrair_numero(google.get("meta"))
+        inicial = extrair_numero(buscar_por_cidade(base_inicial, cidade))
+        atual = extrair_numero(buscar_por_cidade(google_atual, cidade))
 
-        # Primeiro tenta pegar meta no google_metamarço
-        meta_mes = extrair_numero(buscar_por_cidade(base_meta_mes, cidade))
-
-        # Se não tiver meta no google_metamarço, usa a meta já existente no metas_atual.json
-        if meta_mes is None:
-            meta_mes = extrair_numero(google_ind.get("meta"))
-
-        if meta_mes is not None:
-            google_ind["meta"] = formatar_int(meta_mes)
-
-        # Se não tiver valor inicial ou atual, não calcula
-        if atual_total is None or inicial is None:
-            google_ind["ate_o_momento"] = "0"
-            google_ind["falta"] = formatar_int(meta_mes) if meta_mes is not None else "-"
-            google_ind["progresso"] = "0,00%"
-            indicadores["avaliacoes_google"] = google_ind
+        if atual is None or inicial is None:
+            google["ate_o_momento"] = "0"
+            google["falta"] = str(meta) if meta else "-"
+            google["progresso"] = "0,00%"
+            print(f"{cidade}: não calculado. Inicial={inicial}, Atual={atual}")
             continue
 
-        realizado_mes = max(atual_total - inicial, 0)
+        realizado = max(atual - inicial, 0)
 
-        if meta_mes is None or meta_mes <= 0:
-            falta = "-"
-            progresso = "-"
+        google["ate_o_momento"] = str(realizado)
+
+        if meta and meta > 0:
+            falta = max(meta - realizado, 0)
+            progresso = (realizado / meta) * 100
+
+            google["falta"] = str(falta)
+            google["progresso"] = formatar_percentual(progresso)
         else:
-            falta = max(meta_mes - realizado_mes, 0)
-            progresso = (realizado_mes / meta_mes) * 100
+            google["falta"] = "-"
+            google["progresso"] = "0,00%"
 
-        google_ind["ate_o_momento"] = formatar_int(realizado_mes)
-        google_ind["falta"] = formatar_int(falta) if falta != "-" else "-"
-        google_ind["progresso"] = formatar_percentual(progresso) if progresso != "-" else "-"
-
-        indicadores["avaliacoes_google"] = google_ind
+        print(
+            f"{cidade}: inicial={inicial}, atual={atual}, "
+            f"realizado={realizado}, meta={meta}"
+        )
 
     salvar_json(METAS_PATH, metas)
-
-    print(f"Google integrado ao metas_atual.json com base em {mes_ref}.")
+    print("Google integrado ao metas_atual.json com sucesso.")
 
 
 if __name__ == "__main__":
