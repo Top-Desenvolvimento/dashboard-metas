@@ -6,6 +6,6 @@ Nossos sistemas detectaram tráfego incomum na sua rede de computadores. Esta p�
 
 
 
-Endereço IP: 135.232.200.215
-Hora: 2026-05-08T15:28:20Z
-URL: https://www.google.com/search?q=top+estetica+bucal+caxias+do+sul&oq=top+estetica+bucal+caxias+do+sul+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQABgWGB4yCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yBwgFEAAY7wUyBggGEEUYPDIGCAcQRRg80gEINjM3MWowajSoAgCwAgE&sourceid=chrome&ie=UTF-8&sei=EwH-aeK8O82bmLQPzNqwiQs
+Endereço IP: 172.182.203.51
+Hora: 2026-05-08T17:12:59Z
+URL: https://www.google.com/search?q=top+estetica+bucal+caxias+do+sul&oq=top+estetica+bucal+caxias+do+sul+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQABgWGB4yCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yBwgFEAAY7wUyBggGEEUYPDIGCAcQRRg80gEINjM3MWowajSoAgCwAgE&sourceid=chrome&ie=UTF-8&sei=mhn-aZDVN5HEkPIPsbyisAM
