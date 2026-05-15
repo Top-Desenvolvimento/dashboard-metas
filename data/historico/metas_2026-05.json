@@ -52,9 +52,9 @@
       },
       "clinico_geral": {
         "meta": "90.000,00",
-        "ate_o_momento": "11.781,00",
-        "falta": "-78.219,00",
-        "progresso": "13,090%"
+        "ate_o_momento": "12.086,00",
+        "falta": "-77.914,00",
+        "progresso": "13,429%"
       },
       "avaliacoes_google": {
         "meta": "-",
@@ -64,9 +64,9 @@
       },
       "meta_avaliacao": {
         "meta": "228",
-        "ate_o_momento": "46",
-        "falta": "-182",
-        "progresso": "20,175%"
+        "ate_o_momento": "47",
+        "falta": "-181",
+        "progresso": "20,614%"
       },
       "meta_profilaxia": {
         "meta": "89",
@@ -76,9 +76,9 @@
       },
       "meta_restauracao": {
         "meta": "42",
-        "ate_o_momento": "9",
-        "falta": "-33",
-        "progresso": "21,429%"
+        "ate_o_momento": "10",
+        "falta": "-32",
+        "progresso": "23,810%"
       }
     },
     "_status": "ok"
@@ -244,9 +244,9 @@
       },
       "meta_restauracao": {
         "meta": "37",
-        "ate_o_momento": "23",
-        "falta": "-14",
-        "progresso": "62,162%"
+        "ate_o_momento": "24",
+        "falta": "-13",
+        "progresso": "64,865%"
       }
     },
     "_status": "ok"
