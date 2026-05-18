@@ -64,21 +64,21 @@
       },
       "meta_avaliacao": {
         "meta": "228",
-        "ate_o_momento": "67",
-        "falta": "-161",
-        "progresso": "29,386%"
+        "ate_o_momento": "68",
+        "falta": "-160",
+        "progresso": "29,825%"
       },
       "meta_profilaxia": {
         "meta": "89",
-        "ate_o_momento": "37",
-        "falta": "-52",
-        "progresso": "41,573%"
+        "ate_o_momento": "38",
+        "falta": "-51",
+        "progresso": "42,697%"
       },
       "meta_restauracao": {
         "meta": "42",
-        "ate_o_momento": "12",
-        "falta": "-30",
-        "progresso": "28,571%"
+        "ate_o_momento": "13",
+        "falta": "-29",
+        "progresso": "30,952%"
       }
     },
     "_status": "ok"
@@ -322,9 +322,9 @@
       },
       "meta_profilaxia": {
         "meta": "22",
-        "ate_o_momento": "9",
-        "falta": "-13",
-        "progresso": "40,909%"
+        "ate_o_momento": "10",
+        "falta": "-12",
+        "progresso": "45,455%"
       },
       "meta_restauracao": {
         "meta": "17",
