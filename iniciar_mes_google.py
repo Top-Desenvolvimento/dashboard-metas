@@ -3,8 +3,7 @@ import os
 from datetime import datetime
 
 GOOGLE_ATUAL_PATH = "data/google_atual.json"
-GOOGLE_INICIAL_PATH = "data/google_inicial"
-
+GOOGLE_INICIAL_PATH = "data/google_inicial.json"
 
 def carregar_json(path, default):
     if not os.path.exists(path):
