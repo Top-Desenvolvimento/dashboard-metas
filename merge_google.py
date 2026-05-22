@@ -19,6 +19,8 @@ def carregar_json(path, default):
 
 
 def salvar_json(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
@@ -46,17 +48,23 @@ def buscar_por_cidade(base, cidade):
 
 def extrair_numero(valor):
     if valor is None:
-        return None
+        return 0
+
+    if isinstance(valor, dict):
+        for chave in ["valor_atual", "atual", "valor", "avaliacoes", "total", "inicial"]:
+            if chave in valor:
+                return extrair_numero(valor.get(chave))
+        return 0
 
     texto = str(valor).strip()
 
     if texto == "" or texto == "-":
-        return None
+        return 0
 
     numeros = re.findall(r"\d+", texto)
 
     if not numeros:
-        return None
+        return 0
 
     return int("".join(numeros))
 
@@ -71,7 +79,37 @@ def descobrir_mes(metas):
         if mes:
             return mes
 
+    mes_env = os.getenv("MES_REFERENCIA", "").strip()
+    if mes_env and mes_env != "AUTO":
+        return mes_env
+
     return datetime.now().strftime("%Y-%m")
+
+
+def calcular_google(meta, inicial, atual):
+    realizado = atual - inicial
+
+    if realizado < 0:
+        realizado = 0
+
+    falta = meta - realizado
+
+    if falta < 0:
+        falta = 0
+
+    progresso = 0
+
+    if meta > 0:
+        progresso = (realizado / meta) * 100
+
+    return {
+        "meta": str(meta),
+        "ate_o_momento": str(realizado),
+        "falta": str(falta),
+        "progresso": formatar_percentual(progresso),
+        "valor_inicial": str(inicial),
+        "valor_atual": str(atual)
+    }
 
 
 def main():
@@ -82,51 +120,50 @@ def main():
     mes_ref = descobrir_mes(metas)
     base_inicial = google_inicial.get(mes_ref, {})
 
+    print("=" * 60)
+    print("MERGE GOOGLE")
     print(f"Mês referência: {mes_ref}")
     print(f"Meses disponíveis no google_inicial: {list(google_inicial.keys())}")
+    print("=" * 60)
 
     for cidade, info in metas.items():
         indicadores = info.setdefault("indicadores", {})
 
-        google = indicadores.setdefault("avaliacoes_google", {
-            "meta": "-",
+        google_existente = indicadores.setdefault("avaliacoes_google", {
+            "meta": "0",
             "ate_o_momento": "0",
-            "falta": "-",
-            "progresso": "0,00%"
+            "falta": "0",
+            "progresso": "0,00%",
+            "valor_inicial": "0",
+            "valor_atual": "0"
         })
 
-        meta = extrair_numero(google.get("meta"))
+        meta = extrair_numero(google_existente.get("meta"))
         inicial = extrair_numero(buscar_por_cidade(base_inicial, cidade))
         atual = extrair_numero(buscar_por_cidade(google_atual, cidade))
 
-        if atual is None or inicial is None:
-            google["ate_o_momento"] = "0"
-            google["falta"] = str(meta) if meta else "-"
-            google["progresso"] = "0,00%"
-            print(f"{cidade}: não calculado. Inicial={inicial}, Atual={atual}")
+        if inicial <= 0 or atual <= 0:
+            google_existente["ate_o_momento"] = "0"
+            google_existente["falta"] = str(meta) if meta else "0"
+            google_existente["progresso"] = "0,00%"
+            google_existente["valor_inicial"] = str(inicial)
+            google_existente["valor_atual"] = str(atual)
+
+            print(f"{cidade}: NÃO CALCULADO | inicial={inicial} | atual={atual} | meta={meta}")
             continue
 
-        realizado = max(atual - inicial, 0)
-
-        google["ate_o_momento"] = str(realizado)
-
-        if meta and meta > 0:
-            falta = max(meta - realizado, 0)
-            progresso = (realizado / meta) * 100
-
-            google["falta"] = str(falta)
-            google["progresso"] = formatar_percentual(progresso)
-        else:
-            google["falta"] = "-"
-            google["progresso"] = "0,00%"
+        indicadores["avaliacoes_google"] = calcular_google(meta, inicial, atual)
 
         print(
-            f"{cidade}: inicial={inicial}, atual={atual}, "
-            f"realizado={realizado}, meta={meta}"
+            f"{cidade}: inicial={inicial} | atual={atual} | "
+            f"realizado={atual - inicial} | meta={meta}"
         )
 
     salvar_json(METAS_PATH, metas)
+
+    print("=" * 60)
     print("Google integrado ao metas_atual.json com sucesso.")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
