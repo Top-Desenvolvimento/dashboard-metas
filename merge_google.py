@@ -5,7 +5,7 @@ import unicodedata
 from datetime import datetime
 
 METAS_PATH = "data/metas_atual.json"
-GOOGLE_INICIAL_PATH = "data/google_inicial"
+GOOGLE_INICIAL_PATH = "data/google_inicial.json"
 GOOGLE_ATUAL_PATH = "data/google_atual.json"
 
 
