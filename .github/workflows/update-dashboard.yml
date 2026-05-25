@@ -57,9 +57,9 @@ jobs:
         run: |
           python extract_metas.py
 
-      - name: Executar coleta de avaliações do Google
+      - name: Aplicar dados manuais do Google
         run: |
-          python extract_google_reviews.py
+          python aplicar_google_manual.py
 
       - name: Upload debug Google
         if: always()
