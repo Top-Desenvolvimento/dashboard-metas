@@ -48,15 +48,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "50.000,00",
-        "ate_o_momento": "34.877,86",
-        "falta": "-15.122,14",
-        "progresso": "69,756%"
+        "ate_o_momento": "35.142,86",
+        "falta": "-14.857,14",
+        "progresso": "70,286%"
       },
       "clinico_geral": {
         "meta": "90.000,00",
-        "ate_o_momento": "41.813,99",
-        "falta": "-48.186,01",
-        "progresso": "46,460%"
+        "ate_o_momento": "42.042,99",
+        "falta": "-47.957,01",
+        "progresso": "46,714%"
       },
       "avaliacoes_google": {
         "meta": "29",
@@ -68,15 +68,15 @@
       },
       "meta_avaliacao": {
         "meta": "228",
-        "ate_o_momento": "121",
-        "falta": "-107",
-        "progresso": "53,070%"
+        "ate_o_momento": "122",
+        "falta": "-106",
+        "progresso": "53,509%"
       },
       "meta_profilaxia": {
         "meta": "89",
-        "ate_o_momento": "56",
-        "falta": "-33",
-        "progresso": "62,921%"
+        "ate_o_momento": "57",
+        "falta": "-32",
+        "progresso": "64,045%"
       },
       "meta_restauracao": {
         "meta": "42",
@@ -224,9 +224,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "36.468,00",
-        "falta": "-21.532,00",
-        "progresso": "62,876%"
+        "ate_o_momento": "36.687,00",
+        "falta": "-21.313,00",
+        "progresso": "63,253%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
@@ -244,15 +244,15 @@
       },
       "meta_avaliacao": {
         "meta": "300",
-        "ate_o_momento": "215",
-        "falta": "-85",
-        "progresso": "71,667%"
+        "ate_o_momento": "216",
+        "falta": "-84",
+        "progresso": "72,000%"
       },
       "meta_profilaxia": {
         "meta": "86",
-        "ate_o_momento": "50",
-        "falta": "-36",
-        "progresso": "58,140%"
+        "ate_o_momento": "53",
+        "falta": "-33",
+        "progresso": "61,628%"
       },
       "meta_restauracao": {
         "meta": "37",
