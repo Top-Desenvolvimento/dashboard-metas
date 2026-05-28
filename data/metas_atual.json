@@ -4,15 +4,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.500,00",
-        "ate_o_momento": "19.915,00",
-        "falta": "-10.585,00",
-        "progresso": "65,295%"
+        "ate_o_momento": "20.112,00",
+        "falta": "-10.388,00",
+        "progresso": "65,941%"
       },
       "clinico_geral": {
         "meta": "53.800,00",
-        "ate_o_momento": "35.518,20",
-        "falta": "-18.281,80",
-        "progresso": "66,019%"
+        "ate_o_momento": "36.438,20",
+        "falta": "-17.361,80",
+        "progresso": "67,729%"
       },
       "avaliacoes_google": {
         "meta": "27",
@@ -24,9 +24,9 @@
       },
       "meta_avaliacao": {
         "meta": "160",
-        "ate_o_momento": "93",
-        "falta": "-67",
-        "progresso": "58,125%"
+        "ate_o_momento": "95",
+        "falta": "-65",
+        "progresso": "59,375%"
       },
       "meta_profilaxia": {
         "meta": "60",
@@ -92,9 +92,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "34.000,00",
-        "ate_o_momento": "23.229,00",
-        "falta": "-10.771,00",
-        "progresso": "68,321%"
+        "ate_o_momento": "23.999,00",
+        "falta": "-10.001,00",
+        "progresso": "70,585%"
       },
       "clinico_geral": {
         "meta": "34.000,00",
@@ -112,9 +112,9 @@
       },
       "meta_avaliacao": {
         "meta": "90",
-        "ate_o_momento": "61",
-        "falta": "-29",
-        "progresso": "67,778%"
+        "ate_o_momento": "64",
+        "falta": "-26",
+        "progresso": "71,111%"
       },
       "meta_profilaxia": {
         "meta": "27",
@@ -156,9 +156,9 @@
       },
       "meta_avaliacao": {
         "meta": "97",
-        "ate_o_momento": "90",
-        "falta": "-7",
-        "progresso": "92,784%"
+        "ate_o_momento": "91",
+        "falta": "-6",
+        "progresso": "93,814%"
       },
       "meta_profilaxia": {
         "meta": "37",
@@ -224,9 +224,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "38.953,00",
-        "falta": "-19.047,00",
-        "progresso": "67,160%"
+        "ate_o_momento": "39.178,00",
+        "falta": "-18.822,00",
+        "progresso": "67,548%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
@@ -244,15 +244,15 @@
       },
       "meta_avaliacao": {
         "meta": "300",
-        "ate_o_momento": "230",
-        "falta": "-70",
-        "progresso": "76,667%"
+        "ate_o_momento": "231",
+        "falta": "-69",
+        "progresso": "77,000%"
       },
       "meta_profilaxia": {
         "meta": "86",
-        "ate_o_momento": "56",
-        "falta": "-30",
-        "progresso": "65,116%"
+        "ate_o_momento": "57",
+        "falta": "-29",
+        "progresso": "66,279%"
       },
       "meta_restauracao": {
         "meta": "37",
@@ -288,9 +288,9 @@
       },
       "meta_avaliacao": {
         "meta": "84",
-        "ate_o_momento": "69",
-        "falta": "-15",
-        "progresso": "82,143%"
+        "ate_o_momento": "68",
+        "falta": "-16",
+        "progresso": "80,952%"
       },
       "meta_profilaxia": {
         "meta": "41",
@@ -300,9 +300,9 @@
       },
       "meta_restauracao": {
         "meta": "25",
-        "ate_o_momento": "19",
-        "falta": "-6",
-        "progresso": "76,000%"
+        "ate_o_momento": "22",
+        "falta": "-3",
+        "progresso": "88,000%"
       }
     },
     "_status": "ok"
@@ -312,9 +312,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "29.000,00",
-        "ate_o_momento": "21.727,97",
-        "falta": "-7.272,03",
-        "progresso": "74,924%"
+        "ate_o_momento": "21.877,97",
+        "falta": "-7.122,03",
+        "progresso": "75,441%"
       },
       "clinico_geral": {
         "meta": "24.600,00",
