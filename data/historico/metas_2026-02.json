@@ -10,9 +10,9 @@
       },
       "clinico_geral": {
         "meta": "42.000,00",
-        "ate_o_momento": "37.495,53",
-        "falta": "-4.504,47",
-        "progresso": "89,275%"
+        "ate_o_momento": "37.300,53",
+        "falta": "-4.699,47",
+        "progresso": "88,811%"
       },
       "avaliacoes_google": {
         "meta": "-",
@@ -316,9 +316,9 @@
       },
       "meta_avaliacao": {
         "meta": "52",
-        "ate_o_momento": "47",
-        "falta": "-5",
-        "progresso": "90,385%"
+        "ate_o_momento": "48",
+        "falta": "-4",
+        "progresso": "92,308%"
       },
       "meta_profilaxia": {
         "meta": "20",
