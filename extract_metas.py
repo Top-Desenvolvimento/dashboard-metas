@@ -28,9 +28,7 @@ CIDADES = [
     {"nome": "Bento", "url": "http://bento.topesteticabucal.com.br/sistema"},
     {"nome": "Encantado", "url": "https://encantado.topesteticabucal.com.br/sistema"},
     {"nome": "Soledade", "url": "http://soledade.topesteticabucal.com.br/sistema"},
-    {"nome": "Garibaldi", "url": "http://garibaldi.topesteticabucal.com.br/sistema"},
     {"nome": "Veranópolis", "url": "http://veranopolis.topesteticabucal.com.br/sistema"},
-    {"nome": "SS do Caí", "url": "https://ssdocai.topesteticabucal.com.br/sistema/"},
 ]
 
 MAPA_CHAVES = {
