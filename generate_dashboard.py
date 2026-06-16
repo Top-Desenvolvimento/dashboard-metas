@@ -13,6 +13,11 @@ EXCEL_SOURCE = "data/metas_top_estetica.xlsx"
 EXCEL_PUBLIC = "docs/metas_top_estetica.xlsx"
 TZ = ZoneInfo("America/Sao_Paulo")
 
+# Indicadores por seção
+FATURAMENTO = ["ortodontia", "clinico_geral"]
+SERVICO = ["meta_avaliacao", "avaliacoes_google", "meta_profilaxia", "meta_restauracao"]
+ACOMPANHAMENTO = ["colagem_convencional", "colagem_estetico"]
+
 MAPA_INDICADORES = {
     "ortodontia": "Ortodontia",
     "clinico_geral": "Clínico Geral",
@@ -20,16 +25,11 @@ MAPA_INDICADORES = {
     "meta_avaliacao": "Meta de Avaliação",
     "meta_profilaxia": "Meta de Profilaxia",
     "meta_restauracao": "Meta de Restauração",
+    "colagem_convencional": "Colagem Convencional",
+    "colagem_estetico": "Colagem Estético/Autoligado",
 }
 
-INDICADORES = [
-    "ortodontia",
-    "clinico_geral",
-    "avaliacoes_google",
-    "meta_avaliacao",
-    "meta_profilaxia",
-    "meta_restauracao",
-]
+INDICADORES = FATURAMENTO + SERVICO
 
 
 def slug(texto):
@@ -151,14 +151,11 @@ def gerar_dashboard():
     --green: #12d99f;
     --yellow: #f5b301;
     --red: #ff4d7a;
+    --purple: #a78bfa;
     --shadow: 0 0 0 1px rgba(0,232,255,.05), 0 14px 28px rgba(0,0,0,.28);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: Inter, Arial, sans-serif;
@@ -170,11 +167,7 @@ body {
     min-height: 100vh;
 }
 
-.wrap {
-    max-width: 1550px;
-    margin: 0 auto;
-    padding: 24px;
-}
+.wrap { max-width: 1550px; margin: 0 auto; padding: 24px; }
 
 .header {
     display: flex;
@@ -190,11 +183,7 @@ body {
     letter-spacing: -0.03em;
 }
 
-.header-left p {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 1rem;
-}
+.header-left p { margin-top: 8px; color: var(--muted); font-size: 1rem; }
 
 .header-right {
     display: flex;
@@ -219,9 +208,7 @@ body {
     background: linear-gradient(135deg, rgba(0,232,255,.95), rgba(18,217,159,.95));
 }
 
-.month-filter-wrap {
-    position: relative;
-}
+.month-filter-wrap { position: relative; }
 
 .month-filter {
     appearance: none;
@@ -278,9 +265,7 @@ body {
     transition: .2s ease;
 }
 
-.tab-btn:hover {
-    color: var(--text);
-}
+.tab-btn:hover { color: var(--text); }
 
 .tab-btn.active {
     color: var(--cyan);
@@ -288,14 +273,56 @@ body {
     background: rgba(0,232,255,.08);
 }
 
-.tab-content {
-    display: none;
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Section headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 14px;
 }
 
-.tab-content.active {
-    display: block;
+.section-label {
+    font-size: .78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: 5px 12px;
+    border-radius: 999px;
 }
 
+.section-label.faturamento {
+    background: rgba(0,232,255,.12);
+    color: var(--cyan);
+    border: 1px solid rgba(0,232,255,.25);
+}
+
+.section-label.servico {
+    background: rgba(18,217,159,.12);
+    color: var(--green);
+    border: 1px solid rgba(18,217,159,.25);
+}
+
+.section-label.acompanhamento {
+    background: rgba(167,139,250,.12);
+    color: var(--purple);
+    border: 1px solid rgba(167,139,250,.25);
+}
+
+.section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.section-desc {
+    font-size: .82rem;
+    color: var(--muted);
+}
+
+/* Cards gerais */
 .top-grid {
     display: grid;
     grid-template-columns: 340px 1fr;
@@ -303,26 +330,16 @@ body {
     margin-bottom: 22px;
 }
 
-.info-card,
-.beats-card,
-.rank-card,
-.summary-card,
-.city-card,
-.panel {
+.info-card, .beats-card, .rank-card, .summary-card, .city-card, .panel {
     background: linear-gradient(180deg, var(--panel-2), var(--panel));
     border: 1px solid var(--border);
     border-radius: 18px;
     box-shadow: var(--shadow);
 }
 
-.info-card,
-.beats-card {
-    padding: 18px;
-}
+.info-card, .beats-card { padding: 18px; }
 
-.info-title,
-.beats-title,
-.panel-title {
+.info-title, .beats-title, .panel-title {
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: .08em;
@@ -330,21 +347,10 @@ body {
     margin-bottom: 12px;
 }
 
-.info-number {
-    font-size: 3rem;
-    color: var(--cyan);
-    font-weight: 900;
-}
+.info-number { font-size: 3rem; color: var(--cyan); font-weight: 900; }
+.info-text { margin-top: 8px; color: var(--muted); }
 
-.info-text {
-    margin-top: 8px;
-    color: var(--muted);
-}
-
-.beats-list {
-    display: grid;
-    gap: 10px;
-}
+.beats-list { display: grid; gap: 10px; }
 
 .beat-item {
     display: flex;
@@ -357,52 +363,28 @@ body {
     border: 1px solid rgba(255,255,255,.04);
 }
 
-.beat-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+.beat-left { display: flex; flex-direction: column; gap: 4px; }
+.beat-city { font-weight: 800; }
+.beat-meta { color: var(--muted); font-size: .88rem; }
+.beat-item strong { color: var(--green); }
+.empty-message { color: var(--muted); }
 
-.beat-city {
-    font-weight: 800;
-}
-
-.beat-meta {
-    color: var(--muted);
-    font-size: .88rem;
-}
-
-.beat-item strong {
-    color: var(--green);
-}
-
-.empty-message {
-    color: var(--muted);
-}
-
+/* Rankings */
 .rankings-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
-.rank-card {
-    overflow: hidden;
-}
+.rank-card { overflow: hidden; }
 
 .rank-card-header {
     padding: 16px 18px;
     border-bottom: 1px solid var(--line);
 }
 
-.rank-card-title {
-    font-size: 1.05rem;
-    font-weight: 900;
-}
-
-.rank-card-body {
-    padding: 8px 18px 16px;
-}
+.rank-card-title { font-size: 1.05rem; font-weight: 900; }
+.rank-card-body { padding: 8px 18px 16px; }
 
 .rank-row {
     display: grid;
@@ -413,21 +395,10 @@ body {
     border-top: 1px solid rgba(255,255,255,.05);
 }
 
-.rank-row:first-child {
-    border-top: none;
-}
+.rank-row:first-child { border-top: none; }
 
-.rank-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.rank-texts {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+.rank-left { display: flex; align-items: center; gap: 12px; }
+.rank-texts { display: flex; flex-direction: column; gap: 4px; }
 
 .rank-pos {
     min-width: 50px;
@@ -446,15 +417,8 @@ body {
 .pos-3 { background: rgba(165,102,38,.22); color: #ffb56d; }
 .pos-other { color: #fff; }
 
-.rank-city {
-    font-weight: 800;
-    font-size: 1rem;
-}
-
-.rank-sub {
-    color: var(--muted);
-    font-size: .88rem;
-}
+.rank-city { font-weight: 800; font-size: 1rem; }
+.rank-sub { color: var(--muted); font-size: .88rem; }
 
 .rank-bar {
     height: 10px;
@@ -463,21 +427,74 @@ body {
     overflow: hidden;
 }
 
-.rank-fill {
-    height: 100%;
-    border-radius: 999px;
-}
-
+.rank-fill { height: 100%; border-radius: 999px; }
 .rank-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
 .rank-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
 .rank-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
 .rank-fill.empty { background: #25374a; }
 
-.rank-right {
-    text-align: right;
-    font-weight: 900;
+.rank-right { text-align: right; font-weight: 900; }
+
+/* Acompanhamento ranking */
+.acomp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
+.acomp-card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid rgba(167,139,250,.18);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.acomp-card-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(167,139,250,.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.acomp-card-title { font-size: 1.05rem; font-weight: 900; }
+
+.acomp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--purple);
+    flex-shrink: 0;
+}
+
+.acomp-card-body { padding: 8px 18px 16px; }
+
+.acomp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.acomp-row:first-child { border-top: none; }
+
+.acomp-cidade { font-weight: 800; }
+
+.acomp-valor {
+    font-weight: 900;
+    color: var(--purple);
+    font-size: 1.1rem;
+}
+
+.acomp-em-breve {
+    font-size: .82rem;
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* Cidade - summary */
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -485,9 +502,7 @@ body {
     margin-bottom: 18px;
 }
 
-.summary-card {
-    padding: 18px;
-}
+.summary-card { padding: 18px; }
 
 .summary-label {
     color: var(--muted);
@@ -497,25 +512,13 @@ body {
     margin-bottom: 12px;
 }
 
-.summary-value {
-    color: var(--cyan);
-    font-size: 1.8rem;
-    font-weight: 900;
-}
+.summary-value { color: var(--cyan); font-size: 1.8rem; font-weight: 900; }
 
-.panel {
-    padding: 18px;
-    margin-bottom: 18px;
-}
+.panel { padding: 18px; margin-bottom: 18px; }
+.panel-header { margin-bottom: 14px; }
 
-.panel-header {
-    margin-bottom: 14px;
-}
-
-.evolution-chart {
-    display: grid;
-    gap: 12px;
-}
+/* Evolution chart */
+.evolution-chart { display: grid; gap: 12px; }
 
 .evo-row {
     display: grid;
@@ -524,9 +527,7 @@ body {
     align-items: center;
 }
 
-.evo-label {
-    font-weight: 700;
-}
+.evo-label { font-weight: 700; }
 
 .evo-bar {
     height: 12px;
@@ -535,21 +536,16 @@ body {
     overflow: hidden;
 }
 
-.evo-fill {
-    height: 100%;
-    border-radius: 999px;
-}
-
+.evo-fill { height: 100%; border-radius: 999px; }
 .evo-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
 .evo-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
 .evo-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
 .evo-fill.empty { background: #25374a; }
+.evo-fill.acomp { background: linear-gradient(90deg, #a78bfa, #c4b5fd); }
 
-.evo-value {
-    text-align: right;
-    font-weight: 900;
-}
+.evo-value { text-align: right; font-weight: 900; }
 
+/* City cards */
 .city-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -557,9 +553,7 @@ body {
     margin-bottom: 18px;
 }
 
-.city-card {
-    padding: 18px;
-}
+.city-card { padding: 18px; }
 
 .city-card-header {
     display: flex;
@@ -569,14 +563,8 @@ body {
     margin-bottom: 14px;
 }
 
-.city-card-title {
-    font-size: 1.02rem;
-    font-weight: 900;
-}
-
-.city-card-progress {
-    font-weight: 900;
-}
+.city-card-title { font-size: 1.02rem; font-weight: 900; }
+.city-card-progress { font-weight: 900; }
 
 .city-bar {
     height: 12px;
@@ -586,11 +574,7 @@ body {
     margin-bottom: 14px;
 }
 
-.city-fill {
-    height: 100%;
-    border-radius: 999px;
-}
-
+.city-fill { height: 100%; border-radius: 999px; }
 .city-fill.ok { background: linear-gradient(90deg, #12d99f, #08f0c2); }
 .city-fill.warn { background: linear-gradient(90deg, #f0a500, #f7c52b); }
 .city-fill.bad { background: linear-gradient(90deg, #ff4d7a, #ff6a91); }
@@ -616,21 +600,58 @@ body {
     margin-bottom: 6px;
 }
 
-.metric-box strong {
+.metric-box strong { font-size: 1rem; }
+
+/* Acompanhamento cidade */
+.acomp-cidade-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.acomp-cidade-card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid rgba(167,139,250,.18);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.acomp-cidade-title {
+    font-size: .82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--purple);
+    margin-bottom: 14px;
+}
+
+.acomp-cidade-valor {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--purple);
+}
+
+.acomp-cidade-label {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.acomp-cidade-embreve {
     font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 6px;
 }
 
-.table-wrap {
-    overflow-x: auto;
-}
+/* Table */
+.table-wrap { overflow-x: auto; }
 
-.dash-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+.dash-table { width: 100%; border-collapse: collapse; }
 
-.dash-table th,
-.dash-table td {
+.dash-table th, .dash-table td {
     text-align: left;
     padding: 14px 12px;
     border-top: 1px solid rgba(255,255,255,.05);
@@ -643,70 +664,32 @@ body {
     letter-spacing: .05em;
 }
 
-.td-title {
-    font-weight: 800;
-}
-
-.ok {
-    color: var(--green);
-}
-
-.warn {
-    color: var(--yellow);
-}
-
-.bad {
-    color: var(--red);
-}
-
-.empty {
-    color: var(--muted);
-}
+.td-title { font-weight: 800; }
+.ok { color: var(--green); }
+.warn { color: var(--yellow); }
+.bad { color: var(--red); }
+.empty { color: var(--muted); }
+.acomp-color { color: var(--purple); }
 
 @keyframes pulse {
     0%,100% { opacity: 1; transform: scale(1); }
     50% { opacity: .45; transform: scale(1.03); }
 }
 
-.blink {
-    animation: pulse 1.2s infinite;
-}
+.blink { animation: pulse 1.2s infinite; }
 
 @media (max-width: 1280px) {
-    .top-grid,
-    .rankings-grid,
-    .summary-grid,
-    .city-grid {
-        grid-template-columns: 1fr;
-    }
+    .top-grid, .rankings-grid, .summary-grid, .city-grid,
+    .acomp-grid, .acomp-cidade-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 960px) {
-    .header {
-        flex-direction: column;
-    }
-
-    .header-left h1 {
-        font-size: 2.1rem;
-    }
-
-    .rank-row,
-    .evo-row {
-        grid-template-columns: 1fr;
-    }
-
-    .rank-right,
-    .evo-value {
-        text-align: left;
-    }
-
-    .city-metrics {
-        grid-template-columns: 1fr;
-    }
-
-    .month-filter {
-        min-width: 100%;
-    }
+    .header { flex-direction: column; }
+    .header-left h1 { font-size: 2.1rem; }
+    .rank-row, .evo-row { grid-template-columns: 1fr; }
+    .rank-right, .evo-value { text-align: left; }
+    .city-metrics { grid-template-columns: 1fr; }
+    .month-filter { min-width: 100%; }
 }
 </style>
 </head>
@@ -743,10 +726,14 @@ body {
 const HISTORICO = __HISTORICO__;
 const MAPA_INDICADORES = __MAPA__;
 const INDICADORES = __INDICADORES__;
+const FATURAMENTO = __FATURAMENTO__;
+const SERVICO = __SERVICO__;
+const ACOMPANHAMENTO = __ACOMPANHAMENTO__;
 const AGORA = __AGORA__;
 const MES_ATUAL = __MES_ATUAL__;
 
-function textoSeguro(valor, padrao = "—") {
+function textoSeguro(valor, padrao) {
+  padrao = padrao !== undefined ? padrao : "—";
   if (valor === null || valor === undefined) return padrao;
   const texto = String(valor).trim();
   return texto ? texto : padrao;
@@ -780,12 +767,8 @@ function mesLabel(valor) {
   };
   try {
     const partes = valor.split("-");
-    const ano = partes[0];
-    const mes = partes[1];
-    return (mapa[mes] || mes) + "/" + ano;
-  } catch (e) {
-    return valor;
-  }
+    return (mapa[partes[1]] || partes[1]) + "/" + partes[0];
+  } catch (e) { return valor; }
 }
 
 function progressoGeral(infoCidade) {
@@ -796,15 +779,14 @@ function progressoGeral(infoCidade) {
     if (p !== null) valores.push(p);
   }
   if (!valores.length) return null;
-  return valores.reduce((a, b) => a + b, 0) / valores.length;
+  return valores.reduce(function(a, b) { return a + b; }, 0) / valores.length;
 }
 
 function metasBatidas(base) {
   const resultado = [];
   for (const cidade of Object.keys(base)) {
-    const infoCidade = base[cidade] || {};
-    const indicadores = infoCidade.indicadores || {};
-    for (const chave of Object.keys(indicadores)) {
+    const indicadores = (base[cidade] && base[cidade].indicadores) || {};
+    for (const chave of INDICADORES) {
       const ind = indicadores[chave] || {};
       const p = percentual(ind.progresso);
       if (p !== null && p >= 100) {
@@ -817,26 +799,21 @@ function metasBatidas(base) {
       }
     }
   }
-
   resultado.sort(function(a, b) {
     if (b.percentual_num !== a.percentual_num) return b.percentual_num - a.percentual_num;
     if (a.cidade !== b.cidade) return a.cidade.localeCompare(b.cidade);
     return a.indicador.localeCompare(b.indicador);
   });
-
   return resultado;
 }
 
 function gerarRanking(base, indicador) {
   const ranking = [];
-
   for (const cidade of Object.keys(base)) {
-    const infoCidade = base[cidade] || {};
-    const ind = (infoCidade.indicadores && infoCidade.indicadores[indicador]) || {};
+    const ind = ((base[cidade] && base[cidade].indicadores) || {})[indicador] || {};
     const p = percentual(ind.progresso);
     ranking.push([cidade, p, ind]);
   }
-
   ranking.sort(function(a, b) {
     const aNull = a[1] === null;
     const bNull = b[1] === null;
@@ -844,7 +821,6 @@ function gerarRanking(base, indicador) {
     if ((b[1] || 0) !== (a[1] || 0)) return (b[1] || 0) - (a[1] || 0);
     return a[0].localeCompare(b[0]);
   });
-
   return ranking;
 }
 
@@ -871,30 +847,64 @@ function renderRankingCard(titulo, ranking) {
             <div class="rank-sub">Meta: ${textoSeguro(dados.meta)} | Realizado: ${textoSeguro(dados.ate_o_momento)}</div>
           </div>
         </div>
-
         <div class="rank-center">
-          <div class="rank-bar">
-            <div class="rank-fill ${status}" style="width:${largura}%"></div>
-          </div>
+          <div class="rank-bar"><div class="rank-fill ${status}" style="width:${largura}%"></div></div>
         </div>
-
         <div class="rank-right">
           <div class="rank-progress ${status}">${textoSeguro(dados.progresso)}</div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join("");
 
   return `
     <section class="rank-card">
-      <div class="rank-card-header">
-        <div class="rank-card-title">${titulo}</div>
-      </div>
-      <div class="rank-card-body">
-        ${linhas}
-      </div>
-    </section>
-  `;
+      <div class="rank-card-header"><div class="rank-card-title">${titulo}</div></div>
+      <div class="rank-card-body">${linhas}</div>
+    </section>`;
+}
+
+function renderAcompanhamentoRanking(base) {
+  const cards = ACOMPANHAMENTO.map(function(chave) {
+    const linhas = Object.keys(base).sort().map(function(cidade) {
+      const ind = ((base[cidade] && base[cidade].indicadores) || {})[chave];
+      const temDados = ind && (ind.ate_o_momento || ind.valor_atual || ind.realizado);
+      const valor = temDados
+        ? textoSeguro(ind.ate_o_momento || ind.valor_atual || ind.realizado)
+        : null;
+
+      return `
+        <div class="acomp-row">
+          <span class="acomp-cidade">${cidade}</span>
+          ${valor !== null
+            ? `<span class="acomp-valor">${valor}</span>`
+            : `<span class="acomp-em-breve">Em breve</span>`}
+        </div>`;
+    }).join("");
+
+    return `
+      <div class="acomp-card">
+        <div class="acomp-card-header">
+          <div class="acomp-dot"></div>
+          <div class="acomp-card-title">${MAPA_INDICADORES[chave]}</div>
+        </div>
+        <div class="acomp-card-body">${linhas}</div>
+      </div>`;
+  }).join("");
+
+  return `<div class="acomp-grid">${cards}</div>`;
+}
+
+function renderSectionHeader(tipo, descricao) {
+  return `
+    <div class="section-header">
+      <span class="section-label ${tipo}">${
+        tipo === "faturamento" ? "💰 Metas de Faturamento" :
+        tipo === "servico" ? "🎯 Metas de Serviço" :
+        "📊 Acompanhamento"
+      }</span>
+      <div class="section-line"></div>
+      <span class="section-desc">${descricao}</span>
+    </div>`;
 }
 
 function renderCitySummary(cidade, infoCidade) {
@@ -919,44 +929,52 @@ function renderCitySummary(cidade, infoCidade) {
         <div class="summary-label">Atualizado</div>
         <div class="summary-value">${AGORA}</div>
       </div>
-    </section>
-  `;
+    </section>`;
 }
 
 function renderCityChart(indicadores) {
-  const linhas = INDICADORES.map(function(chave) {
+  const linhasFaturamento = FATURAMENTO.map(function(chave) {
     const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
-    const largura = larguraBarra(p);
-
     return `
       <div class="evo-row">
         <div class="evo-label">${MAPA_INDICADORES[chave]}</div>
-        <div class="evo-bar-wrap">
-          <div class="evo-bar">
-            <div class="evo-fill ${status}" style="width:${largura}%"></div>
-          </div>
-        </div>
+        <div class="evo-bar"><div class="evo-fill ${status}" style="width:${larguraBarra(p)}%"></div></div>
         <div class="evo-value ${status}">${textoSeguro(ind.progresso)}</div>
-      </div>
-    `;
+      </div>`;
+  }).join("");
+
+  const linhasServico = SERVICO.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]) || {};
+    const p = percentual(ind.progresso);
+    const status = classePercentual(p);
+    return `
+      <div class="evo-row">
+        <div class="evo-label">${MAPA_INDICADORES[chave]}</div>
+        <div class="evo-bar"><div class="evo-fill ${status}" style="width:${larguraBarra(p)}%"></div></div>
+        <div class="evo-value ${status}">${textoSeguro(ind.progresso)}</div>
+      </div>`;
   }).join("");
 
   return `
     <section class="panel">
-      <div class="panel-header">
-        <div class="panel-title">Evolução das Metas na Cidade</div>
+      <div class="panel-header"><div class="panel-title">Evolução das Metas na Cidade</div></div>
+      <div class="section-header" style="margin-top:0">
+        <span class="section-label faturamento">💰 Faturamento</span>
+        <div class="section-line"></div>
       </div>
-      <div class="evolution-chart">
-        ${linhas}
+      <div class="evolution-chart">${linhasFaturamento}</div>
+      <div class="section-header">
+        <span class="section-label servico">🎯 Serviço</span>
+        <div class="section-line"></div>
       </div>
-    </section>
-  `;
+      <div class="evolution-chart">${linhasServico}</div>
+    </section>`;
 }
 
-function renderCityCards(indicadores) {
-  return INDICADORES.map(function(chave) {
+function renderCityCards(indicadores, grupo) {
+  return grupo.map(function(chave) {
     const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
@@ -968,28 +986,35 @@ function renderCityCards(indicadores) {
           <div class="city-card-title">${MAPA_INDICADORES[chave]}</div>
           <div class="city-card-progress ${status}">${textoSeguro(ind.progresso)}</div>
         </div>
-
-        <div class="city-bar">
-          <div class="city-fill ${status}" style="width:${largura}%"></div>
-        </div>
-
+        <div class="city-bar"><div class="city-fill ${status}" style="width:${largura}%"></div></div>
         <div class="city-metrics">
-          <div class="metric-box">
-            <span>Meta</span>
-            <strong>${textoSeguro(ind.meta)}</strong>
-          </div>
-          <div class="metric-box">
-            <span>Até o momento</span>
-            <strong>${textoSeguro(ind.ate_o_momento)}</strong>
-          </div>
-          <div class="metric-box">
-            <span>Falta</span>
-            <strong>${textoSeguro(ind.falta)}</strong>
-          </div>
+          <div class="metric-box"><span>Meta</span><strong>${textoSeguro(ind.meta)}</strong></div>
+          <div class="metric-box"><span>Até o momento</span><strong>${textoSeguro(ind.ate_o_momento)}</strong></div>
+          <div class="metric-box"><span>Falta</span><strong>${textoSeguro(ind.falta)}</strong></div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join("");
+}
+
+function renderCityAcompanhamento(indicadores) {
+  const cards = ACOMPANHAMENTO.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]);
+    const temDados = ind && (ind.ate_o_momento || ind.valor_atual || ind.realizado);
+    const valor = temDados
+      ? textoSeguro(ind.ate_o_momento || ind.valor_atual || ind.realizado)
+      : null;
+
+    return `
+      <div class="acomp-cidade-card">
+        <div class="acomp-cidade-title">${MAPA_INDICADORES[chave]}</div>
+        ${valor !== null
+          ? `<div class="acomp-cidade-valor">${valor}</div>
+             <div class="acomp-cidade-label">realizados no mês</div>`
+          : `<div class="acomp-cidade-embreve">Em breve</div>`}
+      </div>`;
+  }).join("");
+
+  return `<div class="acomp-cidade-grid">${cards}</div>`;
 }
 
 function renderCityTable(indicadores) {
@@ -997,7 +1022,6 @@ function renderCityTable(indicadores) {
     const ind = (indicadores && indicadores[chave]) || {};
     const p = percentual(ind.progresso);
     const status = classePercentual(p);
-
     return `
       <tr>
         <td class="td-title">${MAPA_INDICADORES[chave]}</td>
@@ -1005,33 +1029,40 @@ function renderCityTable(indicadores) {
         <td>${textoSeguro(ind.ate_o_momento)}</td>
         <td>${textoSeguro(ind.falta)}</td>
         <td class="${status}">${textoSeguro(ind.progresso)}</td>
-      </tr>
-    `;
+      </tr>`;
+  }).join("");
+
+  const linhasAcomp = ACOMPANHAMENTO.map(function(chave) {
+    const ind = (indicadores && indicadores[chave]);
+    const temDados = ind && (ind.ate_o_momento || ind.valor_atual || ind.realizado);
+    const valor = temDados
+      ? textoSeguro(ind.ate_o_momento || ind.valor_atual || ind.realizado)
+      : "Em breve";
+    return `
+      <tr>
+        <td class="td-title">${MAPA_INDICADORES[chave]}</td>
+        <td colspan="3" style="color:var(--muted);font-style:italic">Apenas acompanhamento</td>
+        <td class="acomp-color">${valor}</td>
+      </tr>`;
   }).join("");
 
   return `
     <section class="panel">
-      <div class="panel-header">
-        <div class="panel-title">Tabela Completa da Cidade</div>
-      </div>
+      <div class="panel-header"><div class="panel-title">Tabela Completa da Cidade</div></div>
       <div class="table-wrap">
         <table class="dash-table">
           <thead>
             <tr>
-              <th>Indicador</th>
-              <th>Meta</th>
-              <th>Até o momento</th>
-              <th>Falta</th>
-              <th>Progresso</th>
+              <th>Indicador</th><th>Meta</th><th>Até o momento</th><th>Falta</th><th>Progresso</th>
             </tr>
           </thead>
           <tbody>
             ${linhas}
+            ${linhasAcomp}
           </tbody>
         </table>
       </div>
-    </section>
-  `;
+    </section>`;
 }
 
 function slugify(texto) {
@@ -1046,14 +1077,11 @@ function slugify(texto) {
 function bindTabs() {
   const buttons = document.querySelectorAll(".tab-btn");
   const contents = document.querySelectorAll(".tab-content");
-
   buttons.forEach(function(btn) {
     btn.addEventListener("click", function() {
       buttons.forEach(function(b) { b.classList.remove("active"); });
       contents.forEach(function(c) { c.classList.remove("active"); });
-
       btn.classList.add("active");
-
       const target = document.getElementById(btn.dataset.tab);
       if (target) {
         target.classList.add("active");
@@ -1077,12 +1105,15 @@ function renderDashboard(mesSelecionado) {
               <span class="beat-meta">${item.indicador}</span>
             </div>
             <strong class="blink">${item.progresso}</strong>
-          </div>
-        `;
+          </div>`;
       }).join("")
     : '<div class="empty-message">Nenhuma meta acima de 100% no momento.</div>';
 
-  const rankingCards = INDICADORES.map(function(chave) {
+  const rankingFaturamento = FATURAMENTO.map(function(chave) {
+    return renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave));
+  }).join("");
+
+  const rankingServico = SERVICO.map(function(chave) {
     return renderRankingCard(MAPA_INDICADORES[chave], gerarRanking(base, chave));
   }).join("");
 
@@ -1094,12 +1125,18 @@ function renderDashboard(mesSelecionado) {
       <div id="${slugify(cidade)}" class="tab-content">
         ${renderCitySummary(cidade, infoCidade)}
         ${renderCityChart(indicadores)}
-        <section class="city-grid">
-          ${renderCityCards(indicadores)}
-        </section>
+
+        ${renderSectionHeader("faturamento", "Listas, termos e entregas precisam estar ok")}
+        <section class="city-grid">${renderCityCards(indicadores, FATURAMENTO)}</section>
+
+        ${renderSectionHeader("servico", "Assiduidade necessária para validar")}
+        <section class="city-grid">${renderCityCards(indicadores, SERVICO)}</section>
+
+        ${renderSectionHeader("acompanhamento", "Colagens realizadas no mês")}
+        ${renderCityAcompanhamento(indicadores)}
+
         ${renderCityTable(indicadores)}
-      </div>
-    `;
+      </div>`;
   }).join("");
 
   const htmlContent = `
@@ -1110,18 +1147,20 @@ function renderDashboard(mesSelecionado) {
           <div class="info-number">${cidades.length}</div>
           <div class="info-text">cidades monitoradas</div>
         </div>
-
         <div class="beats-card">
           <div class="beats-title">Metas Batidas</div>
-          <div class="beats-list">
-            ${blocoBatidas}
-          </div>
+          <div class="beats-list">${blocoBatidas}</div>
         </div>
       </section>
 
-      <section class="rankings-grid">
-        ${rankingCards}
-      </section>
+      ${renderSectionHeader("faturamento", "Listas, termos e entregas precisam estar ok")}
+      <section class="rankings-grid">${rankingFaturamento}</section>
+
+      ${renderSectionHeader("servico", "Assiduidade necessária para validar")}
+      <section class="rankings-grid">${rankingServico}</section>
+
+      ${renderSectionHeader("acompanhamento", "Colagens realizadas no mês")}
+      ${renderAcompanhamentoRanking(base)}
     </div>
 
     ${cidadesHtml}
@@ -1152,6 +1191,9 @@ renderDashboard(MES_ATUAL);
     html = html.replace("__HISTORICO__", json.dumps(historico, ensure_ascii=False))
     html = html.replace("__MAPA__", json.dumps(MAPA_INDICADORES, ensure_ascii=False))
     html = html.replace("__INDICADORES__", json.dumps(INDICADORES, ensure_ascii=False))
+    html = html.replace("__FATURAMENTO__", json.dumps(FATURAMENTO, ensure_ascii=False))
+    html = html.replace("__SERVICO__", json.dumps(SERVICO, ensure_ascii=False))
+    html = html.replace("__ACOMPANHAMENTO__", json.dumps(ACOMPANHAMENTO, ensure_ascii=False))
     html = html.replace("__AGORA__", json.dumps(agora, ensure_ascii=False))
     html = html.replace("__AGORA_TEXTO__", agora)
     html = html.replace("__MES_ATUAL__", json.dumps(mes_atual, ensure_ascii=False))
@@ -1166,13 +1208,13 @@ renderDashboard(MES_ATUAL);
     else:
         print(f"Planilha não encontrada em: {EXCEL_SOURCE}")
 
-    print("Dashboard gerado com sucesso.")
-
     if os.path.exists("auth.js"):
         shutil.copy2("auth.js", "docs/auth.js")
         print("auth.js copiado para docs/auth.js")
     else:
         print("auth.js não encontrado na raiz do projeto")
+
+    print("Dashboard gerado com sucesso.")
 
 
 if __name__ == "__main__":
