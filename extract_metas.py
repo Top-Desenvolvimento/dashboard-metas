@@ -22,12 +22,12 @@ GOOGLE_MANUAL_FILE = "data/google_manual.json"
 TZ = ZoneInfo("America/Sao_Paulo") if ZoneInfo else None
 
 CIDADES = [
-    {"nome": "Flores", "url": "http://flores.topesteticabucal.com.br/sistema"},
-    {"nome": "Caxias", "url": "http://caxias.topesteticabucal.com.br/sistema"},
+    {"nome": "Flores",      "url": "http://flores.topesteticabucal.com.br/sistema"},
+    {"nome": "Caxias",      "url": "http://caxias.topesteticabucal.com.br/sistema"},
     {"nome": "Farroupilha", "url": "http://farroupilha.topesteticabucal.com.br/sistema"},
-    {"nome": "Bento", "url": "http://bento.topesteticabucal.com.br/sistema"},
-    {"nome": "Encantado", "url": "https://encantado.topesteticabucal.com.br/sistema"},
-    {"nome": "Soledade", "url": "http://soledade.topesteticabucal.com.br/sistema"},
+    {"nome": "Bento",       "url": "http://bento.topesteticabucal.com.br/sistema"},
+    {"nome": "Encantado",   "url": "https://encantado.topesteticabucal.com.br/sistema"},
+    {"nome": "Soledade",    "url": "http://soledade.topesteticabucal.com.br/sistema"},
     {"nome": "Veranópolis", "url": "http://veranopolis.topesteticabucal.com.br/sistema"},
 ]
 
@@ -47,6 +47,14 @@ MAPA_CHAVES = {
     "restauracao": "meta_restauracao",
     "meta de restauração": "meta_restauracao",
     "meta de restauracao": "meta_restauracao",
+    # Colagens
+    "colagem aparelho convencional": "colagem_convencional",
+    "colagem convencional": "colagem_convencional",
+    "colagem aparelho estetico/autoligado": "colagem_estetico",
+    "colagem aparelho estetico autoligado": "colagem_estetico",
+    "colagem estetico/autoligado": "colagem_estetico",
+    "colagem estetico autoligado": "colagem_estetico",
+    "colagem estetico": "colagem_estetico",
 }
 
 INDICADORES_BASE = [
@@ -56,37 +64,21 @@ INDICADORES_BASE = [
     "meta_avaliacao",
     "meta_profilaxia",
     "meta_restauracao",
+    "colagem_convencional",
+    "colagem_estetico",
 ]
 
 MESES_PT = {
-    1: "Janeiro",
-    2: "Fevereiro",
-    3: "Março",
-    4: "Abril",
-    5: "Maio",
-    6: "Junho",
-    7: "Julho",
-    8: "Agosto",
-    9: "Setembro",
-    10: "Outubro",
-    11: "Novembro",
-    12: "Dezembro",
+    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril",
+    5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
+    9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro",
 }
 
 MESES_PT_REV = {
-    "janeiro": "01",
-    "fevereiro": "02",
-    "março": "03",
-    "marco": "03",
-    "abril": "04",
-    "maio": "05",
-    "junho": "06",
-    "julho": "07",
-    "agosto": "08",
-    "setembro": "09",
-    "outubro": "10",
-    "novembro": "11",
-    "dezembro": "12",
+    "janeiro": "01", "fevereiro": "02", "marco": "03", "março": "03",
+    "abril": "04", "maio": "05", "junho": "06", "julho": "07",
+    "agosto": "08", "setembro": "09", "outubro": "10",
+    "novembro": "11", "dezembro": "12",
 }
 
 
@@ -100,11 +92,9 @@ def normalizar_texto(texto: str) -> str:
     texto = (texto or "").strip().lower()
     trocas = {
         "ã": "a", "á": "a", "à": "a", "â": "a",
-        "é": "e", "ê": "e",
-        "í": "i",
+        "é": "e", "ê": "e", "í": "i",
         "ó": "o", "ô": "o", "õ": "o",
-        "ú": "u",
-        "ç": "c",
+        "ú": "u", "ç": "c",
     }
     for a, b in trocas.items():
         texto = texto.replace(a, b)
@@ -125,38 +115,26 @@ def garantir_indicadores_vazios():
 
 def inferir_chave_indicador(nome_linha: str):
     nome = normalizar_texto(nome_linha)
-
     if nome in MAPA_CHAVES:
         return MAPA_CHAVES[nome]
-
     for trecho, chave in MAPA_CHAVES.items():
         if trecho in nome:
             return chave
-
     return None
 
 
 def obter_mes_tela():
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
-
         if " / " in texto:
             return texto
-
         mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
         if mm_yyyy:
-            mes_num = int(mm_yyyy.group(1))
-            ano = mm_yyyy.group(2)
-            return f"{MESES_PT[mes_num]} / {ano}"
-
+            return f"{MESES_PT[int(mm_yyyy.group(1))]} / {mm_yyyy.group(2)}"
         yyyy_mm = re.match(r"^(\d{4})-(\d{2})$", texto)
         if yyyy_mm:
-            ano = yyyy_mm.group(1)
-            mes_num = int(yyyy_mm.group(2))
-            return f"{MESES_PT[mes_num]} / {ano}"
-
+            return f"{MESES_PT[int(yyyy_mm.group(2))]} / {yyyy_mm.group(1)}"
         return texto
-
     dt = agora()
     return f"{MESES_PT[dt.month]} / {dt.year}"
 
@@ -164,14 +142,11 @@ def obter_mes_tela():
 def obter_mes_referencia_json():
     if MES_REFERENCIA and MES_REFERENCIA != "AUTO":
         texto = MES_REFERENCIA.strip()
-
         if re.match(r"^\d{4}-\d{2}$", texto):
             return texto
-
         mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
         if mm_yyyy:
             return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
-
         mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
         if mes_nome:
             nome = normalizar_texto(mes_nome.group(1))
@@ -179,23 +154,18 @@ def obter_mes_referencia_json():
             mes = MESES_PT_REV.get(nome)
             if mes:
                 return f"{ano}-{mes}"
-
     return agora().strftime("%Y-%m")
 
 
 def converter_mes_para_json(valor):
     if not valor:
         return obter_mes_referencia_json()
-
     texto = str(valor).strip()
-
     if re.match(r"^\d{4}-\d{2}$", texto):
         return texto
-
     mm_yyyy = re.match(r"^(\d{2})/(\d{4})$", texto)
     if mm_yyyy:
         return f"{mm_yyyy.group(2)}-{mm_yyyy.group(1)}"
-
     mes_nome = re.match(r"^([A-Za-zÀ-ÿçÇ]+)\s*/\s*(\d{4})$", texto)
     if mes_nome:
         nome = normalizar_texto(mes_nome.group(1))
@@ -203,7 +173,6 @@ def converter_mes_para_json(valor):
         mes = MESES_PT_REV.get(nome)
         if mes:
             return f"{ano}-{mes}"
-
     return obter_mes_referencia_json()
 
 
@@ -214,15 +183,10 @@ def obter_mes_referencia(page):
             if (!select) return null;
             const selected = select.options[select.selectedIndex];
             if (!selected) return null;
-            return {
-                value: selected.value || null,
-                text: selected.text || null
-            };
+            return { value: selected.value || null, text: selected.text || null };
         }""")
-
         if not valor:
             return obter_mes_referencia_json()
-
         return converter_mes_para_json(valor.get("value") or valor.get("text"))
     except Exception:
         return obter_mes_referencia_json()
@@ -241,10 +205,8 @@ def abrir_metas(page, base_url):
     metas_url = base_url.rstrip("/") + "/index2.php?conteudo=lista_metas"
     if base_url.endswith("/sistema/"):
         metas_url = base_url + "index2.php?conteudo=lista_metas"
-
     page.goto(metas_url, timeout=60000, wait_until="domcontentloaded")
     page.wait_for_timeout(5000)
-
     if "index.php?redir=" in page.url:
         page.wait_for_timeout(2000)
         page.goto(metas_url, timeout=60000, wait_until="domcontentloaded")
@@ -270,20 +232,17 @@ def selecionar_mes_e_buscar(page):
             if normalizar_texto(op) == normalizar_texto(mes_tela):
                 alvo = op.strip()
                 break
-
         if not alvo:
             raise RuntimeError(
-                f"Não encontrei o mês '{mes_tela}' no select. Opções disponíveis: {options}"
+                f"Não encontrei o mês '{mes_tela}' no select. Opções: {options}"
             )
-
         select_mes.select_option(label=alvo)
 
     botao_buscar = page.get_by_role("button", name="Buscar")
     if botao_buscar.count() == 0:
         botao_buscar = page.locator("text=Buscar").first
-
     if botao_buscar.count() == 0:
-        raise RuntimeError("Não encontrei o botão Buscar na tela de metas.")
+        raise RuntimeError("Não encontrei o botão Buscar.")
 
     botao_buscar.click()
     page.wait_for_timeout(3000)
@@ -310,33 +269,25 @@ def extrair_tabelas(page):
 
 def processar_tabela_em_indicadores(tabela):
     indicadores = {}
-
     for i in range(0, len(tabela), 3):
         if i + 2 >= len(tabela):
             continue
-
         cab = tabela[i]
         dados = tabela[i + 2]
-
         if not cab or not dados:
             continue
-
         nome = cab[0].strip() if cab else ""
         chave = inferir_chave_indicador(nome)
-
         if not chave:
             continue
-
         if len(dados) < 5:
             continue
-
         indicadores[chave] = {
             "meta": dados[1].strip() if len(dados) > 1 else "-",
             "ate_o_momento": dados[2].strip() if len(dados) > 2 else "-",
             "falta": dados[3].strip() if len(dados) > 3 else "-",
             "progresso": dados[4].strip() if len(dados) > 4 else "-",
         }
-
     return indicadores
 
 
@@ -346,7 +297,6 @@ def numero_texto_para_float(valor):
     texto = str(valor).strip()
     if not texto:
         return 0.0
-
     texto = texto.replace(".", "").replace(",", ".")
     try:
         return float(texto)
@@ -364,11 +314,9 @@ def carregar_google_manual(mes_ref):
     if not os.path.exists(GOOGLE_MANUAL_FILE):
         print(f"⚠️ Arquivo não encontrado: {GOOGLE_MANUAL_FILE}")
         return {}
-
     try:
         with open(GOOGLE_MANUAL_FILE, "r", encoding="utf-8") as f:
             dados = json.load(f)
-
         bloco_mes = dados.get(mes_ref, {})
         print(f"📘 Google manual carregado para {mes_ref}: {list(bloco_mes.keys())}")
         return bloco_mes
@@ -381,12 +329,10 @@ def montar_google_dashboard(bloco_google):
     valor_atual = bloco_google.get("valor_atual", "-")
     valor_meta = numero_texto_para_float(bloco_google.get("valor_meta", 0))
     valor_atingido = numero_texto_para_float(bloco_google.get("valor_atingido_mes", 0))
-
     falta = valor_meta - valor_atingido
     progresso = 0.0
     if valor_meta > 0:
         progresso = (valor_atingido / valor_meta) * 100
-
     return {
         "meta": float_para_texto_br(valor_meta, 0),
         "ate_o_momento": float_para_texto_br(valor_atingido, 0),
@@ -398,24 +344,20 @@ def montar_google_dashboard(bloco_google):
 
 def aplicar_google_manual(resultado, mes_ref):
     google_manual = carregar_google_manual(mes_ref)
-
     print(f"📅 Mês lido para Google: {mes_ref}")
     print(f"🏙️ Cidades no Google manual: {list(google_manual.keys())}")
-
     for cidade, dados in resultado.items():
         if cidade in google_manual:
             dados["indicadores"]["avaliacoes_google"] = montar_google_dashboard(google_manual[cidade])
             print(f"✅ Google manual aplicado em {cidade}")
         else:
             print(f"ℹ️ Sem Google manual para {cidade}")
-
     return resultado
 
 
 def extrair_cidade(page, cidade_info):
     nome = cidade_info["nome"]
     base_url = cidade_info["url"]
-
     print(f"Coletando {nome}...")
 
     try:
@@ -430,9 +372,15 @@ def extrair_cidade(page, cidade_info):
 
         if len(tabelas) > 0:
             indicadores.update(processar_tabela_em_indicadores(tabelas[0]))
-
         if len(tabelas) > 1:
             indicadores.update(processar_tabela_em_indicadores(tabelas[1]))
+
+        # Log colagens coletadas
+        for chave in ["colagem_convencional", "colagem_estetico"]:
+            if chave in indicadores and indicadores[chave].get("ate_o_momento", "-") != "-":
+                print(f"📎 {chave} coletado em {nome}: {indicadores[chave]}")
+            else:
+                print(f"⚠️ {chave} não encontrado ou zerado em {nome}")
 
         return {
             "mes_referencia": mes_referencia,
@@ -464,15 +412,12 @@ def salvar_excel_placeholder():
 
 def salvar_historico(resultado, mes_ref):
     os.makedirs(HISTORICO_DIR, exist_ok=True)
-
     if mes_ref < "2026-01":
         print(f"⛔ Ignorando histórico anterior a 2026: {mes_ref}")
         return
-
     historico_path = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
     with open(historico_path, "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
-
     print(f"📦 Histórico mensal salvo em: {historico_path}")
 
 
