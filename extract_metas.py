@@ -37,12 +37,22 @@ MAPA_CHAVES = {
     "clinico geral": "clinico_geral",
     "clínico geral": "clinico_geral",
     "clinico_geral": "clinico_geral",
+    # Avaliação Google — deve vir antes de avaliação genérica
+    "avaliacao google": "avaliacoes_google",
+    "avaliação google": "avaliacoes_google",
+    "meta avaliacao google": "avaliacoes_google",
+    "meta avaliação google": "avaliacoes_google",
+    # Meta de Avaliação (serviço)
     "avaliação": "meta_avaliacao",
     "avaliacao": "meta_avaliacao",
     "meta de avaliação": "meta_avaliacao",
     "meta de avaliacao": "meta_avaliacao",
+    "meta avaliacao": "meta_avaliacao",
+    "meta avaliação": "meta_avaliacao",
+    # Profilaxia
     "profilaxia": "meta_profilaxia",
     "meta de profilaxia": "meta_profilaxia",
+    # Restauração
     "restauração": "meta_restauracao",
     "restauracao": "meta_restauracao",
     "meta de restauração": "meta_restauracao",
@@ -115,11 +125,14 @@ def garantir_indicadores_vazios():
 
 def inferir_chave_indicador(nome_linha: str):
     nome = normalizar_texto(nome_linha)
+    # Tenta match exato primeiro
     if nome in MAPA_CHAVES:
         return MAPA_CHAVES[nome]
-    for trecho, chave in MAPA_CHAVES.items():
-        if trecho in nome:
-            return chave
+    # Tenta match por substring, priorizando chaves mais longas (mais específicas)
+    candidatos = [(trecho, chave) for trecho, chave in MAPA_CHAVES.items() if trecho in nome]
+    if candidatos:
+        # Retorna o match com o trecho mais longo (mais específico)
+        return max(candidatos, key=lambda x: len(x[0]))[1]
     return None
 
 
@@ -279,9 +292,11 @@ def processar_tabela_em_indicadores(tabela):
         nome = cab[0].strip() if cab else ""
         chave = inferir_chave_indicador(nome)
         if not chave:
+            print(f"⚠️ Linha não mapeada: '{nome}'")
             continue
         if len(dados) < 5:
             continue
+        print(f"✅ Mapeado: '{nome}' → {chave}")
         indicadores[chave] = {
             "meta": dados[1].strip() if len(dados) > 1 else "-",
             "ate_o_momento": dados[2].strip() if len(dados) > 2 else "-",
@@ -358,6 +373,7 @@ def aplicar_google_manual(resultado, mes_ref):
 def extrair_cidade(page, cidade_info):
     nome = cidade_info["nome"]
     base_url = cidade_info["url"]
+    print(f"\n{'='*55}")
     print(f"Coletando {nome}...")
 
     try:
@@ -377,10 +393,15 @@ def extrair_cidade(page, cidade_info):
 
         # Log colagens coletadas
         for chave in ["colagem_convencional", "colagem_estetico"]:
-            if chave in indicadores and indicadores[chave].get("ate_o_momento", "-") != "-":
+            val = indicadores.get(chave, {}).get("ate_o_momento", "-")
+            if val != "-":
                 print(f"📎 {chave} coletado em {nome}: {indicadores[chave]}")
             else:
                 print(f"⚠️ {chave} não encontrado ou zerado em {nome}")
+
+        # Log meta_avaliacao para debug
+        meta_av = indicadores.get("meta_avaliacao", {})
+        print(f"📋 meta_avaliacao em {nome}: meta={meta_av.get('meta')} | realizado={meta_av.get('ate_o_momento')}")
 
         return {
             "mes_referencia": mes_referencia,
@@ -470,7 +491,7 @@ def main():
     salvar_historico(resultado, mes_ref)
     salvar_excel_placeholder()
 
-    print(f"Arquivo atual gerado: {OUTPUT_JSON}")
+    print(f"\nArquivo atual gerado: {OUTPUT_JSON}")
     print("Coleta finalizada com sucesso.")
 
 
