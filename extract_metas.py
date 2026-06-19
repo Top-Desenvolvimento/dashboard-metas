@@ -292,7 +292,7 @@ def processar_tabela_em_indicadores(tabela):
         nome = cab[0].strip() if cab else ""
         chave = inferir_chave_indicador(nome)
         if not chave:
-            print(f"⚠️ Linha não mapeada: '{nome}'")
+            print(f"⚠️ Linha não mapeada: '{nome}' | repr={repr(nome)} | normalizado={repr(normalizar_texto(nome))}")
             continue
         if len(dados) < 5:
             continue
@@ -383,6 +383,14 @@ def extrair_cidade(page, cidade_info):
 
         tabelas = extrair_tabelas(page)
         mes_referencia = obter_mes_referencia(page)
+
+        # DEBUG: imprime a estrutura bruta das tabelas para Veranópolis
+        if nome == "Veranópolis":
+            print(f"🔍 DEBUG Veranópolis - número de tabelas: {len(tabelas)}")
+            for idx_t, tabela in enumerate(tabelas):
+                print(f"🔍 Tabela {idx_t} tem {len(tabela)} linhas:")
+                for idx_l, linha in enumerate(tabela):
+                    print(f"   linha {idx_l}: {repr(linha)}")
 
         indicadores = garantir_indicadores_vazios()
 
