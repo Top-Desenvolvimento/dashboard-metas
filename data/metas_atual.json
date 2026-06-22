@@ -4,9 +4,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "17.197,00",
-        "falta": "-12.803,00",
-        "progresso": "57,323%"
+        "ate_o_momento": "17.322,00",
+        "falta": "-12.678,00",
+        "progresso": "57,740%"
       },
       "clinico_geral": {
         "meta": "53.000,00",
@@ -60,9 +60,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "48.000,00",
-        "ate_o_momento": "25.990,91",
-        "falta": "-22.009,09",
-        "progresso": "54,148%"
+        "ate_o_momento": "26.969,91",
+        "falta": "-21.030,09",
+        "progresso": "56,187%"
       },
       "clinico_geral": {
         "meta": "88.000,00",
@@ -80,9 +80,9 @@
       },
       "meta_avaliacao": {
         "meta": "206",
-        "ate_o_momento": "114",
-        "falta": "-92",
-        "progresso": "55,340%"
+        "ate_o_momento": "116",
+        "falta": "-90",
+        "progresso": "56,311%"
       },
       "meta_profilaxia": {
         "meta": "83",
@@ -92,9 +92,9 @@
       },
       "meta_restauracao": {
         "meta": "34",
-        "ate_o_momento": "31",
-        "falta": "-3",
-        "progresso": "91,176%"
+        "ate_o_momento": "32",
+        "falta": "-2",
+        "progresso": "94,118%"
       },
       "colagem_convencional": {
         "meta": "0",
@@ -172,9 +172,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "26.000,00",
-        "ate_o_momento": "10.483,00",
-        "falta": "-15.517,00",
-        "progresso": "40,319%"
+        "ate_o_momento": "10.683,00",
+        "falta": "-15.317,00",
+        "progresso": "41,088%"
       },
       "clinico_geral": {
         "meta": "25.000,00",
@@ -228,9 +228,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "39.000,00",
-        "ate_o_momento": "20.231,80",
-        "falta": "-18.768,20",
-        "progresso": "51,876%"
+        "ate_o_momento": "20.586,80",
+        "falta": "-18.413,20",
+        "progresso": "52,787%"
       },
       "clinico_geral": {
         "meta": "31.000,00",
