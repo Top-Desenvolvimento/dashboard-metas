@@ -4,15 +4,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "22.413,00",
-        "falta": "-7.587,00",
-        "progresso": "74,710%"
+        "ate_o_momento": "22.933,00",
+        "falta": "-7.067,00",
+        "progresso": "76,443%"
       },
       "clinico_geral": {
         "meta": "53.000,00",
-        "ate_o_momento": "57.375,70",
-        "falta": "4.375,70",
-        "progresso": "108,256%"
+        "ate_o_momento": "57.581,70",
+        "falta": "4.581,70",
+        "progresso": "108,645%"
       },
       "avaliacoes_google": {
         "meta": "23",
@@ -24,15 +24,15 @@
       },
       "meta_avaliacao": {
         "meta": "160",
-        "ate_o_momento": "91",
-        "falta": "-69",
-        "progresso": "56,875%"
+        "ate_o_momento": "97",
+        "falta": "-63",
+        "progresso": "60,625%"
       },
       "meta_profilaxia": {
         "meta": "60",
-        "ate_o_momento": "38",
-        "falta": "-22",
-        "progresso": "63,333%"
+        "ate_o_momento": "40",
+        "falta": "-20",
+        "progresso": "66,667%"
       },
       "meta_restauracao": {
         "meta": "47",
@@ -60,9 +60,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "48.000,00",
-        "ate_o_momento": "31.861,41",
-        "falta": "-16.138,59",
-        "progresso": "66,378%"
+        "ate_o_momento": "32.845,41",
+        "falta": "-15.154,59",
+        "progresso": "68,428%"
       },
       "clinico_geral": {
         "meta": "88.000,00",
@@ -172,9 +172,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "26.000,00",
-        "ate_o_momento": "12.368,00",
-        "falta": "-13.632,00",
-        "progresso": "47,569%"
+        "ate_o_momento": "12.467,00",
+        "falta": "-13.533,00",
+        "progresso": "47,950%"
       },
       "clinico_geral": {
         "meta": "25.000,00",
@@ -198,9 +198,9 @@
       },
       "meta_profilaxia": {
         "meta": "36",
-        "ate_o_momento": "20",
-        "falta": "-16",
-        "progresso": "55,556%"
+        "ate_o_momento": "21",
+        "falta": "-15",
+        "progresso": "58,333%"
       },
       "meta_restauracao": {
         "meta": "21",
@@ -228,15 +228,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "39.000,00",
-        "ate_o_momento": "25.709,80",
-        "falta": "-13.290,20",
-        "progresso": "65,923%"
+        "ate_o_momento": "27.277,80",
+        "falta": "-11.722,20",
+        "progresso": "69,943%"
       },
       "clinico_geral": {
         "meta": "31.000,00",
-        "ate_o_momento": "11.451,00",
-        "falta": "-19.549,00",
-        "progresso": "36,939%"
+        "ate_o_momento": "11.657,00",
+        "falta": "-19.343,00",
+        "progresso": "37,603%"
       },
       "avaliacoes_google": {
         "meta": "13",
@@ -284,15 +284,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "35.354,00",
-        "falta": "-22.646,00",
-        "progresso": "60,955%"
+        "ate_o_momento": "36.050,00",
+        "falta": "-21.950,00",
+        "progresso": "62,155%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
-        "ate_o_momento": "24.422,55",
-        "falta": "-15.577,45",
-        "progresso": "61,056%"
+        "ate_o_momento": "24.578,55",
+        "falta": "-15.421,45",
+        "progresso": "61,446%"
       },
       "avaliacoes_google": {
         "meta": "60",
@@ -304,9 +304,9 @@
       },
       "meta_avaliacao": {
         "meta": "324",
-        "ate_o_momento": "163",
-        "falta": "-161",
-        "progresso": "50,309%"
+        "ate_o_momento": "170",
+        "falta": "-154",
+        "progresso": "52,469%"
       },
       "meta_profilaxia": {
         "meta": "83",
@@ -322,8 +322,8 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "6",
-        "falta": "6",
+        "ate_o_momento": "7",
+        "falta": "7",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
