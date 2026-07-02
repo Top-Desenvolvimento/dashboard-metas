@@ -37,6 +37,18 @@
         "ate_o_momento": "36",
         "falta": "-34",
         "progresso": "51,429%"
+      },
+      "colagem_convencional": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -79,6 +91,18 @@
         "ate_o_momento": "59",
         "falta": "-45",
         "progresso": "56,731%"
+      },
+      "colagem_convencional": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -121,6 +145,18 @@
         "ate_o_momento": "18",
         "falta": "-4",
         "progresso": "81,818%"
+      },
+      "colagem_convencional": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -163,6 +199,18 @@
         "ate_o_momento": "7",
         "falta": "-13",
         "progresso": "35,000%"
+      },
+      "colagem_convencional": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -205,6 +253,18 @@
         "ate_o_momento": "15",
         "falta": "-29",
         "progresso": "34,091%"
+      },
+      "colagem_convencional": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
+      },
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -247,48 +307,18 @@
         "ate_o_momento": "24",
         "falta": "-24",
         "progresso": "50,000%"
-      }
-    },
-    "_status": "ok"
-  },
-  "Garibaldi": {
-    "mes_referencia": "2026-01",
-    "indicadores": {
-      "ortodontia": {
-        "meta": "37.000,00",
-        "ate_o_momento": "32.487,00",
-        "falta": "-4.513,00",
-        "progresso": "87,803%"
       },
-      "clinico_geral": {
-        "meta": "31.000,00",
-        "ate_o_momento": "19.159,30",
-        "falta": "-11.840,70",
-        "progresso": "61,804%"
-      },
-      "avaliacoes_google": {
+      "colagem_convencional": {
         "meta": "-",
         "ate_o_momento": "-",
         "falta": "-",
         "progresso": "-"
       },
-      "meta_avaliacao": {
-        "meta": "97",
-        "ate_o_momento": "49",
-        "falta": "-48",
-        "progresso": "50,515%"
-      },
-      "meta_profilaxia": {
-        "meta": "46",
-        "ate_o_momento": "25",
-        "falta": "-21",
-        "progresso": "54,348%"
-      },
-      "meta_restauracao": {
-        "meta": "41",
-        "ate_o_momento": "28",
-        "falta": "-13",
-        "progresso": "68,293%"
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"
@@ -331,48 +361,18 @@
         "ate_o_momento": "0",
         "falta": "-22",
         "progresso": "0,000%"
-      }
-    },
-    "_status": "ok"
-  },
-  "SS do Caí": {
-    "mes_referencia": "2026-01",
-    "indicadores": {
-      "ortodontia": {
-        "meta": "25.500,00",
-        "ate_o_momento": "19.758,00",
-        "falta": "-5.742,00",
-        "progresso": "77,482%"
       },
-      "clinico_geral": {
-        "meta": "16.000,00",
-        "ate_o_momento": "12.065,50",
-        "falta": "-3.934,50",
-        "progresso": "75,409%"
-      },
-      "avaliacoes_google": {
+      "colagem_convencional": {
         "meta": "-",
         "ate_o_momento": "-",
         "falta": "-",
         "progresso": "-"
       },
-      "meta_avaliacao": {
-        "meta": "129",
-        "ate_o_momento": "61",
-        "falta": "-68",
-        "progresso": "47,287%"
-      },
-      "meta_profilaxia": {
-        "meta": "32",
-        "ate_o_momento": "8",
-        "falta": "-24",
-        "progresso": "25,000%"
-      },
-      "meta_restauracao": {
-        "meta": "21",
-        "ate_o_momento": "11",
-        "falta": "-10",
-        "progresso": "52,381%"
+      "colagem_estetico": {
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
     "_status": "ok"

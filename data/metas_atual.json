@@ -1,394 +1,380 @@
 {
   "Flores": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "30.000,00",
-        "ate_o_momento": "27.285,00",
-        "falta": "-2.715,00",
-        "progresso": "90,950%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "53.000,00",
-        "ate_o_momento": "60.014,70",
-        "falta": "7.014,70",
-        "progresso": "113,235%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "23",
-        "ate_o_momento": "0",
-        "falta": "23",
-        "progresso": "0,00%",
-        "valor_inicial": "139",
-        "valor_atual": "139"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "160",
-        "ate_o_momento": "111",
-        "falta": "-49",
-        "progresso": "69,375%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "60",
-        "ate_o_momento": "49",
-        "falta": "-11",
-        "progresso": "81,667%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "47",
-        "ate_o_momento": "61",
-        "falta": "14",
-        "progresso": "129,787%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "17",
-        "falta": "17",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Caxias": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "48.000,00",
-        "ate_o_momento": "41.040,41",
-        "falta": "-6.959,59",
-        "progresso": "85,501%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "88.000,00",
-        "ate_o_momento": "61.637,48",
-        "falta": "-26.362,52",
-        "progresso": "70,043%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "30",
-        "ate_o_momento": "1",
-        "falta": "29",
-        "progresso": "3,33%",
-        "valor_inicial": "347",
-        "valor_atual": "348"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "206",
-        "ate_o_momento": "170",
-        "falta": "-36",
-        "progresso": "82,524%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "83",
-        "ate_o_momento": "62",
-        "falta": "-21",
-        "progresso": "74,699%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "34",
-        "ate_o_momento": "40",
-        "falta": "6",
-        "progresso": "117,647%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "3",
-        "falta": "3",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Farroupilha": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "34.000,00",
-        "ate_o_momento": "24.612,79",
-        "falta": "-9.387,21",
-        "progresso": "72,391%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "34.000,00",
-        "ate_o_momento": "27.956,30",
-        "falta": "-6.043,70",
-        "progresso": "82,224%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "14",
-        "ate_o_momento": "0",
-        "falta": "14",
-        "progresso": "0,00%",
-        "valor_inicial": "201",
-        "valor_atual": "200"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "90",
-        "ate_o_momento": "51",
-        "falta": "-39",
-        "progresso": "56,667%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "36",
-        "ate_o_momento": "24",
-        "falta": "-12",
-        "progresso": "66,667%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "14",
-        "ate_o_momento": "15",
-        "falta": "1",
-        "progresso": "107,143%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "4",
-        "falta": "4",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Bento": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "26.000,00",
-        "ate_o_momento": "15.200,00",
-        "falta": "-10.800,00",
-        "progresso": "58,462%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "25.000,00",
-        "ate_o_momento": "10.699,35",
-        "falta": "-14.300,65",
-        "progresso": "42,797%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "20",
-        "ate_o_momento": "0",
-        "falta": "20",
-        "progresso": "0,00%",
-        "valor_inicial": "107",
-        "valor_atual": "106"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "96",
-        "ate_o_momento": "53",
-        "falta": "-43",
-        "progresso": "55,208%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "36",
-        "ate_o_momento": "22",
-        "falta": "-14",
-        "progresso": "61,111%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "21",
-        "ate_o_momento": "12",
-        "falta": "-9",
-        "progresso": "57,143%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "6",
-        "falta": "6",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Encantado": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "39.000,00",
-        "ate_o_momento": "30.816,80",
-        "falta": "-8.183,20",
-        "progresso": "79,017%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "31.000,00",
-        "ate_o_momento": "18.024,70",
-        "falta": "-12.975,30",
-        "progresso": "58,144%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "13",
-        "ate_o_momento": "0",
-        "falta": "13",
-        "progresso": "0,00%",
-        "valor_inicial": "293",
-        "valor_atual": "288"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "78",
-        "ate_o_momento": "42",
-        "falta": "-36",
-        "progresso": "53,846%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "18",
-        "ate_o_momento": "18",
-        "falta": "0",
-        "progresso": "100,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "20",
-        "ate_o_momento": "16",
-        "falta": "-4",
-        "progresso": "80,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "10",
-        "falta": "10",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Soledade": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "58.000,00",
-        "ate_o_momento": "42.475,00",
-        "falta": "-15.525,00",
-        "progresso": "73,233%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "40.000,00",
-        "ate_o_momento": "29.715,55",
-        "falta": "-10.284,45",
-        "progresso": "74,289%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "60",
-        "ate_o_momento": "0",
-        "falta": "60",
-        "progresso": "0,00%",
-        "valor_inicial": "577",
-        "valor_atual": "547"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "324",
-        "ate_o_momento": "204",
-        "falta": "-120",
-        "progresso": "62,963%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "83",
-        "ate_o_momento": "33",
-        "falta": "-50",
-        "progresso": "39,759%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "39",
-        "ate_o_momento": "30",
-        "falta": "-9",
-        "progresso": "76,923%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "7",
-        "falta": "7",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   },
   "Veranópolis": {
-    "mes_referencia": "2026-06",
+    "mes_referencia": "2026-12",
     "indicadores": {
       "ortodontia": {
-        "meta": "29.000,00",
-        "ate_o_momento": "24.003,35",
-        "falta": "-4.996,65",
-        "progresso": "82,770%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "24.600,00",
-        "ate_o_momento": "22.416,00",
-        "falta": "-2.184,00",
-        "progresso": "91,122%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "12",
-        "ate_o_momento": "0",
-        "falta": "12",
-        "progresso": "0,00%",
-        "valor_inicial": "157",
-        "valor_atual": "156"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
-        "meta": "59",
-        "ate_o_momento": "44",
-        "falta": "-15",
-        "progresso": "74,576%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "22",
-        "ate_o_momento": "14",
-        "falta": "-8",
-        "progresso": "63,636%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "17",
-        "ate_o_momento": "14",
-        "falta": "-3",
-        "progresso": "82,353%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "3",
-        "falta": "3",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "1",
-        "falta": "1",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o mês 'Dezembro / 2026' no select. Opções: ['', 'Agosto / 2026', 'Julho / 2026', 'Junho / 2026', 'Maio / 2026', 'Abril / 2026', 'Março / 2026', 'Fevereiro / 2026', 'Janeiro / 2026', 'Dezembro / 2025', 'Novembro / 2025', 'Outubro / 2025', 'Setembro / 2025', 'Agosto / 2025', 'Julho / 2025', 'Junho / 2025', 'Maio / 2025', 'Abril / 2025', 'Março / 2025', 'Fevereiro / 2025', 'Janeiro / 2025', 'Dezembro / 2024', 'Novembro / 2024', 'Outubro / 2024', 'Setembro / 2024', 'Agosto / 2024', 'Julho / 2024', 'Junho / 2024', 'Maio / 2024', 'Abril / 2024', 'Março / 2024', 'Fevereiro / 2024', 'Janeiro / 2024', 'Dezembro / 2023', 'Novembro / 2023', 'Outubro / 2023', 'Setembro / 2023', 'Agosto / 2023', 'Julho / 2023', 'Junho / 2023', 'Maio / 2023', 'Abril / 2023', 'Março / 2023', 'Fevereiro / 2023', 'Janeiro / 2023', 'Dezembro / 2022', 'Novembro / 2022', 'Outubro / 2022', 'Setembro / 2022', 'Agosto / 2022', 'Julho / 2022', 'Junho / 2022', 'Maio / 2022', 'Abril / 2022', 'Março / 2022', 'Fevereiro / 2022', 'Janeiro / 2022', 'Dezembro / 2021', 'Novembro / 2021', 'Outubro / 2021', 'Setembro / 2021', 'Agosto / 2021', 'Julho / 2021', 'Junho / 2021', 'Maio / 2021', 'Abril / 2021', 'Março / 2021', 'Fevereiro / 2021', 'Janeiro / 2021', 'Dezembro / 2020', 'Novembro / 2020', 'Outubro / 2020', 'Setembro / 2020', 'Agosto / 2020', 'Julho / 2020', 'Junho / 2020', 'Maio / 2020', 'Abril / 2020', 'Março / 2020', 'Fevereiro / 2020', 'Janeiro / 2020', 'Dezembro / 2019']"
   }
 }
