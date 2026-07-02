@@ -5,37 +5,68 @@
       "valor_meta": "20",
       "valor_atual": "107"
     },
-
     "Caxias": {
       "valor_inicial": "347",
       "valor_meta": "30",
       "valor_atual": "347"
     },
-
     "Encantado": {
       "valor_inicial": "293",
       "valor_meta": "13",
       "valor_atual": "293"
     },
-
     "Farroupilha": {
       "valor_inicial": "201",
       "valor_meta": "14",
       "valor_atual": "209"
     },
-
     "Flores": {
       "valor_inicial": "139",
       "valor_meta": "23",
       "valor_atual": "139"
     },
-    
-     "Veranopolis": {
+    "Veranopolis": {
       "valor_inicial": "157",
       "valor_meta": "12",
       "valor_atual": "164"
     },
-
+    "Soledade": {
+      "valor_inicial": "577",
+      "valor_meta": "60",
+      "valor_atual": "580"
+    }
+  },
+  "2026-07": {
+    "Bento": {
+      "valor_inicial": "107",
+      "valor_meta": "20",
+      "valor_atual": "107"
+    },
+    "Caxias": {
+      "valor_inicial": "347",
+      "valor_meta": "30",
+      "valor_atual": "347"
+    },
+    "Encantado": {
+      "valor_inicial": "293",
+      "valor_meta": "13",
+      "valor_atual": "293"
+    },
+    "Farroupilha": {
+      "valor_inicial": "201",
+      "valor_meta": "14",
+      "valor_atual": "209"
+    },
+    "Flores": {
+      "valor_inicial": "139",
+      "valor_meta": "23",
+      "valor_atual": "139"
+    },
+    "Veranopolis": {
+      "valor_inicial": "157",
+      "valor_meta": "12",
+      "valor_atual": "164"
+    },
     "Soledade": {
       "valor_inicial": "577",
       "valor_meta": "60",
