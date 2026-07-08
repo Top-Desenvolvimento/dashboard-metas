@@ -284,15 +284,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "58.000,00",
-        "ate_o_momento": "6.338,00",
-        "falta": "-51.662,00",
-        "progresso": "10,928%"
+        "ate_o_momento": "8.599,00",
+        "falta": "-49.401,00",
+        "progresso": "14,826%"
       },
       "clinico_geral": {
         "meta": "40.000,00",
-        "ate_o_momento": "3.245,00",
-        "falta": "-36.755,00",
-        "progresso": "8,113%"
+        "ate_o_momento": "5.179,00",
+        "falta": "-34.821,00",
+        "progresso": "12,948%"
       },
       "avaliacoes_google": {
         "meta": "60",
