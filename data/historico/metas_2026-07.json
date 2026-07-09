@@ -3,16 +3,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "30.000,00",
+        "ate_o_momento": "3.952,00",
+        "falta": "-26.048,00",
+        "progresso": "13,173%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "60.000,00",
+        "ate_o_momento": "10.116,00",
+        "falta": "-49.884,00",
+        "progresso": "16,860%"
       },
       "avaliacoes_google": {
         "meta": "23",
@@ -59,16 +59,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "47.000,00",
+        "ate_o_momento": "8.703,00",
+        "falta": "-38.297,00",
+        "progresso": "18,517%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "85.000,00",
+        "ate_o_momento": "18.818,34",
+        "falta": "-66.181,66",
+        "progresso": "22,139%"
       },
       "avaliacoes_google": {
         "meta": "30",
@@ -115,16 +115,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "33.000,00",
+        "ate_o_momento": "9.993,00",
+        "falta": "-23.007,00",
+        "progresso": "30,282%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "33.000,00",
+        "ate_o_momento": "5.042,00",
+        "falta": "-27.958,00",
+        "progresso": "15,279%"
       },
       "avaliacoes_google": {
         "meta": "14",
@@ -171,16 +171,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "25.000,00",
+        "ate_o_momento": "6.975,50",
+        "falta": "-18.024,50",
+        "progresso": "27,902%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "25.000,00",
+        "ate_o_momento": "1.069,00",
+        "falta": "-23.931,00",
+        "progresso": "4,276%"
       },
       "avaliacoes_google": {
         "meta": "20",
@@ -227,16 +227,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "38.000,00",
+        "ate_o_momento": "3.735,00",
+        "falta": "-34.265,00",
+        "progresso": "9,829%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "30.000,00",
+        "ate_o_momento": "7.997,50",
+        "falta": "-22.002,50",
+        "progresso": "26,658%"
       },
       "avaliacoes_google": {
         "meta": "13",
@@ -283,16 +283,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "58.000,00",
-        "ate_o_momento": "9.190,00",
-        "falta": "-48.810,00",
-        "progresso": "15,845%"
+        "meta": "55.000,00",
+        "ate_o_momento": "9.295,00",
+        "falta": "-45.705,00",
+        "progresso": "16,900%"
       },
       "clinico_geral": {
-        "meta": "40.000,00",
-        "ate_o_momento": "5.964,00",
-        "falta": "-34.036,00",
-        "progresso": "14,910%"
+        "meta": "39.000,00",
+        "ate_o_momento": "6.159,00",
+        "falta": "-32.841,00",
+        "progresso": "15,792%"
       },
       "avaliacoes_google": {
         "meta": "60",
@@ -322,8 +322,8 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "2",
-        "falta": "2",
+        "ate_o_momento": "3",
+        "falta": "3",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
@@ -339,16 +339,16 @@
     "mes_referencia": "2026-07",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "28.000,00",
+        "ate_o_momento": "7.238,01",
+        "falta": "-20.761,99",
+        "progresso": "25,850%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "23.600,00",
+        "ate_o_momento": "1.042,00",
+        "falta": "-22.558,00",
+        "progresso": "4,415%"
       },
       "avaliacoes_google": {
         "meta": "12",
