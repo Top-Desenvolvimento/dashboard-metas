@@ -19,7 +19,6 @@
         "ate_o_momento": "0",
         "falta": "23",
         "progresso": "0,00%",
-        "valor_inicial": "139",
         "valor_atual": "139"
       },
       "meta_avaliacao": {
@@ -75,7 +74,6 @@
         "ate_o_momento": "0",
         "falta": "30",
         "progresso": "0,00%",
-        "valor_inicial": "347",
         "valor_atual": "347"
       },
       "meta_avaliacao": {
@@ -128,10 +126,9 @@
       },
       "avaliacoes_google": {
         "meta": "14",
-        "ate_o_momento": "8",
-        "falta": "6",
-        "progresso": "57,14%",
-        "valor_inicial": "201",
+        "ate_o_momento": "0",
+        "falta": "14",
+        "progresso": "0,00%",
         "valor_atual": "209"
       },
       "meta_avaliacao": {
@@ -187,7 +184,6 @@
         "ate_o_momento": "0",
         "falta": "20",
         "progresso": "0,00%",
-        "valor_inicial": "107",
         "valor_atual": "107"
       },
       "meta_avaliacao": {
@@ -243,7 +239,6 @@
         "ate_o_momento": "0",
         "falta": "13",
         "progresso": "0,00%",
-        "valor_inicial": "293",
         "valor_atual": "293"
       },
       "meta_avaliacao": {
@@ -296,10 +291,9 @@
       },
       "avaliacoes_google": {
         "meta": "60",
-        "ate_o_momento": "3",
-        "falta": "57",
-        "progresso": "5,00%",
-        "valor_inicial": "577",
+        "ate_o_momento": "0",
+        "falta": "60",
+        "progresso": "0,00%",
         "valor_atual": "580"
       },
       "meta_avaliacao": {
@@ -351,12 +345,10 @@
         "progresso": "5,381%"
       },
       "avaliacoes_google": {
-        "meta": "12",
-        "ate_o_momento": "7",
-        "falta": "5",
-        "progresso": "58,33%",
-        "valor_inicial": "157",
-        "valor_atual": "164"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_avaliacao": {
         "meta": "-",
