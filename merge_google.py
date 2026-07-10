@@ -10,6 +10,7 @@ TZ = ZoneInfo("America/Sao_Paulo")
 METAS_PATH = "data/metas_atual.json"
 GOOGLE_INICIAL_PATH = "data/google_inicial.json"
 GOOGLE_ATUAL_PATH = "data/google_atual.json"
+HISTORICO_DIR = "data/historico"
 
 
 def carregar_json(path, default):
@@ -97,6 +98,21 @@ def calcular_google(meta, inicial, atual):
     }
 
 
+def atualizar_historico(mes_ref, metas):
+    """
+    generate_dashboard.py lê os arquivos de data/historico/metas_AAAA-MM.json
+    como fonte principal (inclusive para o mês atual) - não o metas_atual.json.
+    Por isso o merge_google.py precisa gravar o resultado recalculado também
+    no histórico do mês corrente, ou o site nunca vê a correção.
+    """
+    historico_path = os.path.join(HISTORICO_DIR, f"metas_{mes_ref}.json")
+    if not os.path.exists(historico_path):
+        print(f"⚠️ Histórico de {mes_ref} não encontrado em {historico_path} — nada a atualizar lá.")
+        return
+    salvar_json(historico_path, metas)
+    print(f"📦 Histórico do mês {mes_ref} atualizado com os dados do Google em: {historico_path}")
+
+
 def main():
     metas = carregar_json(METAS_PATH, {})
     google_inicial = carregar_json(GOOGLE_INICIAL_PATH, {})
@@ -142,8 +158,10 @@ def main():
         )
 
     salvar_json(METAS_PATH, metas)
+    atualizar_historico(mes_ref, metas)
+
     print("=" * 60)
-    print("Google integrado ao metas_atual.json com sucesso.")
+    print("Google integrado ao metas_atual.json (e ao histórico do mês) com sucesso.")
     print("=" * 60)
 
 
