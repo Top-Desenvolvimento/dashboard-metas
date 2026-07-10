@@ -38,8 +38,12 @@ MAPA_CHAVES = {
     # Avaliação Google — deve vir antes de avaliação genérica
     "avaliacao google": "avaliacoes_google",
     "avaliação google": "avaliacoes_google",
+    "avaliacoes google": "avaliacoes_google",
+    "avaliações google": "avaliacoes_google",
     "meta avaliacao google": "avaliacoes_google",
     "meta avaliação google": "avaliacoes_google",
+    "meta avaliacoes google": "avaliacoes_google",
+    "meta avaliações google": "avaliacoes_google",
     # Meta de Avaliação (serviço)
     "avaliação": "meta_avaliacao",
     "avaliacao": "meta_avaliacao",
