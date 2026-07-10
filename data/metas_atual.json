@@ -15,9 +15,9 @@
         "progresso": "18,633%"
       },
       "avaliacoes_google": {
-        "meta": "23",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "23",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "160",
         "valor_atual": "160"
@@ -71,42 +71,42 @@
         "progresso": "23,349%"
       },
       "avaliacoes_google": {
-        "meta": "30",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "30",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "369",
         "valor_atual": "368"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "183",
+        "ate_o_momento": "19",
+        "falta": "-164",
+        "progresso": "10,383%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "77",
+        "ate_o_momento": "22",
+        "falta": "-55",
+        "progresso": "28,571%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "41",
+        "ate_o_momento": "13",
+        "falta": "-28",
+        "progresso": "31,707%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "6",
+        "falta": "6",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
@@ -127,42 +127,42 @@
         "progresso": "14,273%"
       },
       "avaliacoes_google": {
-        "meta": "14",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "14",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "209",
         "valor_atual": "209"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "91",
+        "ate_o_momento": "12",
+        "falta": "-79",
+        "progresso": "13,187%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "37",
+        "ate_o_momento": "9",
+        "falta": "-28",
+        "progresso": "24,324%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "17",
+        "ate_o_momento": "7",
+        "falta": "-10",
+        "progresso": "41,176%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "3",
+        "falta": "3",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
@@ -183,9 +183,9 @@
         "progresso": "4,276%"
       },
       "avaliacoes_google": {
-        "meta": "20",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "20",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "116",
         "valor_atual": "116"
@@ -239,9 +239,9 @@
         "progresso": "26,658%"
       },
       "avaliacoes_google": {
-        "meta": "13",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "13",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "297",
         "valor_atual": "194"
@@ -295,9 +295,9 @@
         "progresso": "15,792%"
       },
       "avaliacoes_google": {
-        "meta": "60",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "60",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "598",
         "valor_atual": "598"
