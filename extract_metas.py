@@ -391,12 +391,14 @@ def extrair_cidade(page, cidade_info):
         tabelas = extrair_tabelas(page)
         mes_referencia = obter_mes_referencia(page)
 
-        if nome == "Veranópolis":
-            print(f"🔍 DEBUG Veranópolis - número de tabelas: {len(tabelas)}")
-            for idx_t, tabela in enumerate(tabelas):
-                print(f"🔍 Tabela {idx_t} tem {len(tabela)} linhas:")
-                for idx_l, linha in enumerate(tabela):
-                    print(f"   linha {idx_l}: {repr(linha)}")
+        # DEBUG temporário: imprime a estrutura crua das tabelas de TODAS as
+        # cidades, pra investigar por que algumas seções (Avaliações Google,
+        # Meta de Restauração etc.) somem em cidades diferentes.
+        print(f"🔍 DEBUG {nome} - número de tabelas: {len(tabelas)}")
+        for idx_t, tabela in enumerate(tabelas):
+            print(f"🔍 [{nome}] Tabela {idx_t} tem {len(tabela)} linhas:")
+            for idx_l, linha in enumerate(tabela):
+                print(f"   [{nome}] linha {idx_l}: {repr(linha)}")
 
         indicadores = garantir_indicadores_vazios()
         if len(tabelas) > 0:
