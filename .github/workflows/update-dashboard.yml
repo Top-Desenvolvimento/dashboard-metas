@@ -45,6 +45,11 @@ jobs:
           MES_REFERENCIA: 'AUTO'
         run: |
           python extract_metas.py
+      - name: Iniciar mês do Google (se ainda não existir)
+        env:
+          MES_REFERENCIA: 'AUTO'
+        run: |
+          python iniciar_mes_google.py
       - name: Mesclar dados do Google
         run: |
           python merge_google.py
