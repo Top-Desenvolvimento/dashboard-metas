@@ -1,11 +1,11 @@
 {
   "2026-07": {
-    "Bento": { "valor_meta": "0" },
-    "Caxias": { "valor_meta": "0" },
-    "Encantado": { "valor_meta": "0" },
-    "Farroupilha": { "valor_meta": "0" },
-    "Flores": { "valor_meta": "0" },
-    "Veranopolis": { "valor_meta": "0" },
-    "Soledade": { "valor_meta": "0" }
+    "Bento": { "valor_meta": "11" },
+    "Caxias": { "valor_meta": "33" },
+    "Encantado": { "valor_meta": "8" },
+    "Farroupilha": { "valor_meta": "10" },
+    "Flores": { "valor_meta": "22" },
+    "Veranopolis": { "valor_meta": "9" },
+    "Soledade": { "valor_meta": "41" }
   }
 }
