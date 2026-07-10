@@ -3,6 +3,9 @@ import os
 import re
 import unicodedata
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
+TZ = ZoneInfo("America/Sao_Paulo")
 
 METAS_PATH = "data/metas_atual.json"
 GOOGLE_INICIAL_PATH = "data/google_inicial.json"
@@ -13,14 +16,12 @@ def carregar_json(path, default):
     if not os.path.exists(path):
         print(f"Arquivo não encontrado: {path}")
         return default
-
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
 def salvar_json(path, data):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
@@ -38,34 +39,26 @@ def normalizar_nome(nome):
 
 def buscar_por_cidade(base, cidade):
     cidade_norm = normalizar_nome(cidade)
-
     for chave, valor in base.items():
         if normalizar_nome(chave) == cidade_norm:
             return valor
-
     return None
 
 
 def extrair_numero(valor):
     if valor is None:
         return 0
-
     if isinstance(valor, dict):
         for chave in ["valor_atual", "atual", "valor", "avaliacoes", "total", "inicial"]:
             if chave in valor:
                 return extrair_numero(valor.get(chave))
         return 0
-
     texto = str(valor).strip()
-
     if texto == "" or texto == "-":
         return 0
-
     numeros = re.findall(r"\d+", texto)
-
     if not numeros:
         return 0
-
     return int("".join(numeros))
 
 
@@ -78,30 +71,22 @@ def descobrir_mes(metas):
         mes = info.get("mes_referencia")
         if mes:
             return mes
-
     mes_env = os.getenv("MES_REFERENCIA", "").strip()
     if mes_env and mes_env != "AUTO":
         return mes_env
-
-    return datetime.now().strftime("%Y-%m")
+    return datetime.now(TZ).strftime("%Y-%m")
 
 
 def calcular_google(meta, inicial, atual):
     realizado = atual - inicial
-
     if realizado < 0:
         realizado = 0
-
     falta = meta - realizado
-
     if falta < 0:
         falta = 0
-
     progresso = 0
-
     if meta > 0:
         progresso = (realizado / meta) * 100
-
     return {
         "meta": str(meta),
         "ate_o_momento": str(realizado),
@@ -128,7 +113,6 @@ def main():
 
     for cidade, info in metas.items():
         indicadores = info.setdefault("indicadores", {})
-
         google_existente = indicadores.setdefault("avaliacoes_google", {
             "meta": "0",
             "ate_o_momento": "0",
@@ -148,19 +132,16 @@ def main():
             google_existente["progresso"] = "0,00%"
             google_existente["valor_inicial"] = str(inicial)
             google_existente["valor_atual"] = str(atual)
-
             print(f"{cidade}: NÃO CALCULADO | inicial={inicial} | atual={atual} | meta={meta}")
             continue
 
         indicadores["avaliacoes_google"] = calcular_google(meta, inicial, atual)
-
         print(
             f"{cidade}: inicial={inicial} | atual={atual} | "
             f"realizado={atual - inicial} | meta={meta}"
         )
 
     salvar_json(METAS_PATH, metas)
-
     print("=" * 60)
     print("Google integrado ao metas_atual.json com sucesso.")
     print("=" * 60)
