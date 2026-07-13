@@ -355,6 +355,13 @@ def montar_google_meta(bloco_google):
 
 
 def aplicar_google_manual(resultado, mes_ref):
+    """
+    A meta de Avaliações Google deve vir do sistema sempre que ele já tiver
+    essa seção configurada (é o caso normal). O google_manual.json serve
+    SÓ como tapa-buraco para cidades cujo sistema ainda não tem essa
+    configuração (hoje, só a Veranópolis) — por isso só age quando o valor
+    vindo do sistema está vazio ("-"), nunca sobrescrevendo um valor real.
+    """
     google_manual = carregar_google_manual(mes_ref)
     print(f"📅 Mês lido para Google: {mes_ref}")
     print(f"🏙️ Cidades no Google manual: {list(google_manual.keys())}")
@@ -367,13 +374,19 @@ def aplicar_google_manual(resultado, mes_ref):
     }
 
     for cidade, dados in resultado.items():
+        meta_do_sistema = dados.get("indicadores", {}).get("avaliacoes_google", {}).get("meta", "-")
+
+        if meta_do_sistema not in ("-", "", None):
+            print(f"✅ Meta do Google de {cidade} já veio do sistema ({meta_do_sistema}) — mantendo.")
+            continue
+
         chave_norm = normalizar_texto(cidade)
         if chave_norm in google_manual_normalizado:
             nome_original, valores = google_manual_normalizado[chave_norm]
             dados["indicadores"]["avaliacoes_google"] = montar_google_meta(valores)
-            print(f"✅ Meta do Google aplicada em {cidade} (via '{nome_original}')")
+            print(f"✅ Sistema não tinha meta para {cidade} — aplicada via manual ('{nome_original}')")
         else:
-            print(f"ℹ️ Sem meta manual do Google para {cidade}")
+            print(f"ℹ️ Sem meta (nem do sistema, nem manual) para {cidade}")
     return resultado
 
 
