@@ -259,10 +259,10 @@
         "progresso": "30,435%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "21",
+        "ate_o_momento": "16",
+        "falta": "-5",
+        "progresso": "76,190%"
       },
       "colagem_convencional": {
         "meta": "0",
@@ -304,9 +304,9 @@
       },
       "meta_avaliacao": {
         "meta": "318",
-        "ate_o_momento": "89",
-        "falta": "-229",
-        "progresso": "27,987%"
+        "ate_o_momento": "86",
+        "falta": "-232",
+        "progresso": "27,044%"
       },
       "meta_profilaxia": {
         "meta": "83",
@@ -316,14 +316,14 @@
       },
       "meta_restauracao": {
         "meta": "40",
-        "ate_o_momento": "17",
-        "falta": "-23",
-        "progresso": "42,500%"
+        "ate_o_momento": "18",
+        "falta": "-22",
+        "progresso": "45,000%"
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "3",
-        "falta": "3",
+        "ate_o_momento": "6",
+        "falta": "6",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
