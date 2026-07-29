@@ -24,9 +24,9 @@
       },
       "meta_avaliacao": {
         "meta": "146",
-        "ate_o_momento": "101",
-        "falta": "-45",
-        "progresso": "69,178%"
+        "ate_o_momento": "102",
+        "falta": "-44",
+        "progresso": "69,863%"
       },
       "meta_profilaxia": {
         "meta": "59",
@@ -36,9 +36,9 @@
       },
       "meta_restauracao": {
         "meta": "58",
-        "ate_o_momento": "47",
-        "falta": "-11",
-        "progresso": "81,034%"
+        "ate_o_momento": "48",
+        "falta": "-10",
+        "progresso": "82,759%"
       },
       "colagem_convencional": {
         "meta": "0",
@@ -72,23 +72,23 @@
       },
       "avaliacoes_google": {
         "meta": "33",
-        "ate_o_momento": "15",
-        "falta": "18",
-        "progresso": "45,45%",
+        "ate_o_momento": "19",
+        "falta": "14",
+        "progresso": "57,58%",
         "valor_inicial": "369",
-        "valor_atual": "384"
+        "valor_atual": "388"
       },
       "meta_avaliacao": {
         "meta": "183",
-        "ate_o_momento": "179",
-        "falta": "-4",
-        "progresso": "97,814%"
+        "ate_o_momento": "180",
+        "falta": "-3",
+        "progresso": "98,361%"
       },
       "meta_profilaxia": {
         "meta": "77",
-        "ate_o_momento": "73",
-        "falta": "-4",
-        "progresso": "94,805%"
+        "ate_o_momento": "74",
+        "falta": "-3",
+        "progresso": "96,104%"
       },
       "meta_restauracao": {
         "meta": "41",
@@ -240,11 +240,11 @@
       },
       "avaliacoes_google": {
         "meta": "8",
-        "ate_o_momento": "30",
+        "ate_o_momento": "32",
         "falta": "0",
-        "progresso": "375,00%",
+        "progresso": "400,00%",
         "valor_inicial": "294",
-        "valor_atual": "324"
+        "valor_atual": "326"
       },
       "meta_avaliacao": {
         "meta": "72",
@@ -352,11 +352,11 @@
       },
       "avaliacoes_google": {
         "meta": "9",
-        "ate_o_momento": "15",
+        "ate_o_momento": "53",
         "falta": "0",
-        "progresso": "166,67%",
+        "progresso": "588,89%",
         "valor_inicial": "170",
-        "valor_atual": "185"
+        "valor_atual": "223"
       },
       "meta_avaliacao": {
         "meta": "60",
