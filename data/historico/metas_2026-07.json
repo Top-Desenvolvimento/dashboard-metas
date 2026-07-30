@@ -228,9 +228,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "38.000,00",
-        "ate_o_momento": "24.835,00",
-        "falta": "-13.165,00",
-        "progresso": "65,355%"
+        "ate_o_momento": "24.940,00",
+        "falta": "-13.060,00",
+        "progresso": "65,632%"
       },
       "clinico_geral": {
         "meta": "30.000,00",
@@ -284,9 +284,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "55.000,00",
-        "ate_o_momento": "35.596,00",
-        "falta": "-19.404,00",
-        "progresso": "64,720%"
+        "ate_o_momento": "35.692,00",
+        "falta": "-19.308,00",
+        "progresso": "64,895%"
       },
       "clinico_geral": {
         "meta": "39.000,00",
@@ -322,8 +322,8 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "12",
-        "falta": "12",
+        "ate_o_momento": "13",
+        "falta": "13",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
