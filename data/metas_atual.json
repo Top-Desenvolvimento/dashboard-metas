@@ -3,16 +3,16 @@
     "mes_referencia": "2026-08",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "30.000,00",
+        "ate_o_momento": "2.984,00",
+        "falta": "-27.016,00",
+        "progresso": "9,947%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "62.000,00",
+        "ate_o_momento": "7.607,00",
+        "falta": "-54.393,00",
+        "progresso": "12,269%"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -23,34 +23,34 @@
         "valor_atual": "182"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "152",
+        "ate_o_momento": "25",
+        "falta": "-127",
+        "progresso": "16,447%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "59",
+        "ate_o_momento": "6",
+        "falta": "-53",
+        "progresso": "10,169%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "73",
+        "ate_o_momento": "8",
+        "falta": "-65",
+        "progresso": "10,959%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
@@ -59,54 +59,54 @@
     "mes_referencia": "2026-08",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "47.000,00",
+        "ate_o_momento": "8.114,00",
+        "falta": "-38.886,00",
+        "progresso": "17,264%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "85.000,00",
+        "ate_o_momento": "16.882,00",
+        "falta": "-68.118,00",
+        "progresso": "19,861%"
       },
       "avaliacoes_google": {
-        "meta": "0",
+        "meta": "39",
         "ate_o_momento": "0",
-        "falta": "0",
+        "falta": "39",
         "progresso": "0,00%",
         "valor_inicial": "410",
         "valor_atual": "410"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "207",
+        "ate_o_momento": "50",
+        "falta": "-157",
+        "progresso": "24,155%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "83",
+        "ate_o_momento": "27",
+        "falta": "-56",
+        "progresso": "32,530%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "61",
+        "ate_o_momento": "17",
+        "falta": "-44",
+        "progresso": "27,869%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "5",
+        "falta": "5",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
@@ -115,54 +115,54 @@
     "mes_referencia": "2026-08",
     "indicadores": {
       "ortodontia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "33.000,00",
+        "ate_o_momento": "4.682,00",
+        "falta": "-28.318,00",
+        "progresso": "14,188%"
       },
       "clinico_geral": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "33.000,00",
+        "ate_o_momento": "2.251,00",
+        "falta": "-30.749,00",
+        "progresso": "6,821%"
       },
       "avaliacoes_google": {
-        "meta": "0",
+        "meta": "15",
         "ate_o_momento": "0",
-        "falta": "0",
+        "falta": "15",
         "progresso": "0,00%",
         "valor_inicial": "229",
         "valor_atual": "229"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "87",
+        "ate_o_momento": "22",
+        "falta": "-65",
+        "progresso": "25,287%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "38",
+        "ate_o_momento": "6",
+        "falta": "-32",
+        "progresso": "15,789%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "17",
+        "ate_o_momento": "3",
+        "falta": "-14",
+        "progresso": "17,647%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "3",
+        "falta": "3",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
