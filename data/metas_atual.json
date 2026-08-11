@@ -4,15 +4,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "3.104,00",
-        "falta": "-26.896,00",
-        "progresso": "10,347%"
+        "ate_o_momento": "3.303,00",
+        "falta": "-26.697,00",
+        "progresso": "11,010%"
       },
       "clinico_geral": {
         "meta": "62.000,00",
-        "ate_o_momento": "8.189,00",
-        "falta": "-53.811,00",
-        "progresso": "13,208%"
+        "ate_o_momento": "8.384,00",
+        "falta": "-53.616,00",
+        "progresso": "13,523%"
       },
       "avaliacoes_google": {
         "meta": "30",
@@ -24,9 +24,9 @@
       },
       "meta_avaliacao": {
         "meta": "152",
-        "ate_o_momento": "28",
-        "falta": "-124",
-        "progresso": "18,421%"
+        "ate_o_momento": "29",
+        "falta": "-123",
+        "progresso": "19,079%"
       },
       "meta_profilaxia": {
         "meta": "59",
@@ -92,9 +92,9 @@
       },
       "meta_restauracao": {
         "meta": "61",
-        "ate_o_momento": "20",
-        "falta": "-41",
-        "progresso": "32,787%"
+        "ate_o_momento": "21",
+        "falta": "-40",
+        "progresso": "34,426%"
       },
       "colagem_convencional": {
         "meta": "0",
@@ -116,9 +116,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "33.000,00",
-        "ate_o_momento": "5.755,00",
-        "falta": "-27.245,00",
-        "progresso": "17,439%"
+        "ate_o_momento": "6.177,00",
+        "falta": "-26.823,00",
+        "progresso": "18,718%"
       },
       "clinico_geral": {
         "meta": "33.000,00",
@@ -136,9 +136,9 @@
       },
       "meta_avaliacao": {
         "meta": "87",
-        "ate_o_momento": "22",
-        "falta": "-65",
-        "progresso": "25,287%"
+        "ate_o_momento": "23",
+        "falta": "-64",
+        "progresso": "26,437%"
       },
       "meta_profilaxia": {
         "meta": "38",
@@ -316,9 +316,9 @@
       },
       "meta_restauracao": {
         "meta": "38",
-        "ate_o_momento": "9",
-        "falta": "-29",
-        "progresso": "23,684%"
+        "ate_o_momento": "10",
+        "falta": "-28",
+        "progresso": "26,316%"
       },
       "colagem_convencional": {
         "meta": "0",
