@@ -4,9 +4,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "9.145,00",
-        "falta": "-20.855,00",
-        "progresso": "30,483%"
+        "ate_o_momento": "9.304,00",
+        "falta": "-20.696,00",
+        "progresso": "31,013%"
       },
       "clinico_geral": {
         "meta": "62.000,00",
@@ -204,9 +204,9 @@
       },
       "meta_restauracao": {
         "meta": "19",
-        "ate_o_momento": "6",
-        "falta": "-13",
-        "progresso": "31,579%"
+        "ate_o_momento": "7",
+        "falta": "-12",
+        "progresso": "36,842%"
       },
       "colagem_convencional": {
         "meta": "0",
