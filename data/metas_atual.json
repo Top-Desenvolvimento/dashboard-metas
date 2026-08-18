@@ -4,15 +4,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "10.027,00",
-        "falta": "-19.973,00",
-        "progresso": "33,423%"
+        "ate_o_momento": "10.125,00",
+        "falta": "-19.875,00",
+        "progresso": "33,750%"
       },
       "clinico_geral": {
         "meta": "62.000,00",
-        "ate_o_momento": "21.986,39",
-        "falta": "-40.013,61",
-        "progresso": "35,462%"
+        "ate_o_momento": "22.675,39",
+        "falta": "-39.324,61",
+        "progresso": "36,573%"
       },
       "avaliacoes_google": {
         "meta": "30",
@@ -60,9 +60,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "47.000,00",
-        "ate_o_momento": "29.608,53",
-        "falta": "-17.391,47",
-        "progresso": "62,997%"
+        "ate_o_momento": "29.728,53",
+        "falta": "-17.271,47",
+        "progresso": "63,252%"
       },
       "clinico_geral": {
         "meta": "85.000,00",
@@ -80,9 +80,9 @@
       },
       "meta_avaliacao": {
         "meta": "207",
-        "ate_o_momento": "115",
-        "falta": "-92",
-        "progresso": "55,556%"
+        "ate_o_momento": "116",
+        "falta": "-91",
+        "progresso": "56,039%"
       },
       "meta_profilaxia": {
         "meta": "83",
@@ -104,8 +104,8 @@
       },
       "colagem_estetico": {
         "meta": "0",
-        "ate_o_momento": "1",
-        "falta": "1",
+        "ate_o_momento": "2",
+        "falta": "2",
         "progresso": "0,000%"
       }
     },
