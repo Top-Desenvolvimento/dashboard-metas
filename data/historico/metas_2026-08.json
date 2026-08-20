@@ -16,11 +16,11 @@
       },
       "avaliacoes_google": {
         "meta": "30",
-        "ate_o_momento": "1",
-        "falta": "29",
-        "progresso": "3,33%",
+        "ate_o_momento": "3",
+        "falta": "27",
+        "progresso": "10,00%",
         "valor_inicial": "182",
-        "valor_atual": "183"
+        "valor_atual": "185"
       },
       "meta_avaliacao": {
         "meta": "152",
@@ -66,9 +66,9 @@
       },
       "clinico_geral": {
         "meta": "85.000,00",
-        "ate_o_momento": "52.174,06",
-        "falta": "-32.825,94",
-        "progresso": "61,381%"
+        "ate_o_momento": "52.393,06",
+        "falta": "-32.606,94",
+        "progresso": "61,639%"
       },
       "avaliacoes_google": {
         "meta": "39",
@@ -80,15 +80,15 @@
       },
       "meta_avaliacao": {
         "meta": "207",
-        "ate_o_momento": "119",
-        "falta": "-88",
-        "progresso": "57,488%"
+        "ate_o_momento": "120",
+        "falta": "-87",
+        "progresso": "57,971%"
       },
       "meta_profilaxia": {
         "meta": "83",
-        "ate_o_momento": "62",
-        "falta": "-21",
-        "progresso": "74,699%"
+        "ate_o_momento": "63",
+        "falta": "-20",
+        "progresso": "75,904%"
       },
       "meta_restauracao": {
         "meta": "61",
@@ -128,11 +128,11 @@
       },
       "avaliacoes_google": {
         "meta": "15",
-        "ate_o_momento": "0",
-        "falta": "15",
-        "progresso": "0,00%",
+        "ate_o_momento": "8",
+        "falta": "7",
+        "progresso": "53,33%",
         "valor_inicial": "229",
-        "valor_atual": "229"
+        "valor_atual": "237"
       },
       "meta_avaliacao": {
         "meta": "87",
@@ -184,11 +184,11 @@
       },
       "avaliacoes_google": {
         "meta": "22",
-        "ate_o_momento": "2",
-        "falta": "20",
-        "progresso": "9,09%",
+        "ate_o_momento": "3",
+        "falta": "19",
+        "progresso": "13,64%",
         "valor_inicial": "139",
-        "valor_atual": "141"
+        "valor_atual": "142"
       },
       "meta_avaliacao": {
         "meta": "123",
@@ -352,11 +352,11 @@
       },
       "avaliacoes_google": {
         "meta": "15",
-        "ate_o_momento": "4",
-        "falta": "11",
-        "progresso": "26,67%",
+        "ate_o_momento": "11",
+        "falta": "4",
+        "progresso": "73,33%",
         "valor_inicial": "217",
-        "valor_atual": "221"
+        "valor_atual": "228"
       },
       "meta_avaliacao": {
         "meta": "78",
