@@ -4,9 +4,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "19.473,00",
-        "falta": "-10.527,00",
-        "progresso": "64,910%"
+        "ate_o_momento": "19.598,00",
+        "falta": "-10.402,00",
+        "progresso": "65,327%"
       },
       "clinico_geral": {
         "meta": "62.000,00",
@@ -60,15 +60,15 @@
     "indicadores": {
       "ortodontia": {
         "meta": "47.000,00",
-        "ate_o_momento": "36.663,03",
-        "falta": "-10.336,97",
-        "progresso": "78,006%"
+        "ate_o_momento": "36.973,03",
+        "falta": "-10.026,97",
+        "progresso": "78,666%"
       },
       "clinico_geral": {
         "meta": "85.000,00",
-        "ate_o_momento": "55.372,06",
-        "falta": "-29.627,94",
-        "progresso": "65,144%"
+        "ate_o_momento": "55.591,06",
+        "falta": "-29.408,94",
+        "progresso": "65,401%"
       },
       "avaliacoes_google": {
         "meta": "39",
@@ -80,21 +80,21 @@
       },
       "meta_avaliacao": {
         "meta": "207",
-        "ate_o_momento": "146",
-        "falta": "-61",
-        "progresso": "70,531%"
+        "ate_o_momento": "148",
+        "falta": "-59",
+        "progresso": "71,498%"
       },
       "meta_profilaxia": {
         "meta": "83",
-        "ate_o_momento": "70",
-        "falta": "-13",
-        "progresso": "84,337%"
+        "ate_o_momento": "71",
+        "falta": "-12",
+        "progresso": "85,542%"
       },
       "meta_restauracao": {
         "meta": "61",
-        "ate_o_momento": "60",
-        "falta": "-1",
-        "progresso": "98,361%"
+        "ate_o_momento": "61",
+        "falta": "0",
+        "progresso": "100,000%"
       },
       "colagem_convencional": {
         "meta": "0",
@@ -248,9 +248,9 @@
       },
       "meta_avaliacao": {
         "meta": "108",
-        "ate_o_momento": "75",
-        "falta": "-33",
-        "progresso": "69,444%"
+        "ate_o_momento": "76",
+        "falta": "-32",
+        "progresso": "70,370%"
       },
       "meta_profilaxia": {
         "meta": "25",
