@@ -15,18 +15,18 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "182"
+        "valor_inicial": "186",
+        "valor_atual": "186"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "152",
+        "ate_o_momento": "0",
+        "falta": "-152",
+        "progresso": "0,000%"
       },
       "meta_profilaxia": {
         "meta": "-",
@@ -71,12 +71,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "410"
+        "valor_inicial": "426",
+        "valor_atual": "426"
       },
       "meta_avaliacao": {
         "meta": "-",
@@ -127,12 +127,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "229"
+        "valor_inicial": "243",
+        "valor_atual": "243"
       },
       "meta_avaliacao": {
         "meta": "-",
@@ -183,12 +183,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "139"
+        "valor_inicial": "143",
+        "valor_atual": "143"
       },
       "meta_avaliacao": {
         "meta": "-",
@@ -239,12 +239,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "327"
+        "valor_inicial": "345",
+        "valor_atual": "345"
       },
       "meta_avaliacao": {
         "meta": "-",
@@ -295,12 +295,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "655"
+        "valor_inicial": "663",
+        "valor_atual": "663"
       },
       "meta_avaliacao": {
         "meta": "-",
@@ -351,12 +351,12 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
-        "valor_atual": "217"
+        "valor_inicial": "229",
+        "valor_atual": "229"
       },
       "meta_avaliacao": {
         "meta": "-",
