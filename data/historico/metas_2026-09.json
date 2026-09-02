@@ -127,42 +127,42 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
+        "meta": "18",
+        "ate_o_momento": "4",
+        "falta": "14",
+        "progresso": "22,22%",
+        "valor_inicial": "243",
+        "valor_atual": "247"
+      },
+      "meta_avaliacao": {
+        "meta": "97",
+        "ate_o_momento": "4",
+        "falta": "-93",
+        "progresso": "4,124%"
+      },
+      "meta_profilaxia": {
+        "meta": "30",
+        "ate_o_momento": "1",
+        "falta": "-29",
+        "progresso": "3,333%"
+      },
+      "meta_restauracao": {
+        "meta": "17",
+        "ate_o_momento": "0",
+        "falta": "-17",
+        "progresso": "0,000%"
+      },
+      "colagem_convencional": {
         "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
-        "progresso": "0,00%",
-        "valor_inicial": "243",
-        "valor_atual": "243"
-      },
-      "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
-      },
-      "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
-      },
-      "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
-      },
-      "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       }
     },
     "_status": "ok"
