@@ -23,10 +23,10 @@
         "valor_atual": "186"
       },
       "meta_avaliacao": {
-        "meta": "152",
-        "ate_o_momento": "0",
-        "falta": "-152",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
         "meta": "-",
@@ -53,7 +53,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Caxias": {
     "mes_referencia": "2026-10",
@@ -109,7 +109,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Farroupilha": {
     "mes_referencia": "2026-10",
@@ -165,7 +165,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Bento": {
     "mes_referencia": "2026-10",
@@ -221,7 +221,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Encantado": {
     "mes_referencia": "2026-10",
@@ -277,7 +277,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Soledade": {
     "mes_referencia": "2026-10",
@@ -333,7 +333,7 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Veranópolis": {
     "mes_referencia": "2026-10",
@@ -389,6 +389,6 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   }
 }

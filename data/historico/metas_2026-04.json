@@ -3,16 +3,16 @@
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "29.000,00",
-        "ate_o_momento": "29.011,50",
-        "falta": "11,50",
-        "progresso": "100,040%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "53.800,00",
-        "ate_o_momento": "49.544,80",
-        "falta": "-4.255,20",
-        "progresso": "92,091%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -23,22 +23,22 @@
         "valor_atual": "186"
       },
       "meta_avaliacao": {
-        "meta": "159",
-        "ate_o_momento": "137",
-        "falta": "-22",
-        "progresso": "86,164%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "55",
-        "ate_o_momento": "56",
-        "falta": "1",
-        "progresso": "101,818%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "51",
-        "ate_o_momento": "40",
-        "falta": "-11",
-        "progresso": "78,431%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -53,22 +53,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Caxias": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "51.000,00",
-        "ate_o_momento": "40.578,46",
-        "falta": "-10.421,54",
-        "progresso": "79,566%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "91.000,00",
-        "ate_o_momento": "72.248,71",
-        "falta": "-18.751,29",
-        "progresso": "79,394%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -79,22 +79,22 @@
         "valor_atual": "426"
       },
       "meta_avaliacao": {
-        "meta": "228",
-        "ate_o_momento": "147",
-        "falta": "-81",
-        "progresso": "64,474%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "90",
-        "ate_o_momento": "67",
-        "falta": "-23",
-        "progresso": "74,444%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "58",
-        "ate_o_momento": "31",
-        "falta": "-27",
-        "progresso": "53,448%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -109,22 +109,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Farroupilha": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "34.000,00",
-        "ate_o_momento": "28.070,50",
-        "falta": "-5.929,50",
-        "progresso": "82,560%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "34.000,00",
-        "ate_o_momento": "22.748,90",
-        "falta": "-11.251,10",
-        "progresso": "66,909%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -135,22 +135,22 @@
         "valor_atual": "247"
       },
       "meta_avaliacao": {
-        "meta": "76",
-        "ate_o_momento": "84",
-        "falta": "8",
-        "progresso": "110,526%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "26",
-        "ate_o_momento": "25",
-        "falta": "-1",
-        "progresso": "96,154%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "17",
-        "ate_o_momento": "14",
-        "falta": "-3",
-        "progresso": "82,353%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -165,22 +165,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Bento": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "26.000,00",
-        "ate_o_momento": "20.664,00",
-        "falta": "-5.336,00",
-        "progresso": "79,477%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "25.000,00",
-        "ate_o_momento": "12.211,00",
-        "falta": "-12.789,00",
-        "progresso": "48,844%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -191,22 +191,22 @@
         "valor_atual": "143"
       },
       "meta_avaliacao": {
-        "meta": "98",
-        "ate_o_momento": "53",
-        "falta": "-45",
-        "progresso": "54,082%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "37",
-        "ate_o_momento": "25",
-        "falta": "-12",
-        "progresso": "67,568%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "17",
-        "ate_o_momento": "10",
-        "falta": "-7",
-        "progresso": "58,824%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -221,22 +221,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Encantado": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "39.000,00",
-        "ate_o_momento": "28.367,00",
-        "falta": "-10.633,00",
-        "progresso": "72,736%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "31.000,00",
-        "ate_o_momento": "16.585,70",
-        "falta": "-14.414,30",
-        "progresso": "53,502%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -247,22 +247,22 @@
         "valor_atual": "345"
       },
       "meta_avaliacao": {
-        "meta": "109",
-        "ate_o_momento": "59",
-        "falta": "-50",
-        "progresso": "54,128%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "13",
-        "ate_o_momento": "12",
-        "falta": "-1",
-        "progresso": "92,308%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "19",
-        "ate_o_momento": "21",
-        "falta": "2",
-        "progresso": "110,526%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -277,22 +277,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Soledade": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "58.000,00",
-        "ate_o_momento": "46.903,00",
-        "falta": "-11.097,00",
-        "progresso": "80,867%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "40.000,00",
-        "ate_o_momento": "28.202,60",
-        "falta": "-11.797,40",
-        "progresso": "70,507%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -303,22 +303,22 @@
         "valor_atual": "663"
       },
       "meta_avaliacao": {
-        "meta": "320",
-        "ate_o_momento": "250",
-        "falta": "-70",
-        "progresso": "78,125%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "78",
-        "ate_o_momento": "78",
-        "falta": "0",
-        "progresso": "100,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "35",
-        "ate_o_momento": "31",
-        "falta": "-4",
-        "progresso": "88,571%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -333,22 +333,22 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   },
   "Veranópolis": {
     "mes_referencia": "2026-04",
     "indicadores": {
       "ortodontia": {
-        "meta": "29.000,00",
-        "ate_o_momento": "23.586,57",
-        "falta": "-5.413,43",
-        "progresso": "81,333%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "17.700,00",
-        "ate_o_momento": "23.150,98",
-        "falta": "5.450,98",
-        "progresso": "130,796%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
         "meta": "0",
@@ -359,22 +359,22 @@
         "valor_atual": "229"
       },
       "meta_avaliacao": {
-        "meta": "52",
-        "ate_o_momento": "36",
-        "falta": "-16",
-        "progresso": "69,231%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "17",
-        "ate_o_momento": "19",
-        "falta": "2",
-        "progresso": "111,765%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "21",
-        "ate_o_momento": "13",
-        "falta": "-8",
-        "progresso": "61,905%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
         "meta": "-",
@@ -389,6 +389,6 @@
         "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
   }
 }
