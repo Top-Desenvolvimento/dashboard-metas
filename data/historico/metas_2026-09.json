@@ -23,10 +23,10 @@
         "valor_atual": "186"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "152",
+        "ate_o_momento": "4",
+        "falta": "-148",
+        "progresso": "2,632%"
       },
       "meta_profilaxia": {
         "meta": "-",
@@ -53,7 +53,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Caxias": {
     "mes_referencia": "2026-09",
@@ -109,7 +109,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Farroupilha": {
     "mes_referencia": "2026-09",
@@ -127,45 +127,45 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "0",
+        "meta": "18",
         "ate_o_momento": "0",
-        "falta": "0",
+        "falta": "18",
         "progresso": "0,00%",
         "valor_inicial": "247",
         "valor_atual": "247"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "97",
+        "ate_o_momento": "8",
+        "falta": "-89",
+        "progresso": "8,247%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "30",
+        "ate_o_momento": "2",
+        "falta": "-28",
+        "progresso": "6,667%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "17",
+        "ate_o_momento": "0",
+        "falta": "-17",
+        "progresso": "0,000%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Bento": {
     "mes_referencia": "2026-09",
@@ -221,7 +221,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Encantado": {
     "mes_referencia": "2026-09",
@@ -277,7 +277,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Soledade": {
     "mes_referencia": "2026-09",
@@ -333,7 +333,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Veranópolis": {
     "mes_referencia": "2026-09",
@@ -389,6 +389,6 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   }
 }
