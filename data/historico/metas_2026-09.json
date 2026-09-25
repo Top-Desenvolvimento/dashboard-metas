@@ -227,57 +227,57 @@
     "mes_referencia": "2026-09",
     "indicadores": {
       "ortodontia": {
-        "meta": "38.000,00",
-        "ate_o_momento": "21.265,00",
-        "falta": "-16.735,00",
-        "progresso": "55,961%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "clinico_geral": {
-        "meta": "32.000,00",
-        "ate_o_momento": "14.909,00",
-        "falta": "-17.091,00",
-        "progresso": "46,591%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "23",
+        "meta": "0",
         "ate_o_momento": "0",
-        "falta": "23",
+        "falta": "0",
         "progresso": "0,00%",
         "valor_inicial": "345",
         "valor_atual": "345"
       },
       "meta_avaliacao": {
-        "meta": "136",
-        "ate_o_momento": "65",
-        "falta": "-71",
-        "progresso": "47,794%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_profilaxia": {
-        "meta": "27",
-        "ate_o_momento": "10",
-        "falta": "-17",
-        "progresso": "37,037%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "meta_restauracao": {
-        "meta": "36",
-        "ate_o_momento": "9",
-        "falta": "-27",
-        "progresso": "25,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_convencional": {
-        "meta": "0",
-        "ate_o_momento": "1",
-        "falta": "1",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       },
       "colagem_estetico": {
-        "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
-        "progresso": "0,000%"
+        "meta": "-",
+        "ate_o_momento": "-",
+        "falta": "-",
+        "progresso": "-"
       }
     },
-    "_status": "ok"
+    "_status": "erro: Page.goto: net::ERR_TIMED_OUT at https://encantado.topesteticabucal.com.br/sistema\nCall log:\nnavigating to \"https://encantado.topesteticabucal.com.br/sistema\", waiting until \"domcontentloaded\"\n"
   },
   "Soledade": {
     "mes_referencia": "2026-09",
