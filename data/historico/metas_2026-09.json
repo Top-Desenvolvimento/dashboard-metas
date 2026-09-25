@@ -4,9 +4,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "30.000,00",
-        "ate_o_momento": "19.484,00",
-        "falta": "-10.516,00",
-        "progresso": "64,947%"
+        "ate_o_momento": "19.583,00",
+        "falta": "-10.417,00",
+        "progresso": "65,277%"
       },
       "clinico_geral": {
         "meta": "62.000,00",
@@ -24,9 +24,9 @@
       },
       "meta_avaliacao": {
         "meta": "161",
-        "ate_o_momento": "97",
-        "falta": "-64",
-        "progresso": "60,248%"
+        "ate_o_momento": "98",
+        "falta": "-63",
+        "progresso": "60,870%"
       },
       "meta_profilaxia": {
         "meta": "51",
@@ -36,14 +36,14 @@
       },
       "meta_restauracao": {
         "meta": "73",
-        "ate_o_momento": "40",
-        "falta": "-33",
-        "progresso": "54,795%"
+        "ate_o_momento": "41",
+        "falta": "-32",
+        "progresso": "56,164%"
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "9",
-        "falta": "9",
+        "ate_o_momento": "10",
+        "falta": "10",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
@@ -116,9 +116,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "33.000,00",
-        "ate_o_momento": "22.863,85",
-        "falta": "-10.136,15",
-        "progresso": "69,284%"
+        "ate_o_momento": "23.127,85",
+        "falta": "-9.872,15",
+        "progresso": "70,084%"
       },
       "clinico_geral": {
         "meta": "33.000,00",
@@ -340,9 +340,9 @@
     "indicadores": {
       "ortodontia": {
         "meta": "28.000,00",
-        "ate_o_momento": "24.405,44",
-        "falta": "-3.594,56",
-        "progresso": "87,162%"
+        "ate_o_momento": "24.809,44",
+        "falta": "-3.190,56",
+        "progresso": "88,605%"
       },
       "clinico_geral": {
         "meta": "23.600,00",
@@ -378,8 +378,8 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "18",
-        "falta": "18",
+        "ate_o_momento": "19",
+        "falta": "19",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
