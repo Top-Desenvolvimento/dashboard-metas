@@ -15,11 +15,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "186",
         "valor_atual": "186"
       },
       "meta_avaliacao": {
@@ -53,7 +53,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Caxias": {
     "mes_referencia": "2026-10",
@@ -71,11 +71,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "426",
         "valor_atual": "426"
       },
       "meta_avaliacao": {
@@ -109,7 +109,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Farroupilha": {
     "mes_referencia": "2026-10",
@@ -127,11 +127,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "247",
         "valor_atual": "247"
       },
       "meta_avaliacao": {
@@ -165,7 +165,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Bento": {
     "mes_referencia": "2026-10",
@@ -183,11 +183,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "143",
         "valor_atual": "143"
       },
       "meta_avaliacao": {
@@ -221,7 +221,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Encantado": {
     "mes_referencia": "2026-10",
@@ -239,11 +239,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "345",
         "valor_atual": "345"
       },
       "meta_avaliacao": {
@@ -277,7 +277,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Soledade": {
     "mes_referencia": "2026-10",
@@ -295,11 +295,11 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "0",
         "ate_o_momento": "0",
         "falta": "0",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "663",
         "valor_atual": "663"
       },
       "meta_avaliacao": {
@@ -333,7 +333,7 @@
         "progresso": "-"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   },
   "Veranópolis": {
     "mes_referencia": "2026-10",
@@ -351,44 +351,44 @@
         "progresso": "-"
       },
       "avaliacoes_google": {
-        "meta": "-",
+        "meta": "15",
         "ate_o_momento": "0",
-        "falta": "0",
+        "falta": "15",
         "progresso": "0,00%",
-        "valor_inicial": "0",
+        "valor_inicial": "229",
         "valor_atual": "229"
       },
       "meta_avaliacao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "78",
+        "ate_o_momento": "0",
+        "falta": "-78",
+        "progresso": "0,000%"
       },
       "meta_profilaxia": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "18",
+        "ate_o_momento": "0",
+        "falta": "-18",
+        "progresso": "0,000%"
       },
       "meta_restauracao": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "22",
+        "ate_o_momento": "0",
+        "falta": "-22",
+        "progresso": "0,000%"
       },
       "colagem_convencional": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       },
       "colagem_estetico": {
-        "meta": "-",
-        "ate_o_momento": "-",
-        "falta": "-",
-        "progresso": "-"
+        "meta": "0",
+        "ate_o_momento": "0",
+        "falta": "0",
+        "progresso": "0,000%"
       }
     },
-    "_status": "erro: Não encontrei o select #mes_ano na tela de metas."
+    "_status": "ok"
   }
 }
