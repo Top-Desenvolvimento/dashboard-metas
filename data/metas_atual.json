@@ -360,9 +360,9 @@
       },
       "meta_avaliacao": {
         "meta": "78",
-        "ate_o_momento": "0",
-        "falta": "-78",
-        "progresso": "0,000%"
+        "ate_o_momento": "2",
+        "falta": "-76",
+        "progresso": "2,564%"
       },
       "meta_profilaxia": {
         "meta": "18",
@@ -378,8 +378,8 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
