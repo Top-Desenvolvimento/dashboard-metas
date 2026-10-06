@@ -360,15 +360,15 @@
       },
       "meta_avaliacao": {
         "meta": "78",
-        "ate_o_momento": "2",
-        "falta": "-76",
-        "progresso": "2,564%"
+        "ate_o_momento": "9",
+        "falta": "-69",
+        "progresso": "11,538%"
       },
       "meta_profilaxia": {
         "meta": "18",
-        "ate_o_momento": "0",
-        "falta": "-18",
-        "progresso": "0,000%"
+        "ate_o_momento": "4",
+        "falta": "-14",
+        "progresso": "22,222%"
       },
       "meta_restauracao": {
         "meta": "22",
@@ -378,14 +378,14 @@
       },
       "colagem_convencional": {
         "meta": "0",
-        "ate_o_momento": "1",
-        "falta": "1",
+        "ate_o_momento": "3",
+        "falta": "3",
         "progresso": "0,000%"
       },
       "colagem_estetico": {
         "meta": "0",
-        "ate_o_momento": "0",
-        "falta": "0",
+        "ate_o_momento": "1",
+        "falta": "1",
         "progresso": "0,000%"
       }
     },
